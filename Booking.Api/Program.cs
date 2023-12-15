@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Booking.Api.Repositories;
 using Booking.Api.Data;
-using Booking.Api.Repositories;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -7,6 +7,8 @@ namespace Booking.Api.Data
     {
         public CinemaDbContext(DbContextOptions _options) : base(_options) { }
         public DbSet<Movies> movies { get; set; }
+        public DbSet<Salon> salon { get; set; }
+        public DbSet<Show> shows { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -44,6 +46,12 @@ namespace Booking.Api.Data
                 ReleaseYear = 1972,
                 AgeRestriction = 15,
                 MaxShows = 5,
+            });
+            modelBuilder.Entity<Salon>().HasData(new Salon
+            {
+                ID = 1,
+                Name = "Salon 1",
+                NumberOfSeats = 30,
             });
         }
     }
