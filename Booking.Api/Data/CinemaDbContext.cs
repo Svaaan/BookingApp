@@ -34,7 +34,7 @@ namespace Booking.Api.Data
             {
                 ID = 2,
                 Title = "The Godfather",
-                Description = "The aging patriarch of an organized crime dynasty in postwar New York City transfers control of his clandestine empire to his reluctant youngest son.ring",
+                Description = "The aging patriarch of an organized crime dynasty in postwar New York City transfers control of his clandestine empire to his reluctant youngest son",
                 Director = "Francis Ford Coppola",
                 Hours = 2,
                 Minutes = 55,
