@@ -37,7 +37,7 @@ namespace Booking.Api.Validation
             where TEnum : struct
         {
             Guard.Against.Null(value, propertyName);
-            if (Enum.IsDefined(typeof(TEnum), value))
+            if (!Enum.IsDefined(typeof(TEnum), value))
             {
                 throw new ArgumentOutOfRangeException(propertyName, $"Invalid value for {propertyName}");
             }

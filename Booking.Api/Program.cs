@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Booking.Api.Repositories;
 using Booking.Api.Data;
 using System.Reflection;
+using Booking.Api.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,10 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(s =>
+{
+    s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Booking API", Version = "v1" });
+    s.SchemaFilter<EnumFilter>();
+});
 
 builder.Services.AddDbContext<CinemaDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaDbContext")));
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaDbContext")),
+    ServiceLifetime.Scoped);
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 
 var app = builder.Build();
 
