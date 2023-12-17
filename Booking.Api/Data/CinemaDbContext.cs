@@ -6,33 +6,33 @@ namespace Booking.Api.Data
     public class CinemaDbContext : DbContext
     {
         public CinemaDbContext(DbContextOptions _options) : base(_options) { }
-        public DbSet<Movies> movies { get; set; }
+        public DbSet<Movie> movies { get; set; }
         public DbSet<Salon> salon { get; set; }
         public DbSet<Show> shows { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Movies>()
+            modelBuilder.Entity<Movie>()
                 .Property(e => e.Genre)
                 .HasConversion(
                 v => v.ToString(),
                 v => (Genres)Enum.Parse(typeof(Genres), v));
 
-            modelBuilder.Entity<Movies>()
+            modelBuilder.Entity<Movie>()
                 .Property(e => e.Language)
                 .HasConversion(
                 v => v.ToString(),
                 v => (Languages)Enum.Parse(typeof(Languages), v));
 
-            modelBuilder.Entity<Movies>()
+            modelBuilder.Entity<Movie>()
                 .Property(e => e.Subtitle)
                 .HasConversion(
                 v => v.ToString(),
                 v => (Subtitles)Enum.Parse(typeof(Subtitles), v));
 
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Movies>().HasData(new Movies
+            modelBuilder.Entity<Movie>().HasData(new Movie
             {
                 ID = 2,
                 Title = "The Godfather",

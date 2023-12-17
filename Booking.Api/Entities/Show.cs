@@ -4,7 +4,7 @@
     {
         public int ID { get; set; }
         public int MovieID { get; set; }
-        public Movies Movie { get; set; }
+        public Movie Movie { get; set; }
         public int SalonID { get; set; }
         public Salon Salon { get; set; }
         public int AvailableSeats { get; set; }
