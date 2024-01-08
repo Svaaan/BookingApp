@@ -23,6 +23,7 @@ namespace Booking.Api.Repositories
             try
             {
                 MovieValidator.ValidateMovie(movie);
+
                 var createMovie = await _context.movies.AddAsync(movie);
                 await _context.SaveChangesAsync();
                 return createMovie.Entity;
@@ -30,6 +31,19 @@ namespace Booking.Api.Repositories
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creating movie. MovieId: {MovieId}, Title: {Title}", movie.ID, movie.Title);
+                throw;
+            }
+        }
+        public async Task<List<Movie>> GetAllMoviesAsync()
+        {
+            try
+            {
+                var movieList = await _context.movies.ToListAsync();
+                return movieList;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Could not retrieve movies from database");
                 throw;
             }
         }

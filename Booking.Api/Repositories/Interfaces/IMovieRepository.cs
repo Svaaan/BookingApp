@@ -6,5 +6,6 @@ namespace Booking.Api.Repositories.Interfaces
     public interface IMovieRepository
     {
         Task<Movie>CreateMovieAsync(Movie movie);
+        Task<List<Movie>> GetAllMoviesAsync();
     }
 }
