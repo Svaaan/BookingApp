@@ -7,5 +7,6 @@ namespace Booking.Api.Repositories.Interfaces
     {
         Task<Movie>CreateMovieAsync(Movie movie);
         Task<List<Movie>> GetAllMoviesAsync();
+        Task<Movie> DeleteMovieByIdAsync(int Id);
     }
 }
