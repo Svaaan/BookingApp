@@ -1,6 +1,11 @@
-﻿<Router AppAssembly="@typeof(Program).Assembly">
+﻿@using Booking.View.Components.Modals;
+<Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
+        <RouteView RouteData="@routeData" />
+        <MovieTheatreBookingModal />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
+    <NotFound>
+        <p>Not found</p>
+    </NotFound>
 </Router>
