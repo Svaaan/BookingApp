@@ -1,0 +1,63 @@
+﻿@page "/"
+@using Booking.Api.Data
+@using Booking.Api.Entities
+@inject CinemaDbContext DbContext
+<form>
+    <div class="form-group">
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" class="form-control" @bind="bookingData.FullName" />
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" class="form-control" @bind="bookingData.Email" />
+    </div>
+
+    <div class="form-group">
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" class="form-control" @bind="bookingData.PhoneNumber" />
+    </div>
+
+    <div class="form-group">
+        <label for="date">Booking Date:</label>
+        <input type="date" id="date" class="form-control" @bind="bookingData.BookingDate" />
+    </div>
+
+    <div class="form-group">
+        <label for="comments">Comments:</label>
+        <textarea id="comments" class="form-control" @bind="bookingData.Comments"></textarea>
+    </div>
+
+    <button type="button" class="btn btn-primary" @onclick="SubmitBooking">Book Now</button>
+</form>
+
+@code {
+    private BookingDataModel bookingData = new BookingDataModel();
+
+    private void SubmitBooking()
+    {
+        var bookingEntity = new 
+        {
+                FullName = bookingData.FullName,
+                Email = bookingData.Email,
+                PhoneNumber = bookingData.PhoneNumber,
+                BookingDate = bookingData.BookingDate,
+                Comments = bookingData.Comments
+            };
+
+        DbContext.Add(bookingEntity);
+        DbContext.SaveChanges();
+
+        // You can also reset the form after submission if needed
+        bookingData = new BookingDataModel();
+    }
+
+    private class BookingDataModel
+    {
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public DateTime BookingDate { get; set; }
+        public string Comments { get; set; }
+    }
+}
