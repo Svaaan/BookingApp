@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using Booking.Api.Data
 @using Booking.Api.Entities
-@inject Booking.Api.Data.CinemaDbContext DbContext
+@inject CinemaDbContext DbContext
 <form>
     <div class="form-group">
         <label for="fullName">Full Name:</label>
@@ -21,11 +21,6 @@
     <div class="form-group">
         <label for="date">Booking Date:</label>
         <input type="date" id="date" class="form-control" @bind="bookingData.BookingDate" />
-    </div>
-
-    <div class="form-group">
-        <label for="comments">Comments:</label>
-        <textarea id="comments" class="form-control" @bind="bookingData.Comments"></textarea>
     </div>
 
     <button type="button" class="btn btn-primary" @onclick="SubmitBooking">Book Now</button>
