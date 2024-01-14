@@ -1,8 +1,17 @@
 ﻿using Booking.Api.Entities;
 using Ardalis.GuardClauses;
+using Booking.Api.ExceptionHandler;
 
 namespace Booking.Api.Validation
 {
+    public class MovieValidationException : ArgumentException
+    {
+        public MovieValidationException(string message, string paramName)
+        : base(message, paramName)
+        {
+        }
+    }
+
     public class MovieValidator
     {
         public static void ValidateMovie(Movie movie)
@@ -39,7 +48,7 @@ namespace Booking.Api.Validation
             Guard.Against.Null(value, propertyName);
             if (!Enum.IsDefined(typeof(TEnum), value))
             {
-                throw new ArgumentOutOfRangeException(propertyName, $"Invalid value for {propertyName}");
+                throw new CustomArgumentException($"Invalid value for {propertyName}", propertyName);
             }
         }
     }
