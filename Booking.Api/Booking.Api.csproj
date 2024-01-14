@@ -28,10 +28,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Booking.View\Booking.View.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Folder Include="Repositories\Interfaces\" />
 	</ItemGroup>
 
