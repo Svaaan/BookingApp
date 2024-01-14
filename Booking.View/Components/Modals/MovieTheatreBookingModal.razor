@@ -31,14 +31,14 @@
 
     private void SubmitBooking()
     {
-        var bookingEntity = new 
+        var bookingEntity = new
         {
-                FullName = bookingData.FullName,
-                Email = bookingData.Email,
-                PhoneNumber = bookingData.PhoneNumber,
-                BookingDate = bookingData.BookingDate,
-                Comments = bookingData.Comments
-            };
+            FullName = bookingData.FullName,
+            Email = bookingData.Email,
+            PhoneNumber = bookingData.PhoneNumber,
+            BookingDate = bookingData.BookingDate,
+            Comments = bookingData.Comments
+        };
 
         DbContext.Add(bookingEntity);
         DbContext.SaveChanges();
