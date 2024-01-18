@@ -2,55 +2,58 @@
 @using Booking.Api.Data
 @using Booking.Api.Entities
 @inject CinemaDbContext DbContext
-<form>
-    <div class="form-group">
-        <label for="fullName">Full Name:</label>
-        <input type="text" id="fullName" class="form-control" @bind="bookingData.FullName" />
-    </div>
 
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" class="form-control" @bind="bookingData.Email" />
-    </div>
+<link rel="stylesheet" href="BookingLayout.css" />
 
-    <div class="form-group">
-        <label for="phoneNumber">Phone Number:</label>
-        <input type="tel" id="phoneNumber" class="form-control" @bind="bookingData.PhoneNumber" />
-    </div>
+<div class="container">
+    <div class="card mx-auto mt-5" style="max-width: 500px;">
+        <div class="card-body">
+            <h5 class="card-title text-center">Booking Form</h5>
 
-    <div class="form-group">
-        <label for="date">Booking Date:</label>
-        <input type="date" id="date" class="form-control" @bind="bookingData.BookingDate" />
-    </div>
+            <form>
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Name:</label>
+                    <input type="text" id="Name" class="form-control" @bind="bookingData.Name" />
+                </div>
 
-    <button type="button" class="btn btn-primary" @onclick="SubmitBooking">Book Now</button>
-</form>
+                <div class="mb-3">
+                    <label for="LastName" class="form-label">Last Name:</label>
+                    <input type="text" id="LastName" class="form-control" @bind="bookingData.LastName" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Email:</label>
+                    <input type="email" id="Email" class="form-control" @bind="bookingData.Email" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="PhoneNumber" class="form-label">Phone Number:</label>
+                    <input type="tel" id="PhoneNumber" class="form-control" @bind="bookingData.PhoneNumber" />
+                </div>
+
+                <button type="button" class="btn btn-primary" @onclick="SubmitBooking">Book Now</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 @code {
-    private BookingDataModel bookingData = new BookingDataModel();
+    private Booker bookingData = new Booker();
 
     private void SubmitBooking()
     {
-        var bookingEntity = new
-        {
-            FullName = bookingData.FullName,
-            Email = bookingData.Email,
-            PhoneNumber = bookingData.PhoneNumber,
-            BookingDate = bookingData.BookingDate,
-            Comments = bookingData.Comments
-        };
+        var bookingEntity = new Booker()
+            {
+                Id = bookingData.Id,
+                Name = bookingData.Name,
+                LastName = bookingData.LastName,
+                Email = bookingData.Email,
+                PhoneNumber = bookingData.PhoneNumber,
+            };
 
-        DbContext.Add(bookingEntity);
+        DbContext.bookers.Add(bookingEntity);
         DbContext.SaveChanges();
-        bookingData = new BookingDataModel();
-    }
 
-    private class BookingDataModel
-    {
-        public string FullName { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
-        public DateTime BookingDate { get; set; }
-        public string Comments { get; set; }
+        bookingData = new Booker();
     }
 }

@@ -6,6 +6,8 @@ namespace Booking.Api.Data
     public class CinemaDbContext : DbContext
     {
         public CinemaDbContext(DbContextOptions _options) : base(_options) { }
+
+        public DbSet<Booker> bookers { get; set; }
         public DbSet<Movie> movies { get; set; }
         public DbSet<Salon> salon { get; set; }
         public DbSet<Show> shows { get; set; }

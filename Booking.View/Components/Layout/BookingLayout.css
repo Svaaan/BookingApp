@@ -1,6 +1,41 @@
-﻿namespace Booking.View.Components.Layout
+﻿namespace Booking.View.Components.Layout {
+    /* bookinglayout.css */
+
+    body
+
 {
-    public class BookingLayout
-    {
+    background-color: #f8f9fa; /* Light gray background */
+}
+
+.container {
+    margin-top: 50px; /* Adjust the top margin as needed */
+}
+
+.card {
+    background-color: #ffffff; /* White card background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+}
+
+.card-title {
+    color: #007bff; /* Blue card title */
+}
+
+.form-label {
+    color: #343a40; /* Dark gray label text */
+}
+
+.form-control {
+    background-color: #f1f3f5; /* Light gray input background */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Blue button background */
+    border-color: #007bff; /* Blue button border */
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+        border-color: #0056b3;
     }
+
 }
