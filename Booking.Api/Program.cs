@@ -23,6 +23,7 @@ builder.Services.AddDbContext<CinemaDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaDbContext")),
     ServiceLifetime.Scoped);
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<ISalonRepository, SalonRepository>();
 
 var app = builder.Build();
 
