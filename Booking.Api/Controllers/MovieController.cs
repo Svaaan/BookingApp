@@ -19,7 +19,7 @@ namespace Booking.Api.Controllers
         }
 
         /// <summary>
-        /// Creates a new movie.
+        /// Create a new movie.
         /// </summary>
         /// <param name="movie">The movie to create.</param>
         /// <returns>The created movie.</returns>
