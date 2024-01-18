@@ -34,6 +34,25 @@ namespace Booking.Api.Repositories
                 throw;
             }
         }
+
+        public async Task<Movie> GetMovieById(int Id)
+        {
+            try
+            {
+                var getMovie = await _context.movies.FindAsync(Id);
+                if (getMovie == null)
+                {
+                    _logger.LogInformation($"Couldnt find a movie in the database with the ID: {Id}.");
+                }
+                return getMovie;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred when Retrieving the object");
+                throw;
+            }
+        }
+
         public async Task<List<Movie>> GetAllMoviesAsync()
         {
             try
@@ -41,7 +60,6 @@ namespace Booking.Api.Repositories
                 var movieList = await _context.movies.ToListAsync();
                 if (movieList.Count == 0)
                 {
-                    // You might log a message indicating that there are no movies in the database.
                     _logger.LogInformation("No movies found in the database.");
                 }
                 return movieList;
@@ -70,6 +88,34 @@ namespace Booking.Api.Repositories
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting movie. MovieId: {MovieId}", Id);
+                throw;
+            }
+        }
+        public async Task<Movie> UpdateMovieById(int movieId, Movie updateMovie)
+        {
+            try
+            {
+                var movie = await _context.movies.FindAsync(movieId);
+                if (movie == null)
+                {
+                    _logger.LogError($"No movie found with the Id: {movieId}");
+                    return null;
+                }
+                movie.Title = updateMovie.Title;
+                movie.Description = updateMovie.Description;
+                movie.Director = updateMovie.Director;
+                movie.Hours = updateMovie.Hours;
+                movie.Minutes = updateMovie.Minutes;
+                movie.ReleaseYear = updateMovie.ReleaseYear;
+                movie.AgeRestriction = updateMovie.AgeRestriction;
+                movie.MaxShows = updateMovie.MaxShows;
+
+                await _context.SaveChangesAsync();
+                return movie;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating movie. MovieId: {movieId}", ex);
                 throw;
             }
         }
