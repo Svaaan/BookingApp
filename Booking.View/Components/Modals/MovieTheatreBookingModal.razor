@@ -23,11 +23,6 @@
         <input type="date" id="date" class="form-control" @bind="bookingData.BookingDate" />
     </div>
 
-    <div class="form-group">
-        <label for="comments">Comments:</label>
-        <textarea id="comments" class="form-control" @bind="bookingData.Comments"></textarea>
-    </div>
-
     <button type="button" class="btn btn-primary" @onclick="SubmitBooking">Book Now</button>
 </form>
 
@@ -36,19 +31,17 @@
 
     private void SubmitBooking()
     {
-        var bookingEntity = new 
+        var bookingEntity = new
         {
-                FullName = bookingData.FullName,
-                Email = bookingData.Email,
-                PhoneNumber = bookingData.PhoneNumber,
-                BookingDate = bookingData.BookingDate,
-                Comments = bookingData.Comments
-            };
+            FullName = bookingData.FullName,
+            Email = bookingData.Email,
+            PhoneNumber = bookingData.PhoneNumber,
+            BookingDate = bookingData.BookingDate,
+            Comments = bookingData.Comments
+        };
 
         DbContext.Add(bookingEntity);
         DbContext.SaveChanges();
-
-        // You can also reset the form after submission if needed
         bookingData = new BookingDataModel();
     }
 
