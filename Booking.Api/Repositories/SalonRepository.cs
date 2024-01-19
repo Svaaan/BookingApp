@@ -64,6 +64,7 @@ namespace Booking.Api.Repositories
                     _logger.LogError($"No salon found with the Id: {salonId}");
                     return null;
                 }
+                SalonValidator.ValidateSalon(updateSalon);
                 salon.Name = updateSalon.Name;
                 salon.NumberOfSeats = updateSalon.NumberOfSeats;
                 salon.Status = updateSalon.Status;
