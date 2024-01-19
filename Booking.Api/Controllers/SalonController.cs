@@ -11,13 +11,13 @@ namespace Booking.Api.Controllers
     [ApiController]
     public class SalonController : ControllerBase
     {
-        private readonly ILogger<SalonController> _logger;
         private readonly ISalonRepository _salonRepository;
+        private readonly ILogger<SalonController> _logger;
 
         public SalonController(ILogger<SalonController> logger, ISalonRepository salonRepository)
         {
-            _logger = logger;
             _salonRepository = salonRepository;
+            _logger = logger;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Booking.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public async Task<ActionResult<Salon>> PostSalon([FromBody] Salon salon)
+        public async Task<ActionResult<Salon>> CreateSalon([FromBody] Salon salon)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace Booking.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<Movie>>> ListAllMovies()
+        public async Task<ActionResult<List<Salon>>> ListAllSalons()
         {
             var salonsList = await _salonRepository.GetSalonsAsync();
             if (salonsList == null)
@@ -72,6 +72,59 @@ namespace Booking.Api.Controllers
                 return NotFound();
             }
             return Ok(salonsList);
+        }
+
+        /// <summary>
+        /// Update a salon by entering it's ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="salon"></param>
+        /// <returns>Returns the updated Salon.</returns>
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(typeof(Salon), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Salon>> UpdateSalon(int id, [FromBody] Salon salon)
+        {
+            try
+            {
+                // Ensure the provided ID matches the ID in the updateMovie
+                if (id != salon.ID)
+                {
+                    return BadRequest("Mismatched movie ID in the request.");
+                }
+
+                var updatedSalon = await _salonRepository.UpdateSalonById(id, salon);
+                if (updatedSalon == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(updatedSalon);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error updating salon. SalonId: {id}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating the salon.");
+            };
+        }
+        /// <summary>
+        /// Delete a salon by its ID
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        /// <response code="200">Return a message specifying which salon that has been deleted</response>
+        /// <response code="404">Return a not found if incorrect id and/or id doesnt exist</response>
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<Salon>> DeleteMovieById(int Id)
+        {
+            var deleteSalon = await this._salonRepository.DeleteSalonById(Id);
+            if (deleteSalon == null)
+            {
+                return NotFound();
+            }
+            return Ok(deleteSalon);
         }
     }
 }

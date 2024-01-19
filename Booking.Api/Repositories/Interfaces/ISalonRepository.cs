@@ -6,7 +6,7 @@ namespace Booking.Api.Repositories.Interfaces
     {
         Task<Salon> CreateSalonAsync(Salon salon);
         Task<List<Salon>> GetSalonsAsync();
-        //Task<Salon> UpdateSalonAsync(int Id, Salon salon);
-        //Task DeleteSalonAsync(int Id);
+        Task<Salon> UpdateSalonById(int salonId, Salon updateSalon);
+        Task<Salon> DeleteSalonById(int Id);
     }
 }
