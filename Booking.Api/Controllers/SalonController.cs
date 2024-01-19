@@ -1,4 +1,6 @@
 ﻿using Booking.Api.Entities;
+using Booking.Api.ExceptionHandler;
+using Booking.Api.Repositories;
 using Booking.Api.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,27 +36,42 @@ namespace Booking.Api.Controllers
         {
             try
             {
-                if (salon == null)
-                {
-                    return BadRequest("Invalid salon data entered.");
-                }
-
-                var createSalonSuccess = await _salonRepository.CreateSalonAsync(salon);
-
-                if (createSalonSuccess != null)
-                {
-                    return CreatedAtAction(nameof(PostSalon), new { id = salon.ID }, salon);
-                }
-                else
-                {
-                    return StatusCode(500, "Failed to create salon");
-                }
+                // Your repository logic here
+                var createSalon = await _salonRepository.CreateSalonAsync(salon);
+                return Ok(createSalon);
+            }
+            catch (CustomArgumentException customEx)
+            {
+                // Handle custom validation error
+                return BadRequest(customEx.Message);
             }
             catch (Exception ex)
             {
+                // Handle other exceptions
                 _logger.LogError(ex, "An error occurred while processing the request.");
                 return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        /// <summary>
+        /// Gets all salons.
+        /// </summary>
+        /// <returns>A list of salons.</returns>
+        /// <response code="200">Returns the list of movies.</response>
+        /// <response code="404">Returns not found if database is empty.</response>
+        /// <response code="500">If an error occurs while retrieving the movies.</response>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<Movie>>> ListAllMovies()
+        {
+            var salonsList = await _salonRepository.GetSalonsAsync();
+            if (salonsList == null)
+            {
+                return NotFound();
+            }
+            return Ok(salonsList);
         }
     }
 }
