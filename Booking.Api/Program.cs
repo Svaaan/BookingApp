@@ -3,12 +3,18 @@ using Booking.Api.Repositories;
 using Booking.Api.Data;
 using System.Reflection;
 using Booking.Api.Repositories.Interfaces;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(s =>
 {
@@ -23,6 +29,7 @@ builder.Services.AddDbContext<CinemaDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaDbContext")),
     ServiceLifetime.Scoped);
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<ISalonRepository, SalonRepository>();
 
 var app = builder.Build();
 

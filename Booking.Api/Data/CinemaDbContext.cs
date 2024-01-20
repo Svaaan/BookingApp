@@ -9,7 +9,7 @@ namespace Booking.Api.Data
 
         public DbSet<Booker> bookers { get; set; }
         public DbSet<Movie> movies { get; set; }
-        public DbSet<Salon> salon { get; set; }
+        public DbSet<Salon> salons { get; set; }
         public DbSet<Show> shows { get; set; }
 
 
@@ -54,6 +54,7 @@ namespace Booking.Api.Data
                 ID = 1,
                 Name = "Salon 1",
                 NumberOfSeats = 30,
+                Status = 0
             });
         }
     }
