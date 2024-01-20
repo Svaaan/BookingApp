@@ -4,6 +4,7 @@ using Booking.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Booking.Api.Migrations
 {
     [DbContext(typeof(CinemaDbContext))]
-    partial class CinemaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240120112408_UpdateBookerEntity")]
+    partial class UpdateBookerEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,20 +133,16 @@ namespace Booking.Api.Migrations
                     b.Property<int>("NumberOfSeats")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
 
-                    b.ToTable("salons");
+                    b.ToTable("salon");
 
                     b.HasData(
                         new
                         {
                             ID = 1,
                             Name = "Salon 1",
-                            NumberOfSeats = 30,
-                            Status = 0
+                            NumberOfSeats = 30
                         });
                 });
 
