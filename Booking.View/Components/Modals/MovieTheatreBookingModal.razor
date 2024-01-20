@@ -32,6 +32,13 @@
                 </div>
 
                 <button type="button" class="btn btn-primary" @onclick="SubmitBooking">Book Now</button>
+
+                @if (!string.IsNullOrEmpty(submitMessage))
+                {
+                    <div class="alert alert-success mt-3" role="alert">
+                        @submitMessage
+                    </div>
+                }
             </form>
         </div>
     </div>
@@ -39,6 +46,7 @@
 
 @code {
     private Booker bookingData = new Booker();
+    private string submitMessage = "";
 
     private void SubmitBooking()
     {
@@ -55,5 +63,6 @@
         DbContext.SaveChanges();
 
         bookingData = new Booker();
+        submitMessage = "Booking submitted successfully!";
     }
 }
