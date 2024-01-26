@@ -98,6 +98,17 @@ namespace Booking.Api.Controllers
             return Ok(deleteShow);
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<ShowDetailsDto>> GetShowById(int id)
+        {
+            var show = await _showRepository.GetShowById(id);
+            if (show == null)
+            {
+                return BadRequest();
+            }
+            return Ok(show);
+        }
+
         [HttpGet("schedule")]
         public async Task<ActionResult<List<Schedule>>> GetAllShows()
         {

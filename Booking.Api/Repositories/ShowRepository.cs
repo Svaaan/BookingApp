@@ -108,6 +108,41 @@ namespace Booking.Api.Repositories
             return deleteShow;
         }
 
+        public async Task<ShowDetailsDto> GetShowById(int Id)
+        {
+            Show show = await _context.shows
+                .Include(s => s.Movie)
+                .Include(s => s.Salon)
+                .FirstOrDefaultAsync(s => s.ID == Id);
+
+            if (show == null)
+            {
+                return null;
+            }
+
+            ShowDetailsDto showDetailsDto = new ShowDetailsDto
+            {
+                ShowId = show.ID,
+                MovieId = show.Movie.ID,
+                MovieTitle = show.Movie.Title,
+                MovieDescription = show.Movie.Description,
+                MovieDirector = show.Movie.Director,
+                Hours = show.Movie.Hours,
+                minutes = show.Movie.Minutes,
+                ReleaseYear = show.Movie.ReleaseYear,
+                AgeRestriction = show.Movie.AgeRestriction,
+                SalonId = show.Salon.ID,
+                SalonName = show.Salon.Name,
+                AvailableSeats = show.Salon.NumberOfSeats,
+                StartTime = show.StartTime,
+                EndTime = show.EndTime,
+                Genre = show.Movie.Genre,
+                Language = show.Movie.Language,
+                Subtitle = show.Movie.Subtitle,
+            };
+            return showDetailsDto;
+        }
+
         public async Task<List<Schedule>> GetShowsByDateAndHours()
         {
             DateTime currentDate = DateTime.Now;
