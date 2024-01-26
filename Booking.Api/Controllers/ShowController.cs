@@ -63,13 +63,28 @@ namespace Booking.Api.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Show>> UpdateShow(int id, [FromBody] ShowUpsertDto updateShow)
         {
-            var show = await this._showRepository.UpdateShow(id, updateShow);
-
-            if (show == null)
+            try
             {
-                return NoContent();
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                var show = await this._showRepository.UpdateShow(id, updateShow);
+                return Ok(show);
             }
-            return Ok(show);
+            catch (ShowUpsertDtoException ex)
+            {
+                // Log the exception if needed
+                _logger.LogError(ex, "Show validation failed.");
+
+                // Return a more user-friendly error response
+                return BadRequest(new { error = ex.Message, propertyName = ex.ParamName });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while creating a show.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
         }
     }
 }

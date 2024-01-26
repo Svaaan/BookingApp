@@ -70,28 +70,30 @@ namespace Booking.Api.Repositories
                 throw new Exception("Show not found");
             }
 
-            var movie = await _context.movies.FirstOrDefaultAsync(m => m.ID == showDto.MovieId);
-            if (movie == null)
+            try
             {
-                throw new Exception("Movie not found");
+                ShowUpsertDtoValidator.ValidateShowUpsertDto(showDto);
+
+                var movie = await _context.movies.FirstOrDefaultAsync(m => m.ID == showDto.MovieId);
+                var salon = await _context.salons.FirstOrDefaultAsync(s => s.ID == showDto.SalonId);
+
+                show.MovieID = showDto.MovieId;
+                show.Movie = movie;
+
+                show.SalonID = showDto.SalonId;
+                show.Salon = salon;
+                show.StartTime = showDto.StartTime;
+                show.EndTime = showDto.EndTime;
+
+                await _context.SaveChangesAsync();
+                return show;
+
             }
-
-            show.MovieID = showDto.MovieId;
-            show.Movie = movie;
-
-            var salon = await _context.salons.FirstOrDefaultAsync(s => s.ID == showDto.SalonId);
-            if (salon == null)
+            catch (ShowValidationException ex)
             {
-                throw new Exception("Salon not Found");
+                _logger.LogError(ex, "Show validation failed during update.");
+                throw new Exception($"Validation failed: {ex.Message}");
             }
-
-            show.SalonID = showDto.SalonId;
-            show.Salon = salon;
-            show.StartTime = showDto.StartTime;
-            show.EndTime = showDto.EndTime;
-
-            await _context.SaveChangesAsync();
-            return show;
         }
     }
 }
