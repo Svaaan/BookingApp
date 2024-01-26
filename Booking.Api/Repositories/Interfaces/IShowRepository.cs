@@ -9,6 +9,7 @@ namespace Booking.Api.Repositories.Interfaces
         Task<bool> IsShowTimeSlotAvailable(DateTime startTime, DateTime endTime, int salonId);
         Task<Show> UpdateShow(int  showId, ShowUpsertDto showDto);
         Task<Show> DeleteShowById(int Id);
-
+        Task<List<Schedule>> GetShowsByDateAndHours();
+        //Task<ShowDetailsDto> GetShowById(int Id);
     }
 }

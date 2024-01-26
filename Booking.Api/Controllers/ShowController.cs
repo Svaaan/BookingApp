@@ -97,5 +97,12 @@ namespace Booking.Api.Controllers
             }
             return Ok(deleteShow);
         }
+
+        [HttpGet("schedule")]
+        public async Task<ActionResult<List<Schedule>>> GetAllShows()
+        {
+            var shows = await _showRepository.GetShowsByDateAndHours();
+            return Ok(shows);
+        }
     }
 }

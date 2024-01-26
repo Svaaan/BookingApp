@@ -107,5 +107,61 @@ namespace Booking.Api.Repositories
 
             return deleteShow;
         }
+
+        public async Task<List<Schedule>> GetShowsByDateAndHours()
+        {
+            DateTime currentDate = DateTime.Now;
+
+            List<Show> shows = await _context.shows
+                .Include(s => s.Movie)
+                .Include(s => s.Salon)
+                .ToListAsync();
+
+            var currentShows = shows.Where(s => s.StartTime <= currentDate && s.EndTime >= currentDate).ToList();
+            var upcomingShows = shows.Where(s => s.StartTime > currentDate).ToList();
+
+            var currentShowGroup = currentShows.GroupBy(s => s.StartTime.Date)
+                .Select(g => new Schedule
+                {
+                    Date = g.Key,
+                    Shows = g.Select(s => new ShowDto 
+                    {
+                        ShowId = s.ID,
+                        MovieId = s.MovieID,
+                        MovieTitle = s.Movie.Title,
+                        SalonId = s.Salon.ID,
+                        SalonName = s.Salon.Name,
+                        AvailableSeats = s.AvailableSeats,
+                        StartTime = s.StartTime,
+                        EndTime = s.EndTime,
+                    }).ToList(),
+                })
+                .OrderBy(g => g.Date)
+                .ToList();
+
+            var upcomingShowGroup = upcomingShows.GroupBy(s => s.StartTime.Date)
+                .Select(g => new Schedule
+                {
+                    Date = g.Key,
+                    Shows = g.Select(s => new ShowDto
+                    {
+                        ShowId = s.ID,
+                        MovieId = s.MovieID,
+                        MovieTitle = s.Movie.Title,
+                        SalonId = s.Salon.ID,
+                        SalonName = s.Salon.Name,
+                        AvailableSeats = s.AvailableSeats,
+                        StartTime = s.StartTime,
+                        EndTime = s.EndTime,
+                    }).ToList(),
+                })
+                .OrderBy(g => g.Date)
+                .ToList();
+
+            var showGroups = new List<Schedule>();
+            showGroups.AddRange(currentShowGroup);
+            showGroups.AddRange(upcomingShowGroup);
+            return showGroups;
+        }
     }
 }
