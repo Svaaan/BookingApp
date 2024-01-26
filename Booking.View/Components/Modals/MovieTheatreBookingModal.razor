@@ -3,7 +3,64 @@
 @using Booking.Api.Entities
 @inject CinemaDbContext DbContext
 
-<link rel="stylesheet" href="BookingLayout.css" />
+<style>
+
+    body {
+        margin-top: 125px;
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        margin-top: 50px;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border: 2px solid #000000; 
+        border-radius: 8px; 
+        margin: 100px; 
+    }
+
+    /* Blue card title */
+    .card-title {
+        color: black;
+    }
+
+    /* Dark form label */
+    .form-label {
+        color: #343a40;
+        font-weight: bold;
+    }
+
+    .form-control {
+        background-color: #f1f3f5;
+    }
+
+    .custom-button {
+        background-color: white;
+        color: black;
+        border: 2px solid black;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        margin-top: 45px;
+    }
+
+        .custom-button:hover {
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+
+        .custom-button:active {
+            transform: translateY(2px);
+        }
+
+        .custom-button:active {
+            transform: translateY(2px);
+        }
+</style>
 
 <div class="container">
     <div class="card mx-auto mt-5" style="max-width: 500px;">
@@ -12,12 +69,12 @@
 
             <form>
                 <div class="mb-3">
-                    <label for="Name" class="form-label">Name:</label>
+                    <label for="Name" class="form-label">Namn:</label>
                     <input type="text" id="Name" class="form-control" @bind="bookingData.Name" />
                 </div>
 
                 <div class="mb-3">
-                    <label for="LastName" class="form-label">Last Name:</label>
+                    <label for="LastName" class="form-label">Efternamn:</label>
                     <input type="text" id="LastName" class="form-control" @bind="bookingData.LastName" />
                 </div>
 
@@ -27,18 +84,19 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="PhoneNumber" class="form-label">Phone Number:</label>
+                    <label for="PhoneNumber" class="form-label">Telefon nummer:</label>
                     <input type="tel" id="PhoneNumber" class="form-control" @bind="bookingData.PhoneNumber" />
                 </div>
 
-                <button type="button" class="btn btn-primary" @onclick="SubmitBooking">Book Now</button>
-
-                @if (!string.IsNullOrEmpty(submitMessage))
+                <div class="mb-3 text-center">
+                    <button type="button" class="custom-button" @onclick="SubmitBooking">Submit Booking</button>
+                </div>
+                @if (!string.IsNullOrEmpty(statusMessage))
                 {
-                    <div class="alert alert-success mt-3" role="alert">
-                        @submitMessage
-                    </div>
+                    <p class="@statusClass text-center">@statusMessage</p>
                 }
+
+
             </form>
         </div>
     </div>
@@ -46,23 +104,60 @@
 
 @code {
     private Booker bookingData = new Booker();
-    private string submitMessage = "";
+    private string statusMessage = string.Empty;
+    private string statusClass = string.Empty;
 
     private void SubmitBooking()
     {
-        var bookingEntity = new Booker()
-            {
-                Id = bookingData.Id,
-                Name = bookingData.Name,
-                LastName = bookingData.LastName,
-                Email = bookingData.Email,
-                PhoneNumber = bookingData.PhoneNumber,
-            };
+        // Check if all required fields are filled
+        if (string.IsNullOrWhiteSpace(bookingData.Name) ||
+            string.IsNullOrWhiteSpace(bookingData.LastName) ||
+            string.IsNullOrWhiteSpace(bookingData.Email) ||
+            string.IsNullOrWhiteSpace(bookingData.PhoneNumber))
+        {
+            // Show a failed status message
+            SetStatusMessage("Submit booking failed. All fields are required.", "text-danger");
+            return;
+        }
 
-        DbContext.bookers.Add(bookingEntity);
-        DbContext.SaveChanges();
+        try
+        {
+            var bookingEntity = new Booker()
+                {
+                    Id = bookingData.Id,
+                    Name = bookingData.Name,
+                    LastName = bookingData.LastName,
+                    Email = bookingData.Email,
+                    PhoneNumber = bookingData.PhoneNumber,
+                };
 
-        bookingData = new Booker();
-        submitMessage = "Booking submitted successfully!";
+            DbContext.bookers.Add(bookingEntity);
+            DbContext.SaveChanges();
+
+            // Show a success status message
+            SetStatusMessage("Booking submitted successfully!", "text-success");
+
+            // Reset the form after successful submission
+            bookingData = new Booker();
+        }
+        catch (Exception ex)
+        {
+            // Handle the exception and show a failed status message
+            SetStatusMessage($"Failed to submit booking. Error: {ex.Message}", "text-danger");
+        }
+    }
+
+    private void SetStatusMessage(string message, string cssClass)
+    {
+        statusMessage = message;
+        statusClass = cssClass;
+        StateHasChanged();
+        // Clear status message after a few seconds (optional)
+        Task.Delay(5000).ContinueWith(_ =>
+        {
+            statusMessage = string.Empty;
+            statusClass = string.Empty;
+            StateHasChanged();
+        });
     }
 }
