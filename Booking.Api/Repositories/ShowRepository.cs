@@ -18,7 +18,7 @@ namespace Booking.Api.Repositories
             _logger = logger;
         }
 
-        public async Task<Show> CreateShow(CreateShowDto showDto)
+        public async Task<Show> CreateShow(ShowUpsertDto showDto)
         {
             if (await IsShowTimeSlotAvailable(showDto.StartTime, showDto.EndTime, showDto.SalonId))
             {
@@ -27,7 +27,7 @@ namespace Booking.Api.Repositories
 
                 if (movie != null && movie.MaxShows > 0 && await _context.shows.CountAsync(s => s.MovieID == showDto.MovieId) >= movie.MaxShows)
                 {
-                    throw new Exception("Maximum allowed show for this movie has been reached.");
+                    throw new Exception("Maximum allowed shows for this movie has been reached.");
                 }
 
                 var show = new Show
@@ -60,6 +60,38 @@ namespace Booking.Api.Repositories
                 .Where(show => show.SalonID == salonId && !(show.EndTime <= startTime || show.StartTime >= endTime))
                 .AnyAsync();
             return !isAvailable;
+        }
+
+        public async Task<Show> UpdateShow(int showId, ShowUpsertDto showDto)
+        {
+            var show = await _context.shows.FirstOrDefaultAsync(s => s.ID == showId);
+            if (show == null)
+            {
+                throw new Exception("Show not found");
+            }
+
+            var movie = await _context.movies.FirstOrDefaultAsync(m => m.ID == showDto.MovieId);
+            if (movie == null)
+            {
+                throw new Exception("Movie not found");
+            }
+
+            show.MovieID = showDto.MovieId;
+            show.Movie = movie;
+
+            var salon = await _context.salons.FirstOrDefaultAsync(s => s.ID == showDto.SalonId);
+            if (salon == null)
+            {
+                throw new Exception("Salon not Found");
+            }
+
+            show.SalonID = showDto.SalonId;
+            show.Salon = salon;
+            show.StartTime = showDto.StartTime;
+            show.EndTime = showDto.EndTime;
+
+            await _context.SaveChangesAsync();
+            return show;
         }
     }
 }

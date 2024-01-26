@@ -20,8 +20,19 @@ namespace Booking.Api.Controllers
             _showRepository = showRepository;
         }
 
+        /// <summary>
+        /// Create a show based on the Dto inputs
+        /// </summary>
+        /// <param name="showDto"></param>
+        /// <returns>The created show</returns>
+        /// <response code="201">Returns the newly created Show.</response>
+        /// <response code="400">If the Show values are not valid.</response>
+        /// <response code="500">Processing failure.</response>
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public async Task<ActionResult<Show>> CreateShow([FromBody] CreateShowDto showDto)
+        public async Task<ActionResult<Show>> CreateShow([FromBody] ShowUpsertDto showDto)
         {
             try
             {
@@ -49,5 +60,16 @@ namespace Booking.Api.Controllers
             }
         }
 
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<Show>> UpdateShow(int id, [FromBody] ShowUpsertDto updateShow)
+        {
+            var show = await this._showRepository.UpdateShow(id, updateShow);
+
+            if (show == null)
+            {
+                return NoContent();
+            }
+            return Ok(show);
+        }
     }
 }

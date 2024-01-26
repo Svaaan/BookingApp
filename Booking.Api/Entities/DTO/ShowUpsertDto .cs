@@ -1,6 +1,6 @@
 ﻿namespace Booking.Api.Entities.DTO
 {
-    public class CreateShowDto
+    public class ShowUpsertDto
     {
         public int MovieId { get; set; }
         public int SalonId { get; set; }
