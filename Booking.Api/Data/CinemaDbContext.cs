@@ -53,7 +53,7 @@ namespace Booking.Api.Data
             {
                 ID = 1,
                 Name = "Salon 1",
-                NumberOfSeats = 30,
+                AvailableSeats = 30,
                 Status = 0
             });
         }

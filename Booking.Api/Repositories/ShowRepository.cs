@@ -39,7 +39,7 @@ namespace Booking.Api.Repositories
                     StartTime = showDto.StartTime,
                     EndTime = showDto.EndTime,
 
-                    AvailableSeats = _context.salons.FirstOrDefault(s => s.ID == showDto.SalonId)?.NumberOfSeats ?? 0
+                    AvailableSeats = _context.salons.FirstOrDefault(s => s.ID == showDto.SalonId)?.AvailableSeats ?? 0
                 };
 
                 ShowValidator.ValidateShow(show);
@@ -64,7 +64,11 @@ namespace Booking.Api.Repositories
 
         public async Task<Show> UpdateShow(int showId, ShowUpsertDto showDto)
         {
-            var show = await _context.shows.FirstOrDefaultAsync(s => s.ID == showId);
+            var show = await _context.shows
+                .Include(s => s.Movie)
+                .Include(s => s.Salon)
+                .FirstOrDefaultAsync(s => s.ID == showId);
+
             if (show == null)
             {
                 throw new Exception("Show not found");
@@ -77,6 +81,9 @@ namespace Booking.Api.Repositories
                 var movie = await _context.movies.FirstOrDefaultAsync(m => m.ID == showDto.MovieId);
                 var salon = await _context.salons.FirstOrDefaultAsync(s => s.ID == showDto.SalonId);
 
+                _context.Entry(show).Reference(s => s.Movie).Load();
+                _context.Entry(show).Reference(s => s.Salon).Load();
+
                 show.MovieID = showDto.MovieId;
                 show.Movie = movie;
 
@@ -85,9 +92,11 @@ namespace Booking.Api.Repositories
                 show.StartTime = showDto.StartTime;
                 show.EndTime = showDto.EndTime;
 
+                // Update AvailableSeats based on the changes in Salon
+                show.AvailableSeats = salon?.AvailableSeats ?? 0;
+
                 await _context.SaveChangesAsync();
                 return show;
-
             }
             catch (ShowValidationException ex)
             {
@@ -133,7 +142,7 @@ namespace Booking.Api.Repositories
                 AgeRestriction = show.Movie.AgeRestriction,
                 SalonId = show.Salon.ID,
                 SalonName = show.Salon.Name,
-                AvailableSeats = show.Salon.NumberOfSeats,
+                AvailableSeats = show.Salon.AvailableSeats,
                 StartTime = show.StartTime,
                 EndTime = show.EndTime,
                 Genre = show.Movie.Genre,

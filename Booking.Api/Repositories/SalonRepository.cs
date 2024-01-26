@@ -66,7 +66,7 @@ namespace Booking.Api.Repositories
                 }
                 SalonValidator.ValidateSalon(updateSalon);
                 salon.Name = updateSalon.Name;
-                salon.NumberOfSeats = updateSalon.NumberOfSeats;
+                salon.AvailableSeats = updateSalon.AvailableSeats;
                 salon.Status = updateSalon.Status;
 
                 await _context.SaveChangesAsync();
