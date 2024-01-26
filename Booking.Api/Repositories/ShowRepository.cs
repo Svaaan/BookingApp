@@ -2,6 +2,7 @@
 using Booking.Api.Entities;
 using Booking.Api.Entities.DTO;
 using Booking.Api.Repositories.Interfaces;
+using Booking.Api.Validation;
 using Microsoft.EntityFrameworkCore;
 
 namespace Booking.Api.Repositories
@@ -40,6 +41,9 @@ namespace Booking.Api.Repositories
 
                     AvailableSeats = _context.salons.FirstOrDefault(s => s.ID == showDto.SalonId)?.NumberOfSeats ?? 0
                 };
+
+                ShowValidator.ValidateShow(show);
+
                 _context.shows.Add(show);
                 await _context.SaveChangesAsync();
                 return show;
