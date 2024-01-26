@@ -19,7 +19,7 @@ namespace Booking.Api.Validation
             Guard.Against.Null(salon, nameof(salon));
             ValidateStringProperty(salon.Name, nameof(salon.Name));
 
-            ValdiateNonNegativeProperty(salon.NumberOfSeats, nameof(salon.NumberOfSeats));
+            ValdiateNonNegativeProperty(salon.AvailableSeats, nameof(salon.AvailableSeats));
 
             ValidateEnumProperty(salon.Status, nameof(salon.Status));
         }
