@@ -86,5 +86,16 @@ namespace Booking.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Show>> DeleteShow(int id)
+        {
+            var deleteShow = await _showRepository.DeleteShowById(id);
+            if (deleteShow == null)
+            {
+                return BadRequest();
+            }
+            return Ok(deleteShow);
+        }
     }
 }

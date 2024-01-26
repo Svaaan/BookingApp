@@ -95,5 +95,17 @@ namespace Booking.Api.Repositories
                 throw new Exception($"Validation failed: {ex.Message}");
             }
         }
+
+        public async Task<Show> DeleteShowById(int Id)
+        {
+            var deleteShow = await _context.shows.FindAsync(Id);
+            if (deleteShow != null)
+            {
+                _context.shows.Remove(deleteShow);
+                await _context.SaveChangesAsync();
+            }
+
+            return deleteShow;
+        }
     }
 }
