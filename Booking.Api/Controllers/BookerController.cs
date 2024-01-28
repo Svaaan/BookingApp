@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging; // Ensure this using statement is present for ILogger
+using Microsoft.Extensions.Logging;
 using Booking.Api.Entities;
 using Booking.Api.Repositories.Interfaces;
 
@@ -21,12 +21,12 @@ namespace Booking.Api.Controllers
         }
 
         /// <summary>
-        /// Create a new movie.
+        /// Create a new booker.
         /// </summary>
-        /// <param name="booker">The movie to create.</param>
-        /// <returns>The created movie.</returns>
-        /// <response code="200">Returns the newly created movie.</response>
-        /// <response code="400">If the movie is not valid or an error occurs.</response>
+        /// <param name="booker">The booker to create.</param>
+        /// <returns>The Booker movie.</returns>
+        /// <response code="200">Returns the newly created booker.</response>
+        /// <response code="400">If the boooker is not valid or an error occurs.</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

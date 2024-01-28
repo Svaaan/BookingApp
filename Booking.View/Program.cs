@@ -1,5 +1,5 @@
 using Booking.View.Components;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Booking.Api.Data;
 
@@ -10,6 +10,9 @@ builder.Services.AddDbContext<CinemaDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaDbContext"));
 });
+
+// Add HttpClient service
+builder.Services.AddHttpClient();
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
