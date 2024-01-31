@@ -1,7 +1,15 @@
 ﻿@page "/"
 @using Booking.Api.Data
 @using Booking.Api.Entities
-@inject CinemaDbContext DbContext
+@using Booking.Api.Repositories
+@using Booking.Api.Repositories.Interfaces
+@using Microsoft.AspNetCore.Components.Forms
+@using Booking.View.Request
+@using Booking.View.DTO
+@inject BookerRequest BookerRequest
+@inject ILogger<BookerDTO> Logger
+
+@inject CinemaDbContext dbContext
 
 <style>
     body {
@@ -20,12 +28,10 @@
         margin: 100px;
     }
 
-    /* Blue card title */
     .card-title {
         color: black;
     }
 
-    /* Dark form label */
     .form-label {
         color: #343a40;
         font-weight: bold;
@@ -63,55 +69,84 @@
     }
 </style>
 
+
 <div class="container">
     <div class="card mx-auto mt-5" style="max-width: 500px;">
         <div class="card-body">
-            @if (bookingSubmitted)
+            <h5 class="card-title text-center">Booking Form</h5>
+            <EditForm Model="@booker" OnValidSubmit="@SubmitForm" FormName="BookerDTO">
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Namn:</label>
+                    <InputText type="text" id="Name" class="form-control" @bind-Value="booker.Name" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="LastName" class="form-label">Efternamn:</label>
+                    <InputText type="text" id="LastName" class="form-control" @bind-Value="booker.LastName" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Email:</label>
+                    <InputText type="email" id="Email" class="form-control" @bind-Value="booker.Email" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="PhoneNumber" class="form-label">Telefon nummer:</label>
+                    <InputText type="tel" id="PhoneNumber" class="form-control" @bind-Value="booker.PhoneNumber" required />
+                </div>
+
+                <div class="mb-3 text-center">
+                    <button type="submit" class="custom-button">Submit Booking</button>
+                </div>
+            </EditForm>
+       
+            @if (!string.IsNullOrWhiteSpace(successMessage))
             {
-                <h5 class="card-title text-center success-message">Thank you for booking!</h5>
+                <div class="success-message">
+                    @successMessage
+                </div>
             }
-            else
+            @if (!string.IsNullOrWhiteSpace(errorMessage))
             {
-                <h5 class="card-title text-center">Booking Form</h5>
-                <form onvalidform="@SubmitBooking">
-                    <div class="mb-3">
-                        <label for="Name" class="form-label">Namn:</label>
-                        <input type="text" id="Name" class="form-control" @bind="bookingData.Name" required />
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="LastName" class="form-label">Efternamn:</label>
-                        <input type="text" id="LastName" class="form-control" @bind="bookingData.LastName" required />
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="Email" class="form-label">Email:</label>
-                        <input type="email" id="Email" class="form-control" @bind="bookingData.Email" required />
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="PhoneNumber" class="form-label">Telefon nummer:</label>
-                        <input type="tel" id="PhoneNumber" class="form-control" @bind="bookingData.PhoneNumber" required />
-                    </div>
-
-                    <div class="mb-3 text-center">
-                        <button type="submit" class="custom-button">Submit Booking</button>
-                    </div>
-                </form>
+                <div class="error-message">
+                    @errorMessage
+                </div>
             }
         </div>
     </div>
 </div>
 
 @code {
-    private bool bookingSubmitted = false;
-    public Booker bookingData = new Booker();
+    [SupplyParameterFromForm]
+    public BookerDTO booker { get; set; }
+    private EditContext editContext;
+    private string successMessage = "";
+    private string errorMessage = "";
 
-    private async Task SubmitBooking()
+    protected override void OnInitialized() => booker ??= new BookerDTO();
+
+    private async Task SubmitForm()
     {
-        DbContext.bookers.Add(bookingData);
-        await DbContext.SaveChangesAsync();
-        bookingData = new Booker();
-        bookingSubmitted = true;
+        try
+        {
+            var postForm = await BookerRequest.RequestBooking(booker);
+            if (postForm)
+            {
+             
+                successMessage = "Booking successful!";
+                errorMessage = ""; 
+            }
+            else
+            {
+                successMessage = "";
+                errorMessage = "Booking failed. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "An error occurred while submitting the booking form.");
+            successMessage = ""; 
+            errorMessage = "An unexpected error occurred. Please try again later.";
+        }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Booking.Api.Entities;
 using Booking.Api.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Booking.Api.Controllers
 {
