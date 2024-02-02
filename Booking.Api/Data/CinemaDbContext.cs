@@ -11,6 +11,7 @@ namespace Booking.Api.Data
         public DbSet<Movie> movies { get; set; }
         public DbSet<Salon> salons { get; set; }
         public DbSet<Show> shows { get; set; }
+        public DbSet<Reservation> reservations { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
