@@ -42,5 +42,70 @@ namespace Booking.Api.Repositories
             
             return reservation;
         }
+
+        public async Task<List<Reservation>> GetAllReservations()
+        {
+            var reservationList = await _context.reservations.ToListAsync();
+            return reservationList;
+        }
+
+        public async Task<Reservation> GetReservationById(int Id)
+        {
+            try
+            {
+                var getReservation = await _context.reservations.FindAsync(Id);
+                if (getReservation == null)
+                {
+                    _logger.LogInformation($"Couldnt find a reservation in the database with the ID: {Id}.");
+                }
+                return getReservation;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred when Retrieving the object");
+                throw;
+            }
+        }
+
+        public async Task<Reservation> UpdateReservation(int Id, ReservationDto updateReservation)
+        {
+            var reservation = await _context.reservations.FindAsync(Id);
+
+            if (reservation == null)
+            {
+                _logger.LogError($"No reservation found with the Id: {Id}");
+                return null;
+            }
+
+            var showId = reservation.ShowId;
+
+            // Load the show from the database
+            var show = await _context.shows.FindAsync(showId);
+
+            if (show == null)
+            {
+                _logger.LogError($"No show found with the ID: {showId}");
+                return null;
+            }
+
+            var seatDifference = updateReservation.BookedSeats - reservation.BookedSeats;
+
+            if (seatDifference > 0 && show.AvailableSeats - seatDifference < 0)
+            {
+                throw new Exception("Not enough seats are available for the requested update");
+            }
+
+            // Update reservation properties
+            reservation.ShowId = updateReservation.ShowId;
+            reservation.BookerEmail = updateReservation.BookerEmail;
+            reservation.BookedSeats = updateReservation.BookedSeats;
+
+            // Adjust available seats based on seat difference
+            show.AvailableSeats -= seatDifference;
+
+            await _context.SaveChangesAsync();
+            return reservation;
+        }
+
     }
 }

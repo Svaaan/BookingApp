@@ -82,7 +82,7 @@ namespace Booking.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while creating a show.");
+                _logger.LogError(ex, "An error occurred while updating a show.");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
