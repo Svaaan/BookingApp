@@ -21,27 +21,38 @@ namespace Booking.Api.Repositories
 
         public async Task<Reservation> CreateReservation(ReservationDto reservationDto)
         {
-            var show = await _context.shows.FirstOrDefaultAsync(s => s.ID == reservationDto.ShowId);
-
-            if (show.AvailableSeats < reservationDto.BookedSeats)
+            try
             {
-                throw new Exception("Not enough seats are available for booking");
+                var show = await _context.shows.FirstOrDefaultAsync(s => s.ID == reservationDto.ShowId);
+
+                if (show.AvailableSeats < reservationDto.BookedSeats)
+                {
+                    throw new Exception("Not enough seats are available for booking");
+                }
+
+                var reservation = new Reservation
+                {
+                    ShowId = reservationDto.ShowId,
+                    BookerEmail = reservationDto.BookerEmail,
+                    BookedSeats = reservationDto.BookedSeats,
+                };
+
+                ReservationValidator.ValidateReservation(reservation);
+
+                _context.reservations.Add(reservation);
+                await _context.SaveChangesAsync();
+
+                show.AvailableSeats -= reservationDto.BookedSeats;
+                await _context.SaveChangesAsync();
+
+                return reservation;
             }
-
-            var reservation = new Reservation
+            catch (ReservationValidationException ex)
             {
-                ShowId = reservationDto.ShowId,
-                BookerEmail = reservationDto.BookerEmail,
-                BookedSeats = reservationDto.BookedSeats,
-            };
-
-            _context.reservations.Add(reservation);
-            await _context.SaveChangesAsync();
-
-            show.AvailableSeats -= reservationDto.BookedSeats;
-            await _context.SaveChangesAsync();
-
-            return reservation;
+                // Handle validation exception
+                _logger.LogError(ex, "Validation error while creating a reservation.");
+                throw new Exception($"Validation failed: {ex.Message}");
+            }
         }
 
         public async Task<List<Reservation>> GetAllReservations()
