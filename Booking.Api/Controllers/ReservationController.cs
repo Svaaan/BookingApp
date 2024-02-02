@@ -1,5 +1,6 @@
 ﻿using Booking.Api.Entities;
 using Booking.Api.Entities.DTO;
+using Booking.Api.Repositories;
 using Booking.Api.Repositories.Interfaces;
 using Booking.Api.Validation;
 using Microsoft.AspNetCore.Http;
@@ -82,8 +83,19 @@ namespace Booking.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while updating a reservation.");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating a reservation.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating a reservation.\n" + ex.Message);
             }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Reservation>> DeleteReservation(int id)
+        {
+            var deleteReservation = await _reservationRepository.DeleteReservation(id);
+            if (deleteReservation == null)
+            {
+                return BadRequest();
+            }
+            return Ok(deleteReservation);
         }
     }
 }

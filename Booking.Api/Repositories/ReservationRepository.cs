@@ -2,6 +2,7 @@
 using Booking.Api.Entities;
 using Booking.Api.Entities.DTO;
 using Booking.Api.Repositories.Interfaces;
+using Booking.Api.Validation;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -39,7 +40,7 @@ namespace Booking.Api.Repositories
 
             show.AvailableSeats -= reservationDto.BookedSeats;
             await _context.SaveChangesAsync();
-            
+
             return reservation;
         }
 
@@ -107,5 +108,25 @@ namespace Booking.Api.Repositories
             return reservation;
         }
 
+        public async Task<Reservation> DeleteReservation(int Id)
+        {
+            try
+            {
+                var deleteReservation = await _context.reservations.FindAsync(Id);
+
+                if (deleteReservation != null)
+                {
+                    _context.reservations.Remove(deleteReservation);
+                    await _context.SaveChangesAsync();
+                }
+                return deleteReservation;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting movie. MovieId: {MovieId}", Id);
+                throw;
+            }
+
+        }
     }
 }
