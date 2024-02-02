@@ -112,6 +112,8 @@ namespace Booking.Api.Repositories
             reservation.BookerEmail = updateReservation.BookerEmail;
             reservation.BookedSeats = updateReservation.BookedSeats;
 
+            ReservationValidator.ValidateReservation(reservation);
+
             // Adjust available seats based on seat difference
             show.AvailableSeats -= seatDifference;
 
