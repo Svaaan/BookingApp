@@ -96,11 +96,13 @@ namespace Booking.Api.Repositories
             try
             {
                 var movie = await _context.movies.FindAsync(movieId);
+
                 if (movie == null)
                 {
                     _logger.LogError($"No movie found with the Id: {movieId}");
                     return null;
                 }
+
                 movie.Title = updateMovie.Title;
                 movie.Description = updateMovie.Description;
                 movie.Director = updateMovie.Director;

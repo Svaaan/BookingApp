@@ -36,7 +36,7 @@ namespace Booking.Api.Controllers
         }
 
         /// <summary>
-        /// Gets all movies.
+        /// Lists all movies.
         /// </summary>
         /// <returns>A list of movies.</returns>
         /// <response code="200">Returns the list of movies.</response>
@@ -58,13 +58,13 @@ namespace Booking.Api.Controllers
         /// <summary>
         /// Delete a movie ID
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         /// <response code="200">Return a message specifying which movie that has been deleted</response>
         /// <response code="404">Return a not found if incorrect id and/or id doesnt exist</response>
         [HttpDelete("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Movie>> DeleteMovieById(int id)
         {
             var deleteMovie = await this._movieRepository.DeleteMovieByIdAsync(id);

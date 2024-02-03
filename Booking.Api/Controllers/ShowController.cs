@@ -60,7 +60,15 @@ namespace Booking.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Update a show by entering it's ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updateShow"></param>
+        /// <returns>Returns the updated Show.</returns>
         [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Show>> UpdateShow(int id, [FromBody] ShowUpsertDto updateShow)
         {
             try
@@ -82,38 +90,69 @@ namespace Booking.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while creating a show.");
+                _logger.LogError(ex, "An error occurred while updating a show.");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
 
+        /// <summary>
+        /// Delete a show
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <response code="200">Return a object specifying which show that has been deleted</response>
+        /// <response code="404">Return a not found if incorrect id and/or id doesnt exist</response>
         [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Show>> DeleteShow(int id)
         {
             var deleteShow = await _showRepository.DeleteShowById(id);
             if (deleteShow == null)
             {
-                return BadRequest();
+                return NotFound();
             }
             return Ok(deleteShow);
         }
 
+        /// <summary>
+        /// Get the show object.
+        /// </summary>
+        /// <returns>An object of the show.</returns>
+        /// <response code="200">Returns the show object.</response>
+        /// <response code="404">Return a not found if incorrect id and/or id doesnt exist</response>
         [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ShowDetailsDto>> GetShowById(int id)
         {
             var show = await _showRepository.GetShowById(id);
             if (show == null)
             {
-                return BadRequest();
+                return NotFound();
             }
             return Ok(show);
         }
 
+        /// <summary>
+        /// Lists all shows.
+        /// </summary>
+        /// <returns>A list of shows.</returns>
+        /// <response code="200">Returns the list of shows.</response>
+        /// <response code="404">Return a not found if incorrect id and/or id doesnt exist</response>
+        /// <response code="500">If an error occurs while retrieving the shows.</response>
         [HttpGet("schedule")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<List<Schedule>>> GetAllShows()
         {
-            var shows = await _showRepository.GetShowsByDateAndHours();
-            return Ok(shows);
+            var showList = await _showRepository.GetShowsByDateAndHours();
+            if (showList == null)
+            {
+                return NotFound();
+            }
+            return Ok(showList);
         }
     }
 }

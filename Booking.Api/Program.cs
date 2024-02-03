@@ -32,6 +32,7 @@ builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<ISalonRepository, SalonRepository>();
 builder.Services.AddScoped<IShowRepository, ShowRepository>();
 builder.Services.AddScoped<IBookerRepository, BookerRepository>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
 var app = builder.Build();
 
