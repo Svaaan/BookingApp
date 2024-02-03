@@ -1,15 +1,7 @@
-﻿using Booking.View.DTO;
-using System.Text;
+﻿using System.Text;
 using Newtonsoft.Json;
-using System.Net.Http;
-using System.Security.Policy;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Net.Http.Json;
-using System.Text;
-using System.Collections.Generic;
+using Booking.View.DTO.MovieTheatreDTO;
+using Booking.View.Services.IServices;
 
 namespace Booking.View.Request
 {
