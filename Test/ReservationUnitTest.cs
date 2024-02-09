@@ -58,7 +58,31 @@ namespace Booking.Api.Repositories.Tests
             mockContext.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
+        [Fact]
+        public void CalculateTotalCost_ReturnsCorrectTotalCost()
+        {
+            // Arrange
+            var show = new Show
+            {
+                PricePerSeat = 10
+            };
 
+            var reservation = new Reservation
+            {
+                Id = 1,
+                ShowId = 1,
+                BookerEmail = "test@example.com",
+                BookedSeats = 3
+            };
+
+            // Act
+            var totalCost = show.CalculateTotalCost(reservation.BookedSeats);
+
+            // Assert
+            Assert.Equal(30, totalCost);
+        }
+
+        // in case we need to mock the database ;)
         private static DbSet<T> MockDbSet<T>(IQueryable<T> data)
             where T : class
         {
