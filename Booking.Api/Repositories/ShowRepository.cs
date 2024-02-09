@@ -10,9 +10,9 @@ namespace Booking.Api.Repositories
     public class ShowRepository : IShowRepository
     {
         private readonly CinemaDbContext _context;
-        private readonly ILogger<MovieRepository> _logger;
+        private readonly ILogger<ShowRepository> _logger;
 
-        public ShowRepository(CinemaDbContext context, ILogger<MovieRepository> logger)
+        public ShowRepository(CinemaDbContext context, ILogger<ShowRepository> logger)
         {
             _context = context;
             _logger = logger;

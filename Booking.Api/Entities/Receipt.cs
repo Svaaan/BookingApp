@@ -2,7 +2,7 @@
 {
     public class Receipt
     {
-        public int ReservattionId { get; set; }
+        public int ReservationId { get; set; }
         public int ShowId { get; set; }
         public string BookerEmail { get; set; }
         public int BookedSeats { get; set; }
@@ -11,7 +11,7 @@
 
         public Receipt(Reservation reservation, Show show)
         {
-            ReservattionId = reservation.Id;
+            ReservationId = reservation.Id;
             ShowId = reservation.ShowId;
             BookerEmail = reservation.BookerEmail;
             BookedSeats = reservation.BookedSeats;

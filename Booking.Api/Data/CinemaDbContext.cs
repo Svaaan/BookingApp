@@ -10,8 +10,17 @@ namespace Booking.Api.Data
         public DbSet<Booker> bookers { get; set; }
         public DbSet<Movie> movies { get; set; }
         public DbSet<Salon> salons { get; set; }
-        public DbSet<Show> shows { get; set; }
-        public DbSet<Reservation> reservations { get; set; }
+        public virtual DbSet<Show> shows { get; set; }
+        public virtual DbSet<Reservation> reservations { get; set; }
+
+        public CinemaDbContext() : base()
+        {
+        }
+
+        public virtual Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            return base.SaveChangesAsync(cancellationToken);
+        }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
