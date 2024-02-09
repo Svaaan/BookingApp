@@ -10,5 +10,11 @@
         public int AvailableSeats { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        public decimal PricePerSeat { get; set; }
+
+        public decimal CalculateTotalCost(int bookedSeats)
+        {
+            return bookedSeats * PricePerSeat;
+        }
     }
 }

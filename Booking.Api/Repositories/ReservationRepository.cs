@@ -45,6 +45,8 @@ namespace Booking.Api.Repositories
                 show.AvailableSeats -= reservationDto.BookedSeats;
                 await _context.SaveChangesAsync();
 
+                var receipt = new Receipt(reservation, show);
+
                 return reservation;
             }
             catch (ReservationValidationException ex)
