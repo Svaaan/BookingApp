@@ -11,9 +11,9 @@ namespace Booking.Api.Repositories
     public class ReservationRepository : IReservationRepository
     {
         private readonly CinemaDbContext _context;
-        private readonly ILogger<MovieRepository> _logger;
+        private readonly ILogger<ReservationRepository> _logger;
 
-        public ReservationRepository(CinemaDbContext context, ILogger<MovieRepository> logger)
+        public ReservationRepository(CinemaDbContext context, ILogger<ReservationRepository> logger)
         {
             _context = context;
             _logger = logger;
@@ -45,6 +45,8 @@ namespace Booking.Api.Repositories
                 show.AvailableSeats -= reservationDto.BookedSeats;
                 await _context.SaveChangesAsync();
 
+                var receipt = new Receipt(reservation, show);
+
                 return reservation;
             }
             catch (ReservationValidationException ex)
@@ -74,7 +76,7 @@ namespace Booking.Api.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred when Retrieving the object");
+                _logger.LogError(ex, "Error occurred when Retrieving the object with ID: {Id}", Id);
                 throw;
             }
         }
