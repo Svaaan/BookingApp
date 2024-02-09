@@ -23,7 +23,7 @@ namespace Booking.Api.Repositories.Tests
             {
                 ShowId = 1,
                 BookerEmail = "test@example.com",
-                BookedSeats = 5 // This number can be adjusted based on your scenario
+                BookedSeats = 5
             };
 
             var existingReservation = new Reservation
@@ -31,7 +31,7 @@ namespace Booking.Api.Repositories.Tests
                 Id = reservationId,
                 ShowId = 1,
                 BookerEmail = "test@example.com",
-                BookedSeats = 8 // Initial booked seats are greater than the update
+                BookedSeats = 8
             };
 
             var existingShow = new Show

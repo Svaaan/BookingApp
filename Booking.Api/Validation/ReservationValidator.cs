@@ -13,8 +13,6 @@ namespace Booking.Api.Validation
 
     public class ReservationValidator
     {
-        private static readonly TimeSpan FutureDateWindow = TimeSpan.FromMinutes(15);
-
         public static void ValidateReservation(Reservation reservation)
         {
             Guard.Against.Null(reservation, nameof(reservation));
