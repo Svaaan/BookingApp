@@ -98,12 +98,15 @@
                     <label for="PhoneNumber" class="form-label">Telefon nummer:</label>
                     <InputText type="tel" id="PhoneNumber" class="form-control" @bind-Value="booker.PhoneNumber" required />
                 </div>
+                 <div class="mb-3">
+                    <label for="BookedSeats" class="form-label">Antal platser:</label>
+                    <InputNumber type="seats" id="BookedSeats" class="form-control" @bind-Value="reservation.BookedSeats" required />
+                </div
 
                 <div class="mb-3 text-center">
                     <button type="submit" class="custom-button">Submit Booking</button>
                 </div>
             </EditForm>
-
 
             <div style="text-align: center; display: flex; align-items: center; flex-direction: column;">
                 @if (!string.IsNullOrWhiteSpace(successMessage))
@@ -119,6 +122,7 @@
                 }
                 @if (!string.IsNullOrWhiteSpace(errorMessage))
                 {
+                    <BookingReceipt Booker="@booker" Reservation="@reservation" />
                     <div class="error-message">
                         @errorMessage
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
@@ -134,11 +138,18 @@
 @code {
     [SupplyParameterFromForm]
     public BookerDTO booker { get; set; }
+    [SupplyParameterFromForm]
+    public ReservationDto reservation { get; set; }
+
     private EditContext editContext;
     private string successMessage = "";
     private string errorMessage = "";
 
-    protected override void OnInitialized() => booker ??= new BookerDTO();
+    protected override void OnInitialized()
+    {
+        booker ??= new BookerDTO();
+        reservation ??= new ReservationDto();
+    }
 
     private async Task SubmitForm()
     {

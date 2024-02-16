@@ -1,0 +1,40 @@
+﻿@using Booking.View.DTO.MovieTheatreDTO
+
+<div class="receipt-container" style="width: 100%; border: 2px solid #000000; border-radius: 8px; padding: 5px;">
+    <h3>Booking Receipt</h3>
+    <div class="mb-1">
+        <label class="form-label">Namn:</label>
+        <span>@booker.Name</span>
+    </div>
+    <div class="mb-1">
+        <label class="form-label">Efternamn:</label>
+        <span>@booker.LastName</span>
+    </div>
+    <div class="mb-1">
+        <label class="form-label">Email:</label>
+        <span>@booker.Email</span>
+    </div>
+    <div class="mb-1">
+        <label class="form-label">Telefonnummer:</label>
+        <span>@booker.PhoneNumber</span>
+    </div>
+    <div class="mb-1">
+        <label class="form-label">Bokade platser:</label>
+        <span>@(reservation?.BookedSeats)</span>
+    </div>
+@*     <div class="mb-1">
+        <label class="form-label">Totalt:</label>
+        <span>@(receipt.TotalCost)</span>
+    </div> *@
+</div>
+
+@code {
+    [Parameter]
+    public BookerDTO booker { get; set; }
+
+    [Parameter]
+    public ReservationDto reservation { get; set; }
+
+    // [Parameter]
+    // public ReceiptDTO receipt { get; set; }
+}
