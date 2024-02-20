@@ -1,23 +1,14 @@
-using Booking.Web.Components;
-using Microsoft.EntityFrameworkCore;
-using Booking.View.Request;
-using Booking.Api.Data;
-
+using BookerPortal.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<CinemaDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaDbContext"));
-});
-
-  
-
+// Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddScoped<BookerRequest>();
+
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
