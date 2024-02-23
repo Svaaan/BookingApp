@@ -1,0 +1,115 @@
+﻿@page "/Dashboard"
+@inherits LayoutComponentBase
+
+<style>
+    .navbar {
+        height: 80px;
+    }
+
+    .navbar-dark .navbar-brand {
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+        .navbar-dark .navbar-brand:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+    .navbar-dark .navbar-nav .nav-link {
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+    .sidebar {
+        width: 200px;
+        height: calc(100vh - 80px);
+        position: fixed;
+        top: 80px;
+        left: 0;
+        overflow-y: auto;
+    }
+
+    .nav-item {
+        margin-bottom: 10px;
+    }
+
+    .nav-link {
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+</style>
+
+
+
+<div class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Booker Portal</a>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="sidebar bg-dark text-light" id="sidebar">
+    <div class="nav-scrollable">
+        <nav class="flex-column">
+            <div class="nav-item">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill"></span> Home
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="bookings">
+                    <span class="bi bi-list-nested"></span> Bokningar
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="saloon">
+                    <span class="bi bi-list-nested"></span> Salonger
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="movies">
+                    <span class="bi bi-list-nested"></span> Filmer
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="reservation">
+                    <span class="bi bi-list-nested"></span> Reservationer
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="schedule">
+                    <span class="bi bi-list-nested"></span> Schema
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="show">
+                    <span class="bi bi-list-nested"></span> Visningar
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="char">
+                    <span class="bi bi-list-nested"></span> Statistik
+                </NavLink>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<div style="margin-left: 200px;">
+    <!-- Your main content area goes here -->
+    <!-- This margin ensures that your main content doesn't get hidden behind the sidebar -->
+</div>
