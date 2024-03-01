@@ -1,19 +1,53 @@
-using System;
-using System.Threading.Tasks;
+using Booking.Api.Controllers;
 using Booking.Api.Data;
 using Booking.Api.Entities;
 using Booking.Api.Entities.DTO;
 using Booking.Api.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Xunit;
-using FluentAssertions;
 
 namespace Booking.Api.Repositories.Tests
 {
     public class ReservationServiceTests
     {
+        [Fact]
+        public async Task CreateReservation_WithValidData_CreatesReservation()
+        {
+            // Arrange
+            var reservationDto = new ReservationDto
+            {
+                ShowId = 1,
+                BookerEmail = "test@example.com",
+                BookedSeats = 5
+            };
+
+            var mockRepository = new Mock<IReservationRepository>();
+            mockRepository.Setup(repo => repo.CreateReservation(It.IsAny<ReservationDto>()))
+                          .ReturnsAsync(new Reservation
+                          {
+                              // Set properties as needed for the test
+                              ShowId = reservationDto.ShowId,
+                              BookerEmail = reservationDto.BookerEmail,
+                              BookedSeats = reservationDto.BookedSeats
+                          });
+
+            var controller = new ReservationController(Mock.Of<ILogger<ReservationController>>(), mockRepository.Object);
+
+            // Act
+            var result = await controller.CreateReservation(reservationDto);
+
+            // Assert
+            var createdResult = Assert.IsType<OkObjectResult>(result.Result);
+            var createdReservation = Assert.IsType<Reservation>(createdResult.Value);
+
+            Assert.Equal(reservationDto.ShowId, createdReservation.ShowId);
+            Assert.Equal(reservationDto.BookerEmail, createdReservation.BookerEmail);
+            Assert.Equal(reservationDto.BookedSeats, createdReservation.BookedSeats);
+        }
+
+
         [Fact]
         public async Task UpdateReservation_IncreasesAvailableSeats_WhenBookingSeatsDecrease()
         {
@@ -64,7 +98,8 @@ namespace Booking.Api.Repositories.Tests
             // Arrange
             var show = new Show
             {
-                PricePerSeat = 10
+                PricePerSeat = 10,
+                InterestRate = 0.25m
             };
 
             var reservation = new Reservation
@@ -78,8 +113,10 @@ namespace Booking.Api.Repositories.Tests
             // Act
             var totalCost = show.CalculateTotalCost(reservation.BookedSeats);
 
+            var expectedTotalCost = reservation.BookedSeats * show.PricePerSeat * (1 + show.InterestRate);
+
             // Assert
-            Assert.Equal(30, totalCost);
+            Assert.Equal(expectedTotalCost, totalCost);
         }
 
         // in case we need to mock the database ;)

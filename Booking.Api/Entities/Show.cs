@@ -11,10 +11,19 @@
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public decimal PricePerSeat { get; set; }
+        public decimal InterestRate { get; set; } = 25;
 
         public decimal CalculateTotalCost(int bookedSeats)
         {
-            return bookedSeats * PricePerSeat;
+            decimal totalCost = bookedSeats * PricePerSeat;
+
+            if (InterestRate > 0)
+            {
+                decimal interestAmount = totalCost * InterestRate;
+                totalCost += interestAmount;
+            }
+
+            return totalCost;
         }
     }
 }
