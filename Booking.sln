@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Booking.Web", "Booking.View
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{E6AF3D57-2922-4EDA-ADF6-52D0E6953AAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookerPortal.Web", "BookerPortal.Web\BookerPortal.Web.csproj", "{A927598A-7FA7-4948-8136-E2D070BB94B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookerPortal.Web", "BookerPortal.Web\BookerPortal.Web.csproj", "{A927598A-7FA7-4948-8136-E2D070BB94B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Request.HTTP", "Request.HTTP\Request.HTTP.csproj", "{606E1CEF-F902-44BD-AEE7-1130CD30C394}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{A927598A-7FA7-4948-8136-E2D070BB94B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A927598A-7FA7-4948-8136-E2D070BB94B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A927598A-7FA7-4948-8136-E2D070BB94B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{606E1CEF-F902-44BD-AEE7-1130CD30C394}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{606E1CEF-F902-44BD-AEE7-1130CD30C394}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{606E1CEF-F902-44BD-AEE7-1130CD30C394}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{606E1CEF-F902-44BD-AEE7-1130CD30C394}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
