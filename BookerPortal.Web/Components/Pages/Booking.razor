@@ -1,19 +1,42 @@
 ﻿@page "/booking"
-@rendermode InteractiveServer
+@using global::Booking.View.DTO.MovieTheatreDTO
+@inject Crud.CrudMovieTheatre.ReadService ReadService
+<PageTitle>Bokningar</PageTitle>
 
-<PageTitle>Counter</PageTitle>
+<ul>
+    @foreach (var item in bookers)
+    {
+        <li>
+            <div>
+                <strong>Name:</strong> @item.Name
+            </div>
+            <div>
+                <strong>Last Name:</strong> @item.LastName
+            </div>
+            <div>
+                <strong>Email:</strong> @item.Email
+            </div>
+            <div>
+                <strong>Phone Number:</strong> @item.PhoneNumber
+            </div>
+        </li>
+    }
+</ul>
 
-<h1>Counter</h1>
-
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 @code {
-    private int currentCount = 0;
+    private List<BookerDTO> bookers = new List<BookerDTO>();
 
-    private void IncrementCount()
+    protected override async Task OnInitializedAsync()
     {
-        currentCount++;
+        try
+        {
+            var apiBookers = await ReadService.GetAllBookers();
+            
+        }
+        catch (Exception ex)
+        {
+            // Handle error, e.g., log it or display a message to the user
+        }
     }
 }
