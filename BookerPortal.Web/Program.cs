@@ -1,5 +1,5 @@
 using BookerPortal.Web.Components;
-using BookerPortal.Web.Crud.CrudMovieTheatre; 
+
 using System.Net.Http;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +11,6 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddScoped<HttpClient>();
 
-builder.Services.AddScoped<ReadService>();
 
 var app = builder.Build();
 
