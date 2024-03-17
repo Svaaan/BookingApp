@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Request.HTTP.DTO.MovieTheatreDTO
 {
-    public class BookerRequest : IBookerRequest
+    public class BookerRequest : IBookerService
     {
 
         public async Task <bool> RequestBooking(BookerDTO booker)
