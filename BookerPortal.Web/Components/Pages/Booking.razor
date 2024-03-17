@@ -1,42 +1,7 @@
 ﻿@page "/booking"
-@using global::Booking.View.DTO.MovieTheatreDTO
-@inject Crud.CrudMovieTheatre.ReadService ReadService
+
+
 <PageTitle>Bokningar</PageTitle>
 
-<ul>
-    @foreach (var item in bookers)
-    {
-        <li>
-            <div>
-                <strong>Name:</strong> @item.Name
-            </div>
-            <div>
-                <strong>Last Name:</strong> @item.LastName
-            </div>
-            <div>
-                <strong>Email:</strong> @item.Email
-            </div>
-            <div>
-                <strong>Phone Number:</strong> @item.PhoneNumber
-            </div>
-        </li>
-    }
-</ul>
 
 
-@code {
-    private List<BookerDTO> bookers = new List<BookerDTO>();
-
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            var apiBookers = await ReadService.GetAllBookers();
-            
-        }
-        catch (Exception ex)
-        {
-            // Handle error, e.g., log it or display a message to the user
-        }
-    }
-}

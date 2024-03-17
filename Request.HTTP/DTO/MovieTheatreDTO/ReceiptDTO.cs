@@ -1,6 +1,4 @@
-﻿using Booking.Api.Entities;
-
-namespace Booking.View.DTO.MovieTheatreDTO
+﻿namespace Request.HTTP.DTO.MovieTheatreDTO
 {
     public class ReceiptDTO
     {

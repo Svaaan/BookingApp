@@ -1,4 +1,4 @@
-﻿namespace Booking.View.DTO.MovieTheatreDTO
+﻿namespace Request.HTTP.DTO.MovieTheatreDTO
 {
     public class BookerDTO
     {
