@@ -1,7 +1,6 @@
-﻿@page "/Login"
+﻿@page "/"
 @using Microsoft.AspNetCore.Components.Forms
 @inject NavigationManager NavigationManager
-
 
 <style>
     body {
@@ -100,6 +99,11 @@
 </div>
 
 @code {
+
+    //Create an authservice
+        //Create an email cant be same as another email check etc.
+        //On succes route to home
+        //When finished remove page from dashboard and set route to dashboard/home
     private LoginModel loginModel = new LoginModel();
     private string errorMessage = "";
 
@@ -107,25 +111,22 @@
     {
         try
         {
-        
-            // var loginResult = await AuthService.Login(loginModel.Email, loginModel.Password);
-            // if (loginResult.Success)
-            // {
-            //     NavigationManager.NavigateTo("/Dashboard");
-            // }
-            // else
-            // {
-            //     errorMessage = loginResult.ErrorMessage;
-            // }
-
-           
-           // errorMessage = ""; 
-            NavigationManager.NavigateTo("/Dashboard");
+            // Simulate authentication logic
+            if (loginModel.Email == "example@example.com" && loginModel.Password == "password")
+            {
+                // Successful login
+                NavigationManager.NavigateTo("/home");
+            }
+            else
+            {
+                // Failed login
+                errorMessage = "Invalid email or password.";
+            }
         }
         catch (Exception ex)
         {
-           // Logger.LogError(ex, "An error occurred while logging in.");
-            //errorMessage = "An unexpected error occurred. Please try again later.";
+            // Handle any unexpected exceptions
+            errorMessage = "An unexpected error occurred. Please try again later.";
         }
     }
 

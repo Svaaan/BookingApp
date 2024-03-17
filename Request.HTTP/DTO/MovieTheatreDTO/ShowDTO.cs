@@ -1,4 +1,4 @@
-﻿namespace Booking.Api.Entities
+﻿namespace Request.Http.DTO.MovieTheatreDTO
 {
     public class Show
     {

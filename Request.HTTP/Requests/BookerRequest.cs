@@ -1,33 +1,35 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Text;
+using Newtonsoft.Json;
 
-namespace Request.HTTP.Controllers
+
+namespace Request.Http.DTO.MovieTheatreDTO
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class BookerRequest : IBookerRequest
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public async Task <bool> RequestBooking(BookerDTO booker)
         {
-            _logger = logger;
-        }
-
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            try
             {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+                using (HttpClient client = new HttpClient())
+                {
+                    var endpoint = new Uri("https://localhost:44367/api/Booker");
+                    var jsonContent = JsonConvert.SerializeObject(booker);
+                    var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                    var response = await client.PostAsync(endpoint, httpContent);
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    return true;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"HTTP request failed: {ex.Message}");
+                return false;
+            }
         }
+
     }
+
 }
+
