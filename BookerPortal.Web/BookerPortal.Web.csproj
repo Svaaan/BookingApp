@@ -9,6 +9,5 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\booking.api\booking.api.csproj" />
-		<ProjectReference Include="..\Request.HTTP\Request.HTTP.csproj" />
 	</ItemGroup>
 </Project>

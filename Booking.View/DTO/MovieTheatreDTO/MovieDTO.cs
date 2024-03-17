@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Request.HTTP.DTO.MovieTheatreDTO
+namespace Booking.Api.Entities
 {
     public class Movie
     {

@@ -10,7 +10,6 @@
 		<Folder Include="Components\Layout\" />
 		<PackageReference Include="MudBlazor" Version="6.12.0" />
 		<ProjectReference Include="..\booking.api\booking.api.csproj" />
-		<ProjectReference Include="..\Request.HTTP\Request.HTTP.csproj" />
 	</ItemGroup>
 
 </Project>

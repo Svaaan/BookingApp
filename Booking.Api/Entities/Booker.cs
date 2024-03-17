@@ -1,5 +1,4 @@
-﻿
-namespace Booking.Api.Entities
+﻿namespace Booking.Api.Entities
 {
     public class Booker
     {

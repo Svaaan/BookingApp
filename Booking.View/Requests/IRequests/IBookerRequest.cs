@@ -1,4 +1,6 @@
-﻿namespace Request.HTTP.DTO.MovieTheatreDTO
+﻿using Booking.View.DTO.MovieTheatreDTO;
+
+namespace Booking.View.Services.IServices
 {
     public interface IBookerRequest
     {

@@ -9,11 +9,10 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Booking.Api\Booking.Api.csproj" />
+    <Folder Include="Requests\IRequests\" />
   </ItemGroup>
 
 </Project>

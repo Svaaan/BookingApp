@@ -1,8 +1,9 @@
 ﻿using System.Text;
 using Newtonsoft.Json;
-using Request.HTTP.DTO.MovieTheatreDTO;
+using Booking.View.DTO.MovieTheatreDTO;
+using Booking.View.Services.IServices;
 
-namespace Request.HTTP
+namespace Booking.View.Request
 {
     public class BookerRequest : IBookerRequest
     {
