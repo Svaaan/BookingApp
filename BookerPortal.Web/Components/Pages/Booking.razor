@@ -1,6 +1,6 @@
 ﻿@page "/booking"
-@using global::Booking.View.DTO.MovieTheatreDTO
-@inject Crud.CrudMovieTheatre.ReadService ReadService
+@using Request.HTTP
+@using Request.HTTP.DTO.MovieTheatreDTO
 <PageTitle>Bokningar</PageTitle>
 
 <ul>
@@ -31,12 +31,12 @@
     {
         try
         {
-            var apiBookers = await ReadService.GetAllBookers();
+          
             
         }
         catch (Exception ex)
         {
-            // Handle error, e.g., log it or display a message to the user
+            
         }
     }
 }

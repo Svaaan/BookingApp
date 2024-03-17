@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Request.Http.DTO.MovieTheatreDTO
+namespace Request.HTTP.DTO.MovieTheatreDTO
 {
     public class Movie
     {

@@ -1,4 +1,4 @@
-﻿namespace Request.Http.DTO.MovieTheatreDTO
+﻿namespace Request.HTTP.DTO.MovieTheatreDTO
 {
     public interface IBookerRequest
     {

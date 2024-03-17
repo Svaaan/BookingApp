@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 
-namespace Request.Http.DTO.MovieTheatreDTO
+namespace Request.HTTP.DTO.MovieTheatreDTO
 {
     public class BookerRequest : IBookerRequest
     {

@@ -1,6 +1,6 @@
 ﻿using Booking.Api.Entities.DTO;
 
-namespace Request.Http.DTO.MovieTheatreDTO
+namespace Request.HTTP.DTO.MovieTheatreDTO
 {
     public class Schedule
     {
