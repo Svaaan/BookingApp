@@ -43,6 +43,14 @@ namespace Booking.Api.Data
                 v => v.ToString(),
                 v => (Subtitles)Enum.Parse(typeof(Subtitles), v));
 
+            modelBuilder.Entity<Show>()
+                .Property(e => e.InterestRate)
+                .HasColumnType("decimal(10, 2)");
+
+            modelBuilder.Entity<Show>()
+                .Property(s => s.PricePerSeat)
+                .HasColumnType("decimal(10, 2)");
+
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Movie>().HasData(new Movie
             {
