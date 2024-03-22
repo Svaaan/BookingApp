@@ -17,6 +17,7 @@
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Phone Number</th>
+                    <th> </th>
                 </tr>
             </thead>
             <tbody>
@@ -31,7 +32,7 @@
                                 <td><input @bind="item.LastName" /></td>
                                 <td><input @bind="item.Email" /></td>
                                 <td><input @bind="item.PhoneNumber" /></td>
-                                <EditItem bookerDTO="item" OnRemove=@OnRemove></EditItem>
+                                <EditItem bookerDTO="item" OnEdited=@OnEdited></EditItem>
                             }
                             else
                             {
@@ -40,10 +41,17 @@
                                 <td class="smooth-text">@item.Email</td>
                                 <td class="smooth-text">@item.PhoneNumber</td>
                                 <td>
-                                    <button @onclick="() => SetEditMode(item)"></button>
-                                    <RemoveItem bookerDTO="item" OnRemove=@OnRemove></RemoveItem>
-                         
+                                    <div style="display:flex">
+                                        <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
+                                            </svg>
+                                        </button>
+                                        <RemoveItem bookerDTO="item" OnRemove=@OnRemove></RemoveItem>
+                                    </div>
+      
                                 </td>
+
                             }
                         </tr>
                     }
@@ -71,6 +79,15 @@
 
     protected async Task OnRemove()
     {
+        await LoadBookers();
+
+    }
+
+
+    protected async Task OnEdited()
+    {
+        selectedId = 0;
+        isEditMode = false;
         await LoadBookers();
 
     }

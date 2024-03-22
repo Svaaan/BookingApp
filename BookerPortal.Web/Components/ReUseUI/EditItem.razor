@@ -6,10 +6,8 @@
 @inject IBookerService BookerService
 
 <td>
-    <button @onclick="() => EditBooker()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-            <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
-        </svg>
+    <button class="btn btn-success" @onclick="() => EditBooker()">
+        Save
     </button>
 </td>
 
@@ -17,7 +15,7 @@
     [Parameter]
     public BookerDTO bookerDTO { get; set; }
     [Parameter]
-    public EventCallback<int> OnRemove { get; set; }
+    public EventCallback<int> OnEdited { get; set; }
 
 
 
@@ -26,6 +24,7 @@
         try
         {
             await BookerService.EditBookerById(bookerDTO);
+            await OnEdited.InvokeAsync();
 
         }
         catch (Exception ex)
