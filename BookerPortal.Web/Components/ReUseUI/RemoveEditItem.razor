@@ -1,0 +1,43 @@
+﻿@using Request.HTTP
+@using Request.HTTP.DTO.MovieTheatreDTO
+@using System.Net.Http
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode InteractiveServer
+@inject IBookerService BookerService
+
+<td>
+    <button @onclick="() => EditBooker(bookerDTO.Id)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+            <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
+        </svg>
+    </button>
+    <button class="btn btn-danger" @onclick="RemoveBooker">
+        @bookerDTO.Id
+    </button>
+
+</td>
+
+@code {
+    [Parameter]
+    public BookerDTO bookerDTO { get; set; }
+
+
+    private async Task RemoveBooker()
+    {
+        try
+        {
+            await BookerService.RemoveBookerById(bookerDTO.Id);
+
+        }
+        catch (Exception ex)
+        {
+           
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private void EditBooker(int id)
+    {
+     
+    }
+}
