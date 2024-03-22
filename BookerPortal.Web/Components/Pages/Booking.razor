@@ -6,27 +6,29 @@
 
 @if (bookers != null)
 {
-    <ul>
-        @foreach (var item in bookers)
-        {
-            <li>
-                <div>
-                    <strong>Name:</strong> @item.Name
-                </div>
-                <div>
-                    <strong>Last Name:</strong> @item.LastName
-                </div>
-                <div>
-                    <strong>Email:</strong> @item.Email
-                </div>
-                <div>
-                    <strong>Phone Number:</strong> @item.PhoneNumber
-                </div>
-            </li>
-        }
-    </ul>
-
-    
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in bookers)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.LastName</td>
+                        <td>@item.Email</td>
+                        <td>@item.PhoneNumber</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 
 @code {
