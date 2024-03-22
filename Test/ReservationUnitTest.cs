@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Xunit;
 
 namespace Booking.Api.Repositories.Tests
 {
@@ -27,7 +28,6 @@ namespace Booking.Api.Repositories.Tests
             mockRepository.Setup(repo => repo.CreateReservation(It.IsAny<ReservationDto>()))
                           .ReturnsAsync(new Reservation
                           {
-                              // Set properties as needed for the test
                               ShowId = reservationDto.ShowId,
                               BookerEmail = reservationDto.BookerEmail,
                               BookedSeats = reservationDto.BookedSeats
@@ -86,7 +86,7 @@ namespace Booking.Api.Repositories.Tests
 
             // Assert
             // For UpdateReservation_IncreasesAvailableSeats_WhenBookingSeatsDecrease
-            Assert.Equal(expected: 13 ,existingShow.AvailableSeats);
+            Assert.Equal(expected: 13, existingShow.AvailableSeats);
 
             // Verify that SaveChangesAsync was called
             mockContext.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -119,6 +119,42 @@ namespace Booking.Api.Repositories.Tests
             Assert.Equal(expectedTotalCost, totalCost);
         }
 
+        [Fact]
+        public async Task DeleteOverdueShows_RemovesOverdueShowsFromDatabase()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<CinemaDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+
+            using (var context = new CinemaDbContext(options))
+            {
+                var today = DateTime.Today;
+
+                var overdueShows = new[]
+                {
+                   new Show { ID = 1, StartTime = today.AddDays(-2), EndTime = today.AddDays(-1).AddHours(23).AddMinutes(59).AddSeconds(59) }, // Overdue show
+                   new Show { ID = 2, StartTime = today.AddDays(-1), EndTime = today.AddHours(1) } // Not overdue show
+                };
+
+                await context.shows.AddRangeAsync(overdueShows);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = new CinemaDbContext(options))
+            {
+                var repository = new ShowRepository(context, Mock.Of<ILogger<ShowRepository>>());
+
+                // Act
+                await repository.DeleteOverdueShows();
+
+                // Assert
+                var remainingShows = await context.shows.ToListAsync();
+                Assert.DoesNotContain(remainingShows, s => s.ID == 1);
+            }
+
+
+        }
         // in case we need to mock the database ;)
         private static DbSet<T> MockDbSet<T>(IQueryable<T> data)
             where T : class

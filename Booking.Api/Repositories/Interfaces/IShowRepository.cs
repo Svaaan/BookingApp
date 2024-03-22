@@ -11,5 +11,6 @@ namespace Booking.Api.Repositories.Interfaces
         Task<Show> DeleteShowById(int Id);
         Task<List<Schedule>> GetShowsByDateAndHours();
         Task<ShowDetailsDto> GetShowById(int Id);
+        Task DeleteOverdueShows();
     }
 }

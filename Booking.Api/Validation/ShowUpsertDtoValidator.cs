@@ -20,7 +20,6 @@ namespace Booking.Api.Validation
             ValidateNonNegativeProperty(showDto.SalonId, nameof(showDto.SalonId));
             ValidateDateTimeProperty(showDto.StartTime, nameof(showDto.StartTime));
             ValidateDateTimeProperty(showDto.EndTime, nameof(showDto.EndTime));
-            // Add additional validations as needed
         }
 
         private static void ValidateNonNegativeProperty(int value, string propertyName)
@@ -37,7 +36,7 @@ namespace Booking.Api.Validation
         }
         private static void ValidateDateTimeProperty(DateTime value, string propertyName)
         {
-            if (value < DateTime.Now)
+            if (value < DateTime.UtcNow)
             {
                 throw new ShowValidationException($"{propertyName} must be in the future.", propertyName);
             }

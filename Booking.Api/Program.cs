@@ -4,6 +4,7 @@ using Booking.Api.Data;
 using System.Reflection;
 using Booking.Api.Repositories.Interfaces;
 using System.Text.Json.Serialization;
+using Booking.Api.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ builder.Services.AddScoped<ISalonRepository, SalonRepository>();
 builder.Services.AddScoped<IShowRepository, ShowRepository>();
 builder.Services.AddScoped<IBookerRepository, BookerRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+builder.Services.AddHostedService<ShowCleanUpService>();
 
 var app = builder.Build();
 
