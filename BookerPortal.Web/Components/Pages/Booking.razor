@@ -13,7 +13,6 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Id</th>
                     <th>Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
@@ -26,15 +25,26 @@
                     if (item != null) 
                     {
                         <tr>
-                            <td class="smooth-text">@item.Id</td>
-                            <td class="smooth-text">@item.Name</td>
-                            <td class="smooth-text">@item.LastName</td>
-                            <td class="smooth-text">@item.Email</td>
-                            <td class="smooth-text">@item.PhoneNumber</td>
-                            <td>
-                                <RemoveEditItem bookerDTO="item" OnRemove=@OnRemove></RemoveEditItem>
-
-                            </td>
+                            @if (isEditMode && selectedId == item.Id)
+                            {
+                                <td><input @bind="item.Name" /></td>
+                                <td><input @bind="item.LastName" /></td>
+                                <td><input @bind="item.Email" /></td>
+                                <td><input @bind="item.PhoneNumber" /></td>
+                                <EditItem bookerDTO="item" OnRemove=@OnRemove></EditItem>
+                            }
+                            else
+                            {
+                                <td class="smooth-text">@item.Name</td>
+                                <td class="smooth-text">@item.LastName</td>
+                                <td class="smooth-text">@item.Email</td>
+                                <td class="smooth-text">@item.PhoneNumber</td>
+                                <td>
+                                    <button @onclick="() => SetEditMode(item)"></button>
+                                    <RemoveItem bookerDTO="item" OnRemove=@OnRemove></RemoveItem>
+                         
+                                </td>
+                            }
                         </tr>
                     }
                 }
@@ -46,6 +56,8 @@
 @code {
     private List<BookerDTO> bookers;
     private string errorMessage;
+    private bool isEditMode;
+    private int selectedId = 0;
 
 
     [Inject]
@@ -56,12 +68,19 @@
         await LoadBookers();
     }
 
-    
+
     protected async Task OnRemove()
-  {
+    {
         await LoadBookers();
 
-  }
+    }
+
+    protected async Task SetEditMode(BookerDTO bookerDTO)
+    {
+        selectedId = bookerDTO.Id;
+        isEditMode = true;
+
+    }
     public async Task LoadBookers()
     {
         try

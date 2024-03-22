@@ -57,6 +57,29 @@ namespace Request.HTTP.DTO.MovieTheatreDTO
                 return false;
             }
         }
+        public async Task<BookerDTO> EditBookerById(BookerDTO bookerDTO)
+        {
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"https://localhost:44367/api/Booker/{bookerDTO.Id}", bookerDTO);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<BookerDTO>();
+                }
+                else
+                {
+                    Console.WriteLine($"Error updating booker. Status code: {response.StatusCode}");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating booker: {ex.Message}");
+                return null;
+            }
+        }
 
 
     }
