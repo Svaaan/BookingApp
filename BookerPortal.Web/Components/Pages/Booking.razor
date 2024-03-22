@@ -32,7 +32,7 @@
                             <td class="smooth-text">@item.Email</td>
                             <td class="smooth-text">@item.PhoneNumber</td>
                             <td>
-                                <RemoveEditItem bookerDTO="item"></RemoveEditItem>
+                                <RemoveEditItem bookerDTO="item" OnRemove=@OnRemove></RemoveEditItem>
 
                             </td>
                         </tr>
@@ -56,6 +56,12 @@
         await LoadBookers();
     }
 
+    
+    protected async Task OnRemove()
+  {
+        await LoadBookers();
+
+  }
     public async Task LoadBookers()
     {
         try

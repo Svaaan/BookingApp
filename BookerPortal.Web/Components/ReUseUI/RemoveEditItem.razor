@@ -20,6 +20,8 @@
 @code {
     [Parameter]
     public BookerDTO bookerDTO { get; set; }
+    [Parameter]
+    public EventCallback<int> OnRemove { get; set; }
 
 
     private async Task RemoveBooker()
@@ -27,6 +29,7 @@
         try
         {
             await BookerService.RemoveBookerById(bookerDTO.Id);
+            await OnRemove.InvokeAsync();
 
         }
         catch (Exception ex)
