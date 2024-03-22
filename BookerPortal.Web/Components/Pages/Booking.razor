@@ -3,40 +3,61 @@
 @using Request.HTTP.DTO.MovieTheatreDTO
 <PageTitle>Bokningar</PageTitle>
 
-<ul>
-    @foreach (var item in bookers)
-    {
-        <li>
-            <div>
-                <strong>Name:</strong> @item.Name
-            </div>
-            <div>
-                <strong>Last Name:</strong> @item.LastName
-            </div>
-            <div>
-                <strong>Email:</strong> @item.Email
-            </div>
-            <div>
-                <strong>Phone Number:</strong> @item.PhoneNumber
-            </div>
-        </li>
-    }
-</ul>
 
+@if (bookers != null)
+{
+    <ul>
+        @foreach (var item in bookers)
+        {
+            <li>
+                <div>
+                    <strong>Name:</strong> @item.Name
+                </div>
+                <div>
+                    <strong>Last Name:</strong> @item.LastName
+                </div>
+                <div>
+                    <strong>Email:</strong> @item.Email
+                </div>
+                <div>
+                    <strong>Phone Number:</strong> @item.PhoneNumber
+                </div>
+            </li>
+        }
+    </ul>
+
+    
+}
 
 @code {
-    private List<BookerDTO> bookers = new List<BookerDTO>();
+    private List<BookerDTO> bookers;
+
+    [Inject]
+    private IBookerService bookerService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-          
-            
+            bookers = await bookerService.GetBooker();
+
+            if (bookers != null)
+            {
+                for (int i = bookers.Count - 1; i >= 0; i--)
+                {
+                    var booker = bookers[i];
+                    if (booker == null || string.IsNullOrWhiteSpace(booker.Name) || string.IsNullOrWhiteSpace(booker.LastName) || string.IsNullOrWhiteSpace(booker.Email) || string.IsNullOrWhiteSpace(booker.PhoneNumber))
+                    {
+                        // Remove the invalid booker from the list
+                        bookers.RemoveAt(i);
+                    }
+                }
+            }
         }
         catch (Exception ex)
         {
-            
+            // Handle exceptions here
         }
     }
 }
+

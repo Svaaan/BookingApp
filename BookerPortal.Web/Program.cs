@@ -1,16 +1,23 @@
 using BookerPortal.Web.Components;
-
-using System.Net.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Request.HTTP.DTO.MovieTheatreDTO;
+using Booking.Api.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddDbContext<CinemaDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaDbContext"));
+});
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 
 builder.Services.AddScoped<HttpClient>();
 
+builder.Services.AddScoped<IBookerService, BookerService>();
 
 var app = builder.Build();
 

@@ -2,6 +2,7 @@
 {
     public interface IBookerService
     {
-        Task<bool> RequestBooking(BookerDTO booker);
+        Task<bool> PostBooking(BookerDTO booker);
+        Task<List<BookerDTO>> GetBooker();
     }
 }

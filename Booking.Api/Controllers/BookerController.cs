@@ -6,6 +6,7 @@ using Booking.Api.Entities;
 using Booking.Api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Booking.Api.Repositories;
+using System.Reflection;
 
 namespace Booking.Api.Controllers
 {
@@ -34,8 +35,21 @@ namespace Booking.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Booker>> PostBooker([FromBody] Booker booker)
         {
-            var createBooker = await _bookerRepository.CreateBookerAsync(booker);
+            if (booker == null)
+            {
+                return BadRequest("Booker object is null.");
+            }
 
+            PropertyInfo[] properties = typeof(Booker).GetProperties();
+            foreach (var property in properties)
+            {
+                if (property.GetValue(booker) == null)
+                {
+                    return BadRequest($"Property {property.Name} is null.");
+                }
+            }
+
+            var createBooker = await _bookerRepository.CreateBookerAsync(booker);
             return Ok(createBooker);
         }
         /// <summary>
