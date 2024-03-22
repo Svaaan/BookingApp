@@ -17,7 +17,7 @@ namespace Booking.Api.Service
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (stoppingToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 await _showRepository.DeleteOverdueShows();
 
