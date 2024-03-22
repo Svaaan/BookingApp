@@ -50,15 +50,14 @@
                     var booker = bookers[i];
                     if (booker == null || string.IsNullOrWhiteSpace(booker.Name) || string.IsNullOrWhiteSpace(booker.LastName) || string.IsNullOrWhiteSpace(booker.Email) || string.IsNullOrWhiteSpace(booker.PhoneNumber))
                     {
-                        // Remove the invalid booker from the list
                         bookers.RemoveAt(i);
                     }
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            // Handle exceptions here
+            Console.WriteLine(e.Message);
         }
     }
 }
