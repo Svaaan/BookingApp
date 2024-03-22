@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http;
+using System.Text;
 using Newtonsoft.Json;
 
 
@@ -42,6 +43,21 @@ namespace Request.HTTP.DTO.MovieTheatreDTO
 
             return getBooker;
         }
+        public async Task<bool> RemoveBookerById(int bookerId)
+        {
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                HttpResponseMessage response = await httpClient.DeleteAsync($"https://localhost:44367/api/Booker/{bookerId}");
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error removing booker: {ex.Message}");
+                return false;
+            }
+        }
+
 
     }
 
