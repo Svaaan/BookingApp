@@ -1,42 +1,114 @@
 ﻿@page "/booking"
 @using Request.HTTP
 @using Request.HTTP.DTO.MovieTheatreDTO
+@inject IBookerService BookerService
 <PageTitle>Bokningar</PageTitle>
 
-<ul>
-    @foreach (var item in bookers)
-    {
-        <li>
-            <div>
-                <strong>Name:</strong> @item.Name
-            </div>
-            <div>
-                <strong>Last Name:</strong> @item.LastName
-            </div>
-            <div>
-                <strong>Email:</strong> @item.Email
-            </div>
-            <div>
-                <strong>Phone Number:</strong> @item.PhoneNumber
-            </div>
-        </li>
-    }
-</ul>
-
+@if (bookers != null)
+{
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in bookers)
+                {
+                    <tr>
+                        <td class="smooth-text">@item.Name</td>
+                        <td class="smooth-text">@item.LastName</td>
+                        <td class="smooth-text">@item.Email</td>
+                        <td class="smooth-text">@item.PhoneNumber</td>
+                        <td>
+                            <button @onclick="() => EditBooker(item)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                    <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
+                                </svg>
+                            </button>
+                            <button @onclick="() => RemoveBooker(item.Id)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
 
 @code {
-    private List<BookerDTO> bookers = new List<BookerDTO>();
+    private List<BookerDTO> bookers;
+    private string errorMessage;
+
+    [Inject]
+    private IBookerService bookerService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadBookers();
+    }
+
+    private async Task LoadBookers()
+    {
         try
         {
-          
-            
+            bookers = await bookerService.GetBooker();
+
+            if (bookers != null)
+            {
+                for (int i = bookers.Count - 1; i >= 0; i--)
+                {
+                    var booker = bookers[i];
+                    if (booker == null || string.IsNullOrWhiteSpace(booker.Name) || string.IsNullOrWhiteSpace(booker.LastName) || string.IsNullOrWhiteSpace(booker.Email) || string.IsNullOrWhiteSpace(booker.PhoneNumber))
+                    {
+                        bookers.RemoveAt(i);
+                    }
+                }
+            }
         }
         catch (Exception ex)
         {
-            
+            errorMessage = "An error occurred while retrieving data. Please try again later.";
+
+            Console.WriteLine($"Error: {ex.Message}");
         }
     }
+
+    private async Task RemoveBooker(int bookerId)
+    {
+        Console.WriteLine($"Removing booker with ID: {bookerId}");
+        try
+        {
+            bool success = await BookerService.RemoveBookerById(bookerId);
+            if (success)
+            {
+                await LoadBookers();
+            }
+            else
+            {
+                errorMessage = "Failed to remove the booker.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while removing the booker. Please try again later.";
+
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private void EditBooker(BookerDTO booker)
+    {
+  
+    }
 }
+
+

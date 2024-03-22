@@ -6,7 +6,7 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using Request.HTTP.DTO.MovieTheatreDTO
 @using Request.HTTP
-@inject BookerRequest BookerRequest
+@inject IBookerService BookerService
 @inject ILogger<BookerDTO> Logger
 
 @inject CinemaDbContext dbContext
@@ -155,7 +155,7 @@
     {
         try
         {
-            var postForm = await BookerRequest.RequestBooking(booker);
+            var postForm = await BookerService.PostBooking(booker);
             if (postForm)
             {
              

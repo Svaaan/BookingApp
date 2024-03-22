@@ -15,7 +15,7 @@ builder.Services.AddDbContext<CinemaDbContext>(options =>
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddScoped<BookerRequest>();
+builder.Services.AddScoped<IBookerService, BookerService>();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
