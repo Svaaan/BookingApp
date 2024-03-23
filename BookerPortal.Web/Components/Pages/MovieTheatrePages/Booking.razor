@@ -1,0 +1,113 @@
+﻿@page "/booking"
+@using BookerPortal.Web.Components.EditItems.MovieTheatreEdit.EditBooker
+@using Request.HTTP.RequestService.IRequestService
+@using Request.HTTP.DTO.MovieTheatreDTO
+@rendermode InteractiveServer
+@inject IBookerService bookerService
+@attribute [StreamRendering]
+<PageTitle>Bokningar</PageTitle>
+
+@if (bookers != null)
+{
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in bookers)
+                {
+                    if (item != null) 
+                    {
+                        <tr>
+                            @if (isEditMode && selectedId == item.Id)
+                            {
+                                <td><input @bind="item.Name" /></td>
+                                <td><input @bind="item.LastName" /></td>
+                                <td><input @bind="item.Email" /></td>
+                                <td><input @bind="item.PhoneNumber" /></td>
+                                <EditItemBooker bookerDTO="item" OnEdited=@OnEdited></EditItemBooker>
+                            }
+                            else
+                            {
+                                <td class="smooth-text">@item.Name</td>
+                                <td class="smooth-text">@item.LastName</td>
+                                <td class="smooth-text">@item.Email</td>
+                                <td class="smooth-text">@item.PhoneNumber</td>
+                                <td>
+                                    <div style="display:flex">
+                                        <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
+                                            </svg>
+                                        </button>
+                                        <RemoveItemBooker bookerDTO="item" OnRemove=@OnRemove></RemoveItemBooker>
+                                    </div>
+      
+                                </td>
+
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<BookerDTO> bookers;
+    private string errorMessage;
+    private bool isEditMode;
+    private int selectedId = 0;
+
+    private async Task LoadBookers()
+    {
+        try
+        {
+            bookers = await bookerService.GetBooker();
+
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while retrieving data. Please try again later.";
+
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBookers();
+    }
+
+
+    protected async Task OnRemove()
+    {
+        await LoadBookers();
+
+    }
+
+
+    protected async Task OnEdited()
+    {
+        selectedId = 0;
+        isEditMode = false;
+        await LoadBookers();
+
+    }
+
+    protected async Task SetEditMode(BookerDTO bookerDTO)
+    {
+        selectedId = bookerDTO.Id;
+        isEditMode = true;
+
+    }
+
+}

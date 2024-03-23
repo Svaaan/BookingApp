@@ -1,45 +1,45 @@
-﻿@page "/booking"
+﻿@page "/reservation"
 @using Request.HTTP.RequestService.IRequestService
 @using Request.HTTP.DTO.MovieTheatreDTO
-@using BookerPortal.Web.Components.EditItems.EditBooker
+@using BookerPortal.Web.Components.EditItems.MovieTheatreEdit.EditReservation
 @rendermode InteractiveServer
-@inject IBookerService BookerService
+@inject IReservationService reservationService
 @attribute [StreamRendering]
 <PageTitle>Bokningar</PageTitle>
 
-@if (bookers != null)
+@if (reservations != null)
 {
     <div class="table-container">
         <table class="table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Last Name</th>
                     <th>Email</th>
-                    <th>Phone Number</th>
+                    <th>Booked seats</th>
+                    <th>Show id</th>
+                    <th>Reservation time</th>
                     <th> </th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in bookers)
+                @foreach (var item in reservations)
                 {
-                    if (item != null) 
+                    if (item != null)
                     {
                         <tr>
                             @if (isEditMode && selectedId == item.Id)
                             {
-                                <td><input @bind="item.Name" /></td>
-                                <td><input @bind="item.LastName" /></td>
-                                <td><input @bind="item.Email" /></td>
-                                <td><input @bind="item.PhoneNumber" /></td>
-                                <EditItemBooker bookerDTO="item" OnEdited=@OnEdited></EditItemBooker>
+                                <td><input @bind="item.BookerEmail" /></td>
+                                <td><input @bind="item.BookedSeats" /></td>
+                                <td><input @bind="item.ShowId" /></td>
+                                <td><input @bind="item.ReservationTime" /></td>
+                                <EditItemReservation reservationDTO="item" OnEdited=@OnEdited></EditItemReservation>
                             }
                             else
                             {
-                                <td class="smooth-text">@item.Name</td>
-                                <td class="smooth-text">@item.LastName</td>
-                                <td class="smooth-text">@item.Email</td>
-                                <td class="smooth-text">@item.PhoneNumber</td>
+                                <td class="smooth-text">@item.BookerEmail</td>
+                                <td class="smooth-text">@item.BookedSeats</td>
+                                <td class="smooth-text">@item.ShowId</td>
+                                <td class="smooth-text">@item.ReservationTime</td>
                                 <td>
                                     <div style="display:flex">
                                         <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
@@ -47,9 +47,9 @@
                                                 <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
                                             </svg>
                                         </button>
-                                        <RemoveItemBooker bookerDTO="item" OnRemove=@OnRemove></RemoveItemBooker>
+                                        <RemoveItemReservation reservationDTO="item" OnRemove=@OnRemove></RemoveItemReservation>
                                     </div>
-      
+
                                 </td>
 
                             }
@@ -62,47 +62,16 @@
 }
 
 @code {
-    private List<BookerDTO> bookers;
+    private List<ReservationDTO> reservations;
     private string errorMessage;
     private bool isEditMode;
     private int selectedId = 0;
 
-
-    [Inject]
-    private IBookerService bookerService { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadBookers();
-    }
-
-
-    protected async Task OnRemove()
-    {
-        await LoadBookers();
-
-    }
-
-
-    protected async Task OnEdited()
-    {
-        selectedId = 0;
-        isEditMode = false;
-        await LoadBookers();
-
-    }
-
-    protected async Task SetEditMode(BookerDTO bookerDTO)
-    {
-        selectedId = bookerDTO.Id;
-        isEditMode = true;
-
-    }
-    public async Task LoadBookers()
+    private async Task LoadReservation()
     {
         try
         {
-            bookers = await bookerService.GetBooker();
+            reservations = await reservationService.GetReservation();
 
         }
         catch (Exception ex)
@@ -111,6 +80,33 @@
 
             Console.WriteLine($"Error: {ex.Message}");
         }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadReservation();
+    }
+
+    protected async Task OnRemove()
+    {
+        await LoadReservation();
+
+    }
+
+    protected async Task OnEdited()
+    {
+        selectedId = 0;
+        isEditMode = false;
+        await LoadReservation();
+
+    }
+
+    protected async Task SetEditMode(ReservationDTO reservationDTO)
+    {
+        selectedId = reservationDTO.Id;
+        isEditMode = true;
+
     }
 }
 

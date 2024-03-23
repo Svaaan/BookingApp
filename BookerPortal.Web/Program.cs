@@ -20,6 +20,8 @@ builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<IBookerService, BookerService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<ISalonService, SalonService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped<IShowService, ShowService>();
 
 var app = builder.Build();
 

@@ -3,27 +3,27 @@
 @using System.Net.Http
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
 @rendermode InteractiveServer
-@inject ISalonService SalonService
+@inject IShowService showService
 
 <td>
-    <button class="btn btn-success" @onclick="() => EditSalon()">
+    <button class="btn btn-success" @onclick="() => EditShow()">
         Save
     </button>
 </td>
 
 @code {
     [Parameter]
-    public SalonDTO salonDTO { get; set; }
+    public ShowDTO showDTO { get; set; }
     [Parameter]
     public EventCallback<int> OnEdited { get; set; }
 
 
 
-    private async Task EditSalon()
+    private async Task EditShow()
     {
         try
         {
-            await SalonService.EditSalonById(salonDTO);
+            await showService.EditShowById(showDTO);
             await OnEdited.InvokeAsync();
 
         }

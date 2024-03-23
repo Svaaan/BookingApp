@@ -3,27 +3,27 @@
 @using System.Net.Http
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
 @rendermode InteractiveServer
-@inject IMovieService MovieService
+@inject IBookerService bookerService
 
 <td>
-    <button class="btn btn-success" @onclick="() => EditMovie()">
+    <button class="btn btn-success" @onclick="() => EditBooker()">
         Save
     </button>
 </td>
 
 @code {
     [Parameter]
-    public MovieDTO movieDTO { get; set; }
+    public BookerDTO bookerDTO { get; set; }
     [Parameter]
     public EventCallback<int> OnEdited { get; set; }
 
 
 
-    private async Task EditMovie()
+    private async Task EditBooker()
     {
         try
         {
-            await MovieService.EditMovieById(movieDTO);
+            await bookerService.EditBookerById(bookerDTO);
             await OnEdited.InvokeAsync();
 
         }
