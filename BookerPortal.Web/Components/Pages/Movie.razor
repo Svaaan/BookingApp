@@ -1,64 +1,117 @@
 ﻿@page "/movie"
+@using Request.HTTP.RequestService.IRequestService
+@using Request.HTTP.DTO.MovieTheatreDTO
+@using BookerPortal.Web.Components.EditItems.EditMovie
+@rendermode InteractiveServer
+@inject IMovieService MovieService
 @attribute [StreamRendering]
+<PageTitle>Filmer</PageTitle>
 
-<PageTitle>Weather</PageTitle>
-
-<h1>Weather</h1>
-
-<p>This component demonstrates showing data.</p>
-
-@if (forecasts == null)
+@if (movies != null)
 {
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
+<div class="table-container">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <th>Title</th>
+                    <th>Director</th>
+                    <th>Description</th>
+                    <th>Genre</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in movies)
+                {
+                    if (item != null) 
+                    {
+                        <tr>
+                            @if (isEditMode && selectedId == item.ID)
+                            {
+                                <td><input @bind="item.Title" /></td>
+                                <td><input @bind="item.Director" /></td>
+                                <td><input @bind="item.Description" /></td>
+                                <td><input @bind="item.Genre" /></td>
+                                <EditItemMovie movieDTO="item" OnEdited=@OnEdited></EditItemMovie>
+                            }
+                            else
+                            {
+                                <td class="smooth-text">@item.Title</td>
+                                <td class="smooth-text">@item.Director</td>
+                                <td class="smooth-text">@item.Description</td>
+                                <td class="smooth-text">@item.Genre</td>
+                                <td>
+                                    <div style="display:flex">
+                                        <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
+                                            </svg>
+                                        </button>
+                                        <RemoveItemMovie movieDTO="item" OnRemove=@OnRemove></RemoveItemMovie>
+                                    </div>
+      
+                                </td>
+
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private List<MovieDTO> movies;
+    private string errorMessage;
+    private bool isEditMode;
+    private int selectedId = 0;
+
+
+    [Inject]
+    private IMovieService movieService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
-
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = startDate.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        }).ToArray();
+        await LoadMovies();
     }
 
-    private class WeatherForecast
+
+    protected async Task OnRemove()
     {
-        public DateOnly Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        await LoadMovies();
+
+    }
+
+
+    protected async Task OnEdited()
+    {
+        selectedId = 0;
+        isEditMode = false;
+        await LoadMovies();
+
+    }
+
+    protected async Task SetEditMode(MovieDTO movieDTO)
+    {
+        selectedId = movieDTO.ID;
+        isEditMode = true;
+
+    }
+    public async Task LoadMovies()
+    {
+        try
+        {
+            movies = await movieService.GetMovie();
+
+          
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while retrieving data. Please try again later.";
+
+            Console.WriteLine($"Error: {ex.Message}");
+        }
     }
 }
+
+

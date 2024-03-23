@@ -1,19 +1,115 @@
 ﻿@page "/salon"
+@using Request.HTTP.RequestService.IRequestService
+@using Request.HTTP.DTO.MovieTheatreDTO
+@using BookerPortal.Web.Components.EditItems.EditSalon
 @rendermode InteractiveServer
+@inject ISalonService SalonService
+@attribute [StreamRendering]
+<PageTitle>Bokningar</PageTitle>
 
-<PageTitle>Counter</PageTitle>
+@if (salon != null)
+{
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>AvailableSeats</th>
+                    <th>Status</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in salon)
+                {
+                    if (item != null)
+                    {
+                        <tr>
+                            @if (isEditMode && selectedId == item.ID)
+                            {
+                                <td><input @bind="item.Name" /></td>
+                                <td><input @bind="item.AvailableSeats" /></td>
+                                <td><input @bind="item.Status" /></td>
+                             
+                                <EditItemSalon salonDTO="item" OnEdited=@OnEdited></EditItemSalon>
+                            }
+                            else
+                            {
+                                <td class="smooth-text">@item.Name</td>
+                                <td class="smooth-text">@item.AvailableSeats</td>
+                                <td class="smooth-text">@item.Status</td>
+                                <td>
+                                    <div style="display:flex">
+                                        <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
+                                            </svg>
+                                        </button>
+                                        <RemoveItemSalon salonDTO="item" OnRemove=@OnRemove></RemoveItemSalon>
+                                    </div>
 
-<h1>Counter</h1>
+                                </td>
 
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
 
 @code {
-    private int currentCount = 0;
+    private List<SalonDTO> salon;
+    private string errorMessage;
+    private bool isEditMode;
+    private int selectedId = 0;
 
-    private void IncrementCount()
+
+    [Inject]
+    private ISalonService salonService { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        currentCount++;
+        await LoadSalons();
+    }
+
+
+    protected async Task OnRemove()
+    {
+        await LoadSalons();
+
+    }
+
+
+    protected async Task OnEdited()
+    {
+        selectedId = 0;
+        isEditMode = false;
+        await LoadSalons();
+
+    }
+
+    protected async Task SetEditMode(SalonDTO salonDTO)
+    {
+        selectedId = salonDTO.ID;
+        isEditMode = true;
+
+    }
+    public async Task LoadSalons()
+    {
+        try
+        {
+            salon = await salonService.GetSalon();
+
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while retrieving data. Please try again later.";
+
+            Console.WriteLine($"Error: {ex.Message}");
+        }
     }
 }
+
+
