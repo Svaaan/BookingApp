@@ -54,9 +54,9 @@ namespace Booking.Api.Data
                 .Property(s => s.PricePerSeat)
                 .HasColumnType("decimal(10, 2)");
             modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.Show)                    
-                .WithMany(s => s.Reservations)          
-                .HasForeignKey(r => r.ShowId)           
+                .HasOne(r => r.Show)
+                .WithMany(s => s.Reservations)
+                .HasForeignKey(r => r.ShowId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
@@ -83,20 +83,7 @@ namespace Booking.Api.Data
                 Status = 0
             });
 
-            modelBuilder.Entity<User>()
-         .HasOne(u => u.Company)
-         .WithMany(c => c.Users)
-         .HasForeignKey(u => u.CompanyId); 
-
-            modelBuilder.Entity<Company>()
-                .HasMany(c => c.Users)
-                .WithOne(u => u.Company)
-                .HasForeignKey(u => u.CompanyId);
-
-            modelBuilder.Entity<Company>()
-              .HasMany(c => c.MovieTheatres)
-              .WithOne(m => m.Company)
-              .HasForeignKey(m => m.CompanyId);
         }
+         
     }
 }
