@@ -7,6 +7,9 @@ namespace Booking.Api.Data
     {
         public CinemaDbContext(DbContextOptions _options) : base(_options) { }
 
+        public DbSet<Company> company { get; set; }
+        public DbSet<MovieTheatre> movieTheatres { get; set; }
+        public DbSet<User> users { get; set; }
         public DbSet<Booker> bookers { get; set; }
         public DbSet<Movie> movies { get; set; }
         public DbSet<Salon> salons { get; set; }
@@ -79,6 +82,21 @@ namespace Booking.Api.Data
                 AvailableSeats = 30,
                 Status = 0
             });
+
+            modelBuilder.Entity<User>()
+         .HasOne(u => u.Company)
+         .WithMany(c => c.Users)
+         .HasForeignKey(u => u.CompanyId); 
+
+            modelBuilder.Entity<Company>()
+                .HasMany(c => c.Users)
+                .WithOne(u => u.Company)
+                .HasForeignKey(u => u.CompanyId);
+
+            modelBuilder.Entity<Company>()
+              .HasMany(c => c.MovieTheatres)
+              .WithOne(m => m.Company)
+              .HasForeignKey(m => m.CompanyId);
         }
     }
 }
