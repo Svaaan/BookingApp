@@ -16,8 +16,8 @@ namespace Booking.Api.Validation
         public static void ValidateShow(Show show)
         {
             Guard.Against.Null(show, nameof(show));
-            ValidateNonNegativeProperty(show.MovieID, nameof(show.MovieID));
-            ValidateNonNegativeProperty(show.SalonID, nameof(show.SalonID));
+            ValidateNonNegativeProperty(show.MovieId, nameof(show.MovieId));
+            ValidateNonNegativeProperty(show.SalonId, nameof(show.SalonId));
             ValidateNonNegativeProperty(show.AvailableSeats, nameof(show.AvailableSeats));
             ValidateDateTimeProperty(show.StartTime, nameof(show.StartTime));
             ValidateDateTimeProperty(show.EndTime, nameof(show.EndTime));

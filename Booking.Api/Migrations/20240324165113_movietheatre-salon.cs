@@ -5,7 +5,7 @@
 namespace Booking.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateLastNameDataType : Migration
+    public partial class movietheatresalon : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

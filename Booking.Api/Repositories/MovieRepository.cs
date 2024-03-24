@@ -30,7 +30,7 @@ namespace Booking.Api.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating movie. MovieId: {MovieId}, Title: {Title}", movie.ID, movie.Title);
+                _logger.LogError(ex, "Error creating movie. MovieId: {MovieId}, Title: {Title}", movie.Id, movie.Title);
                 throw;
             }
         }

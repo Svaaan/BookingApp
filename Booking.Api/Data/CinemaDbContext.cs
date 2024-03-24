@@ -7,6 +7,9 @@ namespace Booking.Api.Data
     {
         public CinemaDbContext(DbContextOptions _options) : base(_options) { }
 
+        public DbSet<Company> company { get; set; }
+        public DbSet<MovieTheatre> movieTheatres { get; set; }
+        public DbSet<User> users { get; set; }
         public DbSet<Booker> bookers { get; set; }
         public DbSet<Movie> movies { get; set; }
         public DbSet<Salon> salons { get; set; }
@@ -51,15 +54,15 @@ namespace Booking.Api.Data
                 .Property(s => s.PricePerSeat)
                 .HasColumnType("decimal(10, 2)");
             modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.Show)                    
-                .WithMany(s => s.Reservations)          
-                .HasForeignKey(r => r.ShowId)           
+                .HasOne(r => r.Show)
+                .WithMany(s => s.Reservations)
+                .HasForeignKey(r => r.ShowId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Movie>().HasData(new Movie
             {
-                ID = 2,
+                Id = 2,
                 Title = "The Godfather",
                 Description = "The aging patriarch of an organized crime dynasty in postwar New York City transfers control of his clandestine empire to his reluctant youngest son",
                 Director = "Francis Ford Coppola",
@@ -74,11 +77,15 @@ namespace Booking.Api.Data
             });
             modelBuilder.Entity<Salon>().HasData(new Salon
             {
-                ID = 1,
+                Id = 1,
                 Name = "Salon 1",
                 AvailableSeats = 30,
                 Status = 0
             });
+
+            modelBuilder.Entity<User>().HasOne(u => u.Company);
+
         }
+         
     }
 }

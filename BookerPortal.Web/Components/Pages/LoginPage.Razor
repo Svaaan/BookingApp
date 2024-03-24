@@ -1,7 +1,6 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components.Forms
 @inject NavigationManager NavigationManager
-
 <style>
     body {
         margin-top: 10px;
@@ -70,14 +69,16 @@
 <div class="container">
     <div class="card mx-auto mt-5" style="max-width: 500px;">
         <div class="card-body">
-            <EditForm Model="@loginModel" OnValidSubmit="@Login" FormName="LoginForm">
+            <EditForm Model="@loginModel" OnValidSubmit="@Login" FormName="Login">
                 <div class="mb-3">
                     <label for="Email" class="form-label">Email:</label>
+                    example@example.com
                     <InputText type="email" id="Email" class="form-control" @bind-Value="loginModel.Email" required />
                 </div>
 
                 <div class="mb-3">
                     <label for="Password" class="form-label">Password:</label>
+                    password
                     <InputText type="password" id="Password" class="form-control" @bind-Value="loginModel.Password" required />
                 </div>
 
@@ -93,40 +94,43 @@
                         @errorMessage
                     </div>
                 }
+                else if (loginSuccess)
+                {
+                    <div class="success-message">
+                        Login successful!
+                    </div>
+                }
             </div>
         </div>
     </div>
 </div>
 
 @code {
+    [SupplyParameterFromForm]
+    private LoginModel loginModel { get; set; } = new LoginModel();
 
-    //Create an authservice
-        //Create an email cant be same as another email check etc.
-        //On succes route to home
-        //When finished remove page from dashboard and set route to dashboard/home
-    private LoginModel loginModel = new LoginModel();
     private string errorMessage = "";
+    private bool loginSuccess = false;
 
     private async Task Login()
     {
         try
         {
-            // Simulate authentication logic
             if (loginModel.Email == "example@example.com" && loginModel.Password == "password")
             {
-                // Successful login
-                NavigationManager.NavigateTo("/home");
+
+                loginSuccess = true;
+                Thread.Sleep(500);
+                NavigationManager.NavigateTo("/booking");
             }
             else
             {
-                // Failed login
                 errorMessage = "Invalid email or password.";
             }
         }
         catch (Exception ex)
         {
-            // Handle any unexpected exceptions
-            errorMessage = "An unexpected error occurred. Please try again later.";
+            Console.WriteLine(ex);
         }
     }
 

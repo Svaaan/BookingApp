@@ -24,15 +24,15 @@ namespace Booking.Api.Repositories
             {
                 SalonValidator.ValidateSalon(salon);
 
-                var createSalon = await _context.salons.AddAsync(salon);
+                 await _context.salons.AddAsync(salon);
                 await _context.SaveChangesAsync();
-                return createSalon.Entity;
+                return salon;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creating salon. Salon: Name: {Name}", salon.Name);
 
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -40,7 +40,7 @@ namespace Booking.Api.Repositories
         {
             try
             {
-                var salonList = await _context.salons.ToListAsync();
+                var salonList = await _context.salons.Include(s => s.MovieTheatre).ToListAsync();
                 if (salonList.Count == 0)
                 {
                     _logger.LogInformation("No salons found in the database.");

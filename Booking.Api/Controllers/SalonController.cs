@@ -1,4 +1,5 @@
 ﻿using Booking.Api.Entities;
+using Booking.Api.Entities.DTO;
 using Booking.Api.ExceptionHandler;
 using Booking.Api.Repositories;
 using Booking.Api.Repositories.Interfaces;
@@ -32,10 +33,11 @@ namespace Booking.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public async Task<ActionResult<Salon>> CreateSalon([FromBody] Salon salon)
+        public async Task<ActionResult<Salon>> CreateSalon([FromBody] SalonDTO salonDTO)
         {
             try
             {
+                var salon = new Salon {Id = salonDTO.Id, Name = salonDTO.Name, Status = salonDTO.Status, MovieTheatreId = salonDTO.MovieTheatreId, AvailableSeats = salonDTO.AvailableSeats};
                 // Your repository logic here
                 var createSalon = await _salonRepository.CreateSalonAsync(salon);
                 return Ok(createSalon);
@@ -88,7 +90,7 @@ namespace Booking.Api.Controllers
             try
             {
                 // Ensure the provided ID matches the ID in the updateMovie
-                if (id != salon.ID)
+                if (id != salon.Id)
                 {
                     return BadRequest("Mismatched movie ID in the request.");
                 }
