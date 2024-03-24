@@ -1,0 +1,115 @@
+﻿@page "/movie"
+@using Request.HTTP.RequestService.IRequestService
+@using Request.HTTP.DTO.MovieTheatreDTO
+@using BookerPortal.Web.Components.EditItems.MovieTheatreEdit.EditMovie
+@rendermode InteractiveServer
+@inject IMovieService movieService
+@attribute [StreamRendering]
+<PageTitle>Filmer</PageTitle>
+
+@if (movies != null)
+{
+<div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Director</th>
+                    <th>Description</th>
+                    <th>Genre</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in movies)
+                {
+                    if (item != null) 
+                    {
+                        <tr>
+                            @if (isEditMode && selectedId == item.ID)
+                            {
+                                <td><input @bind="item.Title" /></td>
+                                <td><input @bind="item.Director" /></td>
+                                <td><input @bind="item.Description" /></td>
+                                <td><input @bind="item.Genre" /></td>
+                                <EditItemMovie movieDTO="item" OnEdited=@OnEdited></EditItemMovie>
+                            }
+                            else
+                            {
+                                <td class="smooth-text">@item.Title</td>
+                                <td class="smooth-text">@item.Director</td>
+                                <td class="smooth-text">@item.Description</td>
+                                <td class="smooth-text">@item.Genre</td>
+                                <td>
+                                    <div style="display:flex">
+                                        <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
+                                            </svg>
+                                        </button>
+                                        <RemoveItemMovie movieDTO="item" OnRemove=@OnRemove></RemoveItemMovie>
+                                    </div>
+      
+                                </td>
+
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<MovieDTO> movies;
+    private string errorMessage;
+    private bool isEditMode;
+    private int selectedId = 0;
+
+    private async Task LoadMovies()
+    {
+        try
+        {
+            movies = await movieService.GetMovie();
+
+
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while retrieving data. Please try again later.";
+
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadMovies();
+    }
+
+
+    protected async Task OnRemove()
+    {
+        await LoadMovies();
+
+    }
+
+
+    protected async Task OnEdited()
+    {
+        selectedId = 0;
+        isEditMode = false;
+        await LoadMovies();
+
+    }
+
+    protected async Task SetEditMode(MovieDTO movieDTO)
+    {
+        selectedId = movieDTO.ID;
+        isEditMode = true;
+
+    }
+
+}
+
+

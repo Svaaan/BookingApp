@@ -2,7 +2,7 @@
 
 namespace Request.HTTP.DTO.MovieTheatreDTO
 {
-    public class Salon
+    public class SalonDTO
     {
         public int ID { get; set; }
         public string? Name { get; set; }
