@@ -62,7 +62,7 @@ namespace Booking.Api.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Movie>().HasData(new Movie
             {
-                ID = 2,
+                Id = 2,
                 Title = "The Godfather",
                 Description = "The aging patriarch of an organized crime dynasty in postwar New York City transfers control of his clandestine empire to his reluctant youngest son",
                 Director = "Francis Ford Coppola",
@@ -77,11 +77,13 @@ namespace Booking.Api.Data
             });
             modelBuilder.Entity<Salon>().HasData(new Salon
             {
-                ID = 1,
+                Id = 1,
                 Name = "Salon 1",
                 AvailableSeats = 30,
                 Status = 0
             });
+
+            modelBuilder.Entity<User>().HasOne(u => u.Company);
 
         }
          

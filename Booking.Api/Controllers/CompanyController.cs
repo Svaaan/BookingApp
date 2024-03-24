@@ -7,6 +7,7 @@ using Booking.Api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Booking.Api.Repositories;
 using System.Reflection;
+using Booking.Api.Entities.DTO;
 
 namespace Booking.Api.Controllers
 {
@@ -33,21 +34,23 @@ namespace Booking.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Company>> PostCompany([FromBody] Company company)
+        public async Task<ActionResult<Company>> PostCompany([FromBody] CompanyDTO companyDTO)
         {
-            if (company == null)
+            if (companyDTO == null)
             {
                 return BadRequest("Company object is null.");
             }
 
-            PropertyInfo[] properties = typeof(Company).GetProperties();
+            PropertyInfo[] properties = typeof(CompanyDTO).GetProperties();
             foreach (var property in properties)
             {
-                if (property.GetValue(company) == null)
+                if (property.GetValue(companyDTO) == null)
                 {
                     return BadRequest($"Property {property.Name} is null.");
                 }
             }
+
+            var company = new Company { Id = companyDTO.Id, CompanyName = companyDTO.CompanyName, Email = companyDTO.Email };
 
             var createCompany = await _companyRepository.CreateCompanyAsync(company);
             return Ok(createCompany);

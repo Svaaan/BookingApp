@@ -5,7 +5,7 @@
 namespace Booking.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class Databaseconfigs2 : Migration
+    public partial class modelbuilder : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

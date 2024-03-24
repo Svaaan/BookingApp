@@ -13,7 +13,7 @@
         {
             ReservationId = reservation.Id;
             ShowId = reservation.ShowId;
-            BookerEmail = reservation.BookerEmail;
+            BookerEmail = reservation.Booker.Email;
             BookedSeats = reservation.BookedSeats;
             ReservationTime = reservation.ReservationTime;
 

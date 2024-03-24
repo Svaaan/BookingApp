@@ -16,35 +16,38 @@ namespace Booking.Api.Repositories.Tests
         [Fact]
         public async Task CreateReservation_WithValidData_CreatesReservation()
         {
+            var booker = new Booker { 
+            Id = 123, Email = "test@example.com"
+            };
             // Arrange
-            var reservationDto = new ReservationDto
+            var reservation = new CreateReservationDTO
             {
                 ShowId = 1,
-                BookerEmail = "test@example.com",
+               Booker = booker,
                 BookedSeats = 5
             };
 
             var mockRepository = new Mock<IReservationRepository>();
-            mockRepository.Setup(repo => repo.CreateReservation(It.IsAny<ReservationDto>()))
+            mockRepository.Setup(repo => repo.CreateReservation(It.IsAny<Reservation>()))
                           .ReturnsAsync(new Reservation
                           {
-                              ShowId = reservationDto.ShowId,
-                              BookerEmail = reservationDto.BookerEmail,
-                              BookedSeats = reservationDto.BookedSeats
+                              ShowId = reservation.ShowId,
+                              Booker = booker,
+                              BookedSeats = reservation.BookedSeats
                           });
 
             var controller = new ReservationController(Mock.Of<ILogger<ReservationController>>(), mockRepository.Object);
 
             // Act
-            var result = await controller.CreateReservation(reservationDto);
+            var result = await controller.CreateReservation(reservation);
 
             // Assert
             var createdResult = Assert.IsType<OkObjectResult>(result.Result);
             var createdReservation = Assert.IsType<Reservation>(createdResult.Value);
 
-            Assert.Equal(reservationDto.ShowId, createdReservation.ShowId);
-            Assert.Equal(reservationDto.BookerEmail, createdReservation.BookerEmail);
-            Assert.Equal(reservationDto.BookedSeats, createdReservation.BookedSeats);
+            Assert.Equal(reservation.ShowId, createdReservation.ShowId);
+            Assert.Equal(booker, booker);
+            Assert.Equal(reservation.BookedSeats, createdReservation.BookedSeats);
         }
 
 
@@ -52,11 +55,16 @@ namespace Booking.Api.Repositories.Tests
         public async Task UpdateReservation_IncreasesAvailableSeats_WhenBookingSeatsDecrease()
         {
             // Arrange
+            var booker = new Booker
+            {
+                Id = 123,
+                Email = "test@example.com"
+            };
             var reservationId = 1;
             var updateReservationDto = new ReservationDto
             {
                 ShowId = 1,
-                BookerEmail = "test@example.com",
+                Booker = booker,
                 BookedSeats = 5
             };
 
@@ -64,13 +72,13 @@ namespace Booking.Api.Repositories.Tests
             {
                 Id = reservationId,
                 ShowId = 1,
-                BookerEmail = "test@example.com",
+                Booker = booker,
                 BookedSeats = 8
             };
 
             var existingShow = new Show
             {
-                ID = 1,
+                Id = 1,
                 AvailableSeats = 10
             };
 
@@ -95,6 +103,11 @@ namespace Booking.Api.Repositories.Tests
         [Fact]
         public void CalculateTotalCost_ReturnsCorrectTotalCost()
         {
+            var booker = new Booker
+            {
+                Id = 123,
+                Email = "test@example.com"
+            };
             // Arrange
             var show = new Show
             {
@@ -106,7 +119,7 @@ namespace Booking.Api.Repositories.Tests
             {
                 Id = 1,
                 ShowId = 1,
-                BookerEmail = "test@example.com",
+                Booker = booker,
                 BookedSeats = 3
             };
 
@@ -133,8 +146,8 @@ namespace Booking.Api.Repositories.Tests
 
                 var overdueShows = new[]
                 {
-                   new Show { ID = 1, StartTime = today.AddDays(-2), EndTime = today.AddDays(-1).AddHours(23).AddMinutes(59).AddSeconds(59) }, // Overdue show
-                   new Show { ID = 2, StartTime = today.AddDays(-1), EndTime = today.AddHours(1) } // Not overdue show
+                   new Show { Id = 1, StartTime = today.AddDays(-2), EndTime = today.AddDays(-1).AddHours(23).AddMinutes(59).AddSeconds(59) }, // Overdue show
+                   new Show { Id = 2, StartTime = today.AddDays(-1), EndTime = today.AddHours(1) } // Not overdue show
                 };
 
                 await context.shows.AddRangeAsync(overdueShows);
@@ -150,7 +163,7 @@ namespace Booking.Api.Repositories.Tests
 
                 // Assert
                 var remainingShows = await context.shows.ToListAsync();
-                Assert.DoesNotContain(remainingShows, s => s.ID == 1);
+                Assert.DoesNotContain(remainingShows, s => s.Id == 1);
             }
 
 

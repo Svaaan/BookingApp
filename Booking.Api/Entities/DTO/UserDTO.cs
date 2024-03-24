@@ -1,6 +1,6 @@
-﻿namespace Booking.Api.Entities
+﻿namespace Booking.Api.Entities.DTO
 {
-    public class User
+    public class UserDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -8,6 +8,5 @@
         public string Email { get; set; }
         public string Password { get; set; }
         public int CompanyId { get; set; }
-        public Company Company { get; set; }
     }
 }

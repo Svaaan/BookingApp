@@ -18,7 +18,6 @@ namespace Booking.Api.Validation
             Guard.Against.Null(reservation, nameof(reservation));
             ValidateNonNegativeProperty(reservation.ShowId, nameof(reservation.ShowId));
             ValidateNonNegativeProperty(reservation.BookedSeats, nameof(reservation.BookedSeats));
-            ValidateNonEmptyStringProperty(reservation.BookerEmail, nameof(reservation.BookerEmail));
         }
 
         private static void ValidateNonNegativeProperty(int value, string propertyName)

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Booking.Api.Entities;
 using Booking.Api.Repositories.Interfaces;
 using System.Reflection;
+using Booking.Api.Entities.DTO;
 
 namespace Booking.Api.Controllers
 {
@@ -28,21 +29,24 @@ namespace Booking.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<MovieTheatre>> PostUser([FromBody] MovieTheatre movieTheatre)
+        public async Task<ActionResult<MovieTheatre>> PostUser([FromBody] MovieTheatreDTO movieTheatreDTO)
         {
-            if (movieTheatre == null)
+            if (movieTheatreDTO == null)
             {
                 return BadRequest("MovieTheatre object is null.");
             }
 
-            PropertyInfo[] properties = typeof(MovieTheatre).GetProperties();
+            PropertyInfo[] properties = typeof(MovieTheatreDTO).GetProperties();
             foreach (var property in properties)
             {
-                if (property.GetValue(movieTheatre) == null)
+                if (property.GetValue(movieTheatreDTO) == null)
                 {
                     return BadRequest($"Property {property.Name} is null.");
                 }
             }
+
+            var movieTheatre = new MovieTheatre{
+            Id = movieTheatreDTO.Id, CompanyId = movieTheatreDTO.CompanyId, Name = movieTheatreDTO.Name};
 
             var createMovieTheatre = await _movieTheatreRepository.CreateMovieTheatreAsync(movieTheatre);
             return Ok(createMovieTheatre);

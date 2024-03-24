@@ -33,14 +33,20 @@ namespace Booking.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<Reservation>> CreateReservation([FromBody]ReservationDto reservationDto)
+        public async Task<ActionResult<Reservation>> CreateReservation([FromBody]CreateReservationDTO reservationDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            
-            var createReservation = await this._reservationRepository.CreateReservation(reservationDto);
+            var reservation = new Reservation
+            {
+               ShowId = reservationDto.ShowId,
+               BookedSeats = reservationDto.BookedSeats,
+               BookerId = reservationDto.BookerId,
+               ReservationTime = DateTime.UtcNow
+        };
+            var createReservation = await this._reservationRepository.CreateReservation(reservation);
             return Ok(createReservation);
         }
 

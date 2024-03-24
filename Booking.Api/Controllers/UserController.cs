@@ -2,6 +2,7 @@
 using Booking.Api.Entities;
 using Booking.Api.Repositories.Interfaces;
 using System.Reflection;
+using Booking.Api.Entities.DTO;
 
 namespace Booking.Api.Controllers
 {
@@ -28,22 +29,22 @@ namespace Booking.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<User>> PostUser([FromBody] User user)
+        public async Task<ActionResult<User>> PostUser([FromBody] UserDTO userDTO)
         {
-            if (user == null)
+            if (userDTO == null)
             {
                 return BadRequest("User object is null.");
             }
 
-            PropertyInfo[] properties = typeof(User).GetProperties();
+            PropertyInfo[] properties = typeof(UserDTO).GetProperties();
             foreach (var property in properties)
             {
-                if (property.GetValue(user) == null)
+                if (property.GetValue(userDTO) == null)
                 {
                     return BadRequest($"Property {property.Name} is null.");
                 }
             }
-
+            var user = new User { Id = userDTO .Id, CompanyId = userDTO .CompanyId, Email = userDTO .Email, Name = userDTO.Name, LastName = userDTO.LastName, Password = userDTO.Password };
             var createUser = await _userRepository.CreateUserAsync(user);
             return Ok(createUser);
         }

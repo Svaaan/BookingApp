@@ -2,7 +2,7 @@
 {
     public class ShowDto
     {
-        public int ShowId { get; set; }
+        public int Id { get; set; }
         public int MovieId { get; set; }
         public string MovieTitle { get; set; }
         public int SalonId { get; set; }

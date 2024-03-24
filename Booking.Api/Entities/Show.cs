@@ -2,10 +2,10 @@
 {
     public class Show
     {
-        public int ID { get; set; }
-        public int MovieID { get; set; }
+        public int Id { get; set; }
+        public int MovieId { get; set; }
         public Movie Movie { get; set; }
-        public int SalonID { get; set; }
+        public int SalonId { get; set; }
         public Salon Salon { get; set; }
         public int AvailableSeats { get; set; }
         public DateTime StartTime { get; set; } = DateTime.UtcNow;

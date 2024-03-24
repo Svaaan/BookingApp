@@ -36,7 +36,7 @@ namespace Booking.Api.Repositories
         {
             try
             {
-                var getMovieTheatre = await _context.movieTheatres.FindAsync(Id);
+                var getMovieTheatre = await _context.movieTheatres.Where(m => m.Id == Id).Include(m => m.Company).FirstAsync();
                 if (getMovieTheatre == null)
                 {
                     _logger.LogInformation($"Couldnt find a MovieTheatre in the database with the ID: {Id}.");
@@ -54,7 +54,7 @@ namespace Booking.Api.Repositories
         {
             try
             {
-                var movieTheatreList = await _context.movieTheatres.ToListAsync();
+                var movieTheatreList = await _context.movieTheatres.Include(m => m.Company).ToListAsync();
                 if (movieTheatreList.Count == 0)
                 {
                     _logger.LogInformation("No MovieTheatre found in the database.");

@@ -1,10 +1,9 @@
-﻿namespace Booking.Api.Entities
+﻿namespace Booking.Api.Entities.DTO
 {
-    public class MovieTheatre
+    public class MovieTheatreDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public int CompanyId { get; set; }
-        public Company Company { get; set; }
     }
 }

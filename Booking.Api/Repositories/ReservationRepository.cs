@@ -19,34 +19,27 @@ namespace Booking.Api.Repositories
             _logger = logger;
         }
 
-        public async Task<Reservation> CreateReservation(ReservationDto reservationDto)
+        public async Task<Reservation> CreateReservation(Reservation reservation)
         {
             try
             {
-                var show = await _context.shows.FirstOrDefaultAsync(s => s.ID == reservationDto.ShowId);
+                var show = await _context.shows.FirstOrDefaultAsync(s => s.Id == reservation.ShowId);
 
-                if (show.AvailableSeats < reservationDto.BookedSeats)
+                if (show.AvailableSeats < reservation.BookedSeats)
                 {
                     throw new Exception("Not enough seats are available for booking");
                 }
-
-                var reservation = new Reservation
-                {
-                    ShowId = reservationDto.ShowId,
-                    BookerEmail = reservationDto.BookerEmail,
-                    BookedSeats = reservationDto.BookedSeats,
-                    ReservationTime = DateTime.UtcNow
-                };
 
                 ReservationValidator.ValidateReservation(reservation);
 
                 _context.reservations.Add(reservation);
                 await _context.SaveChangesAsync();
 
-                show.AvailableSeats -= reservationDto.BookedSeats;
+                show.AvailableSeats -= reservation.BookedSeats;
                 await _context.SaveChangesAsync();
 
-                var receipt = new Receipt(reservation, show);
+                var createdReservation = await _context.reservations.Include(r => r.Booker).Where(r => r.Id == reservation.Id).FirstAsync();
+                var receipt = new Receipt(createdReservation, show);
 
                 return reservation;
             }
@@ -60,7 +53,7 @@ namespace Booking.Api.Repositories
 
         public async Task<List<Reservation>> GetAllReservations()
         {
-            var reservationList = await _context.reservations.ToListAsync();
+            var reservationList = await _context.reservations.Include(r => r.Booker).ToListAsync();
             return reservationList;
         }
 
@@ -68,7 +61,7 @@ namespace Booking.Api.Repositories
         {
             try
             {
-                var getReservation = await _context.reservations.FindAsync(Id);
+                var getReservation = await _context.reservations.Include(r => r.Booker).Where(r => r.Id == Id).FirstAsync();
                 if (getReservation == null)
                 {
                     _logger.LogInformation($"Couldnt find a reservation in the database with the ID: {Id}.");
@@ -112,7 +105,7 @@ namespace Booking.Api.Repositories
 
             // Update reservation properties
             reservation.ShowId = updateReservation.ShowId;
-            reservation.BookerEmail = updateReservation.BookerEmail;
+            reservation.Booker.Email = updateReservation.Booker.Email;
             reservation.BookedSeats = updateReservation.BookedSeats;
 
             ReservationValidator.ValidateReservation(reservation);

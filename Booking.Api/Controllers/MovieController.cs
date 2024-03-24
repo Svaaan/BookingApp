@@ -109,7 +109,7 @@ namespace Booking.Api.Controllers
             try
             {
                 // Ensure the provided ID matches the ID in the updateMovie
-                if (id != updateMovie.ID)
+                if (id != updateMovie.Id)
                 {
                     return BadRequest("Mismatched movie ID in the request.");
                 }

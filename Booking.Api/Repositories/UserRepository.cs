@@ -22,9 +22,9 @@ namespace Booking.Api.Repositories
             try
             {
 
-                var createUser = await _context.users.AddAsync(user);
+                await _context.users.AddAsync(user);
                 await _context.SaveChangesAsync();
-                return createUser.Entity;
+                return user;
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace Booking.Api.Repositories
         {
             try
             {
-                var getUser = await _context.users.FindAsync(Id);
+                var getUser = await _context.users.Include(u => u.Company).Where(u => u.Id == Id).FirstAsync();
                 if (getUser == null)
                 {
                     _logger.LogInformation($"Couldnt find a user in the database with the ID: {Id}.");
@@ -54,7 +54,7 @@ namespace Booking.Api.Repositories
         {
             try
             {
-                var userList = await _context.users.ToListAsync();
+                var userList = await _context.users.Include(u => u.Company).ToListAsync();
                 if (userList.Count == 0)
                 {
                     _logger.LogInformation("No users found in the database.");

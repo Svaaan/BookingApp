@@ -22,24 +22,22 @@ namespace Booking.Api.Repositories
         {
             if (await IsShowTimeSlotAvailable(showDto.StartTime, showDto.EndTime, showDto.SalonId))
             {
-                var movie = _context.movies.FirstOrDefault(m => m.ID == showDto.MovieId);
-                var salon = _context.salons.FirstOrDefault(s => s.ID == showDto.MovieId);
+                var movie = _context.movies.FirstOrDefault(m => m.Id == showDto.MovieId);
+                var salon = _context.salons.FirstOrDefault(s => s.Id == showDto.MovieId);
 
-                if (movie != null && movie.MaxShows > 0 && await _context.shows.CountAsync(s => s.MovieID == showDto.MovieId) >= movie.MaxShows)
+                if (movie != null && movie.MaxShows > 0 && await _context.shows.CountAsync(s => s.MovieId == showDto.MovieId) >= movie.MaxShows)
                 {
                     throw new Exception("Maximum allowed shows for this movie has been reached.");
                 }
 
                 var show = new Show
                 {
-                    MovieID = showDto.MovieId,
-                    Movie = movie,
-                    SalonID = showDto.SalonId,
-                    Salon = salon,
+                    Id = showDto.Id,
+                    MovieId = showDto.MovieId, 
+                    SalonId = showDto.SalonId,
                     StartTime = showDto.StartTime,
                     EndTime = showDto.EndTime,
-
-                    AvailableSeats = _context.salons.FirstOrDefault(s => s.ID == showDto.SalonId)?.AvailableSeats ?? 0
+                    AvailableSeats = _context.salons.FirstOrDefault(s => s.Id == showDto.SalonId)?.AvailableSeats ?? 0
                 };
 
                 ShowValidator.ValidateShow(show);
@@ -57,7 +55,7 @@ namespace Booking.Api.Repositories
         public async Task<bool> IsShowTimeSlotAvailable(DateTime startTime, DateTime endTime, int salonId)
         {
             bool isAvailable = await _context.shows
-                .Where(show => show.SalonID == salonId && !(show.EndTime <= startTime || show.StartTime >= endTime))
+                .Where(show => show.SalonId == salonId && !(show.EndTime <= startTime || show.StartTime >= endTime))
                 .AnyAsync();
             return !isAvailable;
         }
@@ -67,7 +65,7 @@ namespace Booking.Api.Repositories
             var show = await _context.shows
                 .Include(s => s.Movie)
                 .Include(s => s.Salon)
-                .FirstOrDefaultAsync(s => s.ID == showId);
+                .FirstOrDefaultAsync(s => s.Id == showId);
 
             if (show == null)
             {
@@ -78,16 +76,16 @@ namespace Booking.Api.Repositories
             {
                 ShowUpsertDtoValidator.ValidateShowUpsertDto(showDto);
 
-                var movie = await _context.movies.FirstOrDefaultAsync(m => m.ID == showDto.MovieId);
-                var salon = await _context.salons.FirstOrDefaultAsync(s => s.ID == showDto.SalonId);
+                var movie = await _context.movies.FirstOrDefaultAsync(m => m.Id == showDto.MovieId);
+                var salon = await _context.salons.FirstOrDefaultAsync(s => s.Id == showDto.SalonId);
 
                 _context.Entry(show).Reference(s => s.Movie).Load();
                 _context.Entry(show).Reference(s => s.Salon).Load();
 
-                show.MovieID = showDto.MovieId;
+                show.MovieId = showDto.MovieId;
                 show.Movie = movie;
 
-                show.SalonID = showDto.SalonId;
+                show.SalonId = showDto.SalonId;
                 show.Salon = salon;
                 show.StartTime = showDto.StartTime;
                 show.EndTime = showDto.EndTime;
@@ -132,7 +130,7 @@ namespace Booking.Api.Repositories
             Show show = await _context.shows
                 .Include(s => s.Movie)
                 .Include(s => s.Salon)
-                .FirstOrDefaultAsync(s => s.ID == Id);
+                .FirstOrDefaultAsync(s => s.Id == Id);
 
             if (show == null)
             {
@@ -141,8 +139,8 @@ namespace Booking.Api.Repositories
 
             ShowDetailsDto showDetailsDto = new ShowDetailsDto
             {
-                ShowId = show.ID,
-                MovieId = show.Movie.ID,
+                ShowId = show.Id,
+                MovieId = show.Movie.Id,
                 MovieTitle = show.Movie.Title,
                 MovieDescription = show.Movie.Description,
                 MovieDirector = show.Movie.Director,
@@ -150,7 +148,7 @@ namespace Booking.Api.Repositories
                 minutes = show.Movie.Minutes,
                 ReleaseYear = show.Movie.ReleaseYear,
                 AgeRestriction = show.Movie.AgeRestriction,
-                SalonId = show.Salon.ID,
+                SalonId = show.Salon.Id,
                 SalonName = show.Salon.Name,
                 AvailableSeats = show.Salon.AvailableSeats,
                 StartTime = show.StartTime,
@@ -180,10 +178,10 @@ namespace Booking.Api.Repositories
                     Date = g.Key,
                     Shows = g.Select(s => new ShowDto 
                     {
-                        ShowId = s.ID,
-                        MovieId = s.MovieID,
+                        Id = s.Id,
+                        MovieId = s.MovieId,
                         MovieTitle = s.Movie.Title,
-                        SalonId = s.Salon.ID,
+                        SalonId = s.Salon.Id,
                         SalonName = s.Salon.Name,
                         AvailableSeats = s.AvailableSeats,
                         StartTime = s.StartTime,
@@ -199,10 +197,10 @@ namespace Booking.Api.Repositories
                     Date = g.Key,
                     Shows = g.Select(s => new ShowDto
                     {
-                        ShowId = s.ID,
-                        MovieId = s.MovieID,
+                        Id = s.Id,
+                        MovieId = s.MovieId,
                         MovieTitle = s.Movie.Title,
-                        SalonId = s.Salon.ID,
+                        SalonId = s.Salon.Id,
                         SalonName = s.Salon.Name,
                         AvailableSeats = s.AvailableSeats,
                         StartTime = s.StartTime,

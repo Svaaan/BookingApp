@@ -70,11 +70,11 @@ namespace Booking.Api.Migrations
 
             modelBuilder.Entity("Booking.Api.Entities.Movie", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AgeRestriction")
                         .HasColumnType("int");
@@ -102,9 +102,6 @@ namespace Booking.Api.Migrations
                     b.Property<int>("Minutes")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MovieTheatreId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ReleaseYear")
                         .HasColumnType("int");
 
@@ -115,16 +112,14 @@ namespace Booking.Api.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
-
-                    b.HasIndex("MovieTheatreId");
+                    b.HasKey("Id");
 
                     b.ToTable("movies");
 
                     b.HasData(
                         new
                         {
-                            ID = 2,
+                            Id = 2,
                             AgeRestriction = 15,
                             Description = "The aging patriarch of an organized crime dynasty in postwar New York City transfers control of his clandestine empire to his reluctant youngest son",
                             Director = "Francis Ford Coppola",
@@ -172,9 +167,8 @@ namespace Booking.Api.Migrations
                     b.Property<int>("BookedSeats")
                         .HasColumnType("int");
 
-                    b.Property<string>("BookerEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("BookerId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ReservationTime")
                         .HasColumnType("datetime2");
@@ -184,6 +178,8 @@ namespace Booking.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BookerId");
+
                     b.HasIndex("ShowId");
 
                     b.ToTable("reservations");
@@ -191,11 +187,11 @@ namespace Booking.Api.Migrations
 
             modelBuilder.Entity("Booking.Api.Entities.Salon", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AvailableSeats")
                         .HasColumnType("int");
@@ -206,14 +202,14 @@ namespace Booking.Api.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("salons");
 
                     b.HasData(
                         new
                         {
-                            ID = 1,
+                            Id = 1,
                             AvailableSeats = 30,
                             Name = "Salon 1",
                             Status = 0
@@ -222,11 +218,11 @@ namespace Booking.Api.Migrations
 
             modelBuilder.Entity("Booking.Api.Entities.Show", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AvailableSeats")
                         .HasColumnType("int");
@@ -237,28 +233,23 @@ namespace Booking.Api.Migrations
                     b.Property<decimal>("InterestRate")
                         .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("MovieID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MovieTheatreId")
+                    b.Property<int>("MovieId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("PricePerSeat")
                         .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("SalonID")
+                    b.Property<int>("SalonId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("MovieID");
+                    b.HasIndex("MovieId");
 
-                    b.HasIndex("MovieTheatreId");
-
-                    b.HasIndex("SalonID");
+                    b.HasIndex("SalonId");
 
                     b.ToTable("shows");
                 });
@@ -297,17 +288,10 @@ namespace Booking.Api.Migrations
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("Booking.Api.Entities.Movie", b =>
-                {
-                    b.HasOne("Booking.Api.Entities.MovieTheatre", null)
-                        .WithMany("Movies")
-                        .HasForeignKey("MovieTheatreId");
-                });
-
             modelBuilder.Entity("Booking.Api.Entities.MovieTheatre", b =>
                 {
                     b.HasOne("Booking.Api.Entities.Company", "Company")
-                        .WithMany("MovieTheatres")
+                        .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -317,11 +301,19 @@ namespace Booking.Api.Migrations
 
             modelBuilder.Entity("Booking.Api.Entities.Reservation", b =>
                 {
+                    b.HasOne("Booking.Api.Entities.Booker", "Booker")
+                        .WithMany()
+                        .HasForeignKey("BookerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Booking.Api.Entities.Show", "Show")
                         .WithMany("Reservations")
                         .HasForeignKey("ShowId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Booker");
 
                     b.Navigation("Show");
                 });
@@ -330,17 +322,13 @@ namespace Booking.Api.Migrations
                 {
                     b.HasOne("Booking.Api.Entities.Movie", "Movie")
                         .WithMany()
-                        .HasForeignKey("MovieID")
+                        .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Booking.Api.Entities.MovieTheatre", null)
-                        .WithMany("Shows")
-                        .HasForeignKey("MovieTheatreId");
-
                     b.HasOne("Booking.Api.Entities.Salon", "Salon")
                         .WithMany()
-                        .HasForeignKey("SalonID")
+                        .HasForeignKey("SalonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -352,26 +340,12 @@ namespace Booking.Api.Migrations
             modelBuilder.Entity("Booking.Api.Entities.User", b =>
                 {
                     b.HasOne("Booking.Api.Entities.Company", "Company")
-                        .WithMany("Users")
+                        .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("Booking.Api.Entities.Company", b =>
-                {
-                    b.Navigation("MovieTheatres");
-
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Booking.Api.Entities.MovieTheatre", b =>
-                {
-                    b.Navigation("Movies");
-
-                    b.Navigation("Shows");
                 });
 
             modelBuilder.Entity("Booking.Api.Entities.Show", b =>
