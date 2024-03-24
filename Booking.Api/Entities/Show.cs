@@ -8,10 +8,12 @@
         public int SalonID { get; set; }
         public Salon Salon { get; set; }
         public int AvailableSeats { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime StartTime { get; set; } = DateTime.UtcNow;
+        public DateTime EndTime { get; set; } = DateTime.UtcNow;
         public decimal PricePerSeat { get; set; }
         public decimal InterestRate { get; set; } = 25;
+
+        public ICollection<Reservation> Reservations { get; set; }
 
         public decimal CalculateTotalCost(int bookedSeats)
         {

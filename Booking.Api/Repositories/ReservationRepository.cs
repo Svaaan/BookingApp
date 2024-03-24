@@ -35,6 +35,7 @@ namespace Booking.Api.Repositories
                     ShowId = reservationDto.ShowId,
                     BookerEmail = reservationDto.BookerEmail,
                     BookedSeats = reservationDto.BookedSeats,
+                    ReservationTime = DateTime.UtcNow
                 };
 
                 ReservationValidator.ValidateReservation(reservation);

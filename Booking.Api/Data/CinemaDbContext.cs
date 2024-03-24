@@ -50,6 +50,11 @@ namespace Booking.Api.Data
             modelBuilder.Entity<Show>()
                 .Property(s => s.PricePerSeat)
                 .HasColumnType("decimal(10, 2)");
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.Show)                    
+                .WithMany(s => s.Reservations)          
+                .HasForeignKey(r => r.ShowId)           
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Movie>().HasData(new Movie

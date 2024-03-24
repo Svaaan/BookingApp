@@ -6,7 +6,7 @@
         public int ShowId { get; set; }
         public string BookerEmail { get; set; }
         public int BookedSeats { get; set; }
-        public DateTime ReservationTime { get; set; }
+        public DateTime ReservationTime { get; set; } = DateTime.UtcNow;
         public decimal TotalCost { get; set; }
 
         public Receipt(Reservation reservation, Show show)

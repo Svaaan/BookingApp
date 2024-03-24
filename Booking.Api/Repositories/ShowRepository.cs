@@ -117,6 +117,16 @@ namespace Booking.Api.Repositories
             return deleteShow;
         }
 
+        public async Task DeleteOverdueShows()
+        {
+            var overdueShows = await _context.shows
+                .Where(s => s.EndTime < DateTime.Today)
+                .ToListAsync();
+
+            _context.shows.RemoveRange(overdueShows);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<ShowDetailsDto> GetShowById(int Id)
         {
             Show show = await _context.shows
@@ -154,7 +164,7 @@ namespace Booking.Api.Repositories
 
         public async Task<List<Schedule>> GetShowsByDateAndHours()
         {
-            DateTime currentDate = DateTime.Now;
+            DateTime currentDate = DateTime.UtcNow;
 
             List<Show> shows = await _context.shows
                 .Include(s => s.Movie)
