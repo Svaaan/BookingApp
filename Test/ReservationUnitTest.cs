@@ -23,7 +23,7 @@ namespace Booking.Api.Repositories.Tests
             var reservation = new CreateReservationDTO
             {
                 ShowId = 1,
-               Booker = booker,
+               BookerId = booker.Id,
                 BookedSeats = 5
             };
 
