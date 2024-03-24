@@ -164,7 +164,7 @@ namespace Booking.Api.Repositories
 
         public async Task<List<Schedule>> GetShowsByDateAndHours()
         {
-            DateTime currentDate = DateTime.Now;
+            DateTime currentDate = DateTime.UtcNow;
 
             List<Show> shows = await _context.shows
                 .Include(s => s.Movie)
