@@ -8,18 +8,22 @@ namespace Booking.Api.Service
 {
     public class ShowCleanUpService : BackgroundService
     {
-        private readonly IShowRepository _showRepository;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public ShowCleanUpService(IShowRepository showRepository)
+        public ShowCleanUpService(IServiceScopeFactory scopeFactory)
         {
-            _showRepository = showRepository;
+            _scopeFactory = scopeFactory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                await _showRepository.DeleteOverdueShows();
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    var showRepository = scope.ServiceProvider.GetRequiredService<IShowRepository>();
+                    await showRepository.DeleteOverdueShows();
+                }
 
                 await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
             }
