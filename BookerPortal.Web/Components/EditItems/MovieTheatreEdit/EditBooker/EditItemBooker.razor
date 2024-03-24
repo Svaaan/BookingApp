@@ -1,0 +1,36 @@
+﻿@using Request.HTTP.RequestService.IRequestService
+@using Request.HTTP.DTO.MovieTheatreDTO
+@using System.Net.Http
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode InteractiveServer
+@inject IBookerService bookerService
+
+<td>
+    <button class="btn btn-success" @onclick="() => EditBooker()">
+        Save
+    </button>
+</td>
+
+@code {
+    [Parameter]
+    public BookerDTO bookerDTO { get; set; }
+    [Parameter]
+    public EventCallback<int> OnEdited { get; set; }
+
+
+
+    private async Task EditBooker()
+    {
+        try
+        {
+            await bookerService.EditBookerById(bookerDTO);
+            await OnEdited.InvokeAsync();
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+
+        }
+    }
+}

@@ -1,0 +1,36 @@
+﻿@using Request.HTTP.RequestService.IRequestService
+@using Request.HTTP.DTO.MovieTheatreDTO
+@using System.Net.Http
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode InteractiveServer
+@inject IReservationService reservationService
+
+<td>
+    <button class="btn btn-success" @onclick="() => EditReservation()">
+        Save
+    </button>
+</td>
+
+@code {
+    [Parameter]
+    public ReservationDTO reservationDTO { get; set; }
+    [Parameter]
+    public EventCallback<int> OnEdited { get; set; }
+
+
+
+    private async Task EditReservation()
+    {
+        try
+        {
+            await reservationService.EditReservationById(reservationDTO);
+            await OnEdited.InvokeAsync();
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+
+        }
+    }
+}

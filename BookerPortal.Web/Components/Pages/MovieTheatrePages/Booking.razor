@@ -1,9 +1,9 @@
 ﻿@page "/booking"
-@using Request.HTTP
+@using BookerPortal.Web.Components.EditItems.MovieTheatreEdit.EditBooker
+@using Request.HTTP.RequestService.IRequestService
 @using Request.HTTP.DTO.MovieTheatreDTO
-@using BookerPortal.Web.Components.ReUseUI
 @rendermode InteractiveServer
-@inject IBookerService BookerService
+@inject IBookerService bookerService
 @attribute [StreamRendering]
 <PageTitle>Bokningar</PageTitle>
 
@@ -32,7 +32,7 @@
                                 <td><input @bind="item.LastName" /></td>
                                 <td><input @bind="item.Email" /></td>
                                 <td><input @bind="item.PhoneNumber" /></td>
-                                <EditItem bookerDTO="item" OnEdited=@OnEdited></EditItem>
+                                <EditItemBooker bookerDTO="item" OnEdited=@OnEdited></EditItemBooker>
                             }
                             else
                             {
@@ -47,7 +47,7 @@
                                                 <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
                                             </svg>
                                         </button>
-                                        <RemoveItem bookerDTO="item" OnRemove=@OnRemove></RemoveItem>
+                                        <RemoveItemBooker bookerDTO="item" OnRemove=@OnRemove></RemoveItemBooker>
                                     </div>
       
                                 </td>
@@ -67,9 +67,20 @@
     private bool isEditMode;
     private int selectedId = 0;
 
+    private async Task LoadBookers()
+    {
+        try
+        {
+            bookers = await bookerService.GetBooker();
 
-    [Inject]
-    private IBookerService bookerService { get; set; }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while retrieving data. Please try again later.";
+
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -98,31 +109,5 @@
         isEditMode = true;
 
     }
-    public async Task LoadBookers()
-    {
-        try
-        {
-            bookers = await bookerService.GetBooker();
 
-            if (bookers != null)
-            {
-                for (int i = bookers.Count - 1; i >= 0; i--)
-                {
-                    var booker = bookers[i];
-                    if (booker == null || string.IsNullOrWhiteSpace(booker.Name) || string.IsNullOrWhiteSpace(booker.LastName) || string.IsNullOrWhiteSpace(booker.Email) || string.IsNullOrWhiteSpace(booker.PhoneNumber))
-                    {
-                        bookers.RemoveAt(i);
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            errorMessage = "An error occurred while retrieving data. Please try again later.";
-
-            Console.WriteLine($"Error: {ex.Message}");
-        }
-    }
 }
-
-

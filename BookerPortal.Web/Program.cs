@@ -1,8 +1,8 @@
 using BookerPortal.Web.Components;
-using Microsoft.Extensions.DependencyInjection;
-using Request.HTTP.DTO.MovieTheatreDTO;
 using Booking.Api.Data;
 using Microsoft.EntityFrameworkCore;
+using Request.HTTP.RequestService.IRequestService;
+using Request.HTTP.RequestService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +18,10 @@ builder.Services.AddRazorComponents()
 builder.Services.AddScoped<HttpClient>();
 
 builder.Services.AddScoped<IBookerService, BookerService>();
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<ISalonService, SalonService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped<IShowService, ShowService>();
 
 var app = builder.Build();
 

@@ -1,29 +1,29 @@
-﻿@using Request.HTTP
+﻿@using Request.HTTP.RequestService.IRequestService
 @using Request.HTTP.DTO.MovieTheatreDTO
 @using System.Net.Http
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
 @rendermode InteractiveServer
-@inject IBookerService BookerService
+@inject ISalonService salonService
 
 <td>
-    <button class="btn btn-success" @onclick="() => EditBooker()">
+    <button class="btn btn-success" @onclick="() => EditSalon()">
         Save
     </button>
 </td>
 
 @code {
     [Parameter]
-    public BookerDTO bookerDTO { get; set; }
+    public SalonDTO salonDTO { get; set; }
     [Parameter]
     public EventCallback<int> OnEdited { get; set; }
 
 
 
-    private async Task EditBooker()
+    private async Task EditSalon()
     {
         try
         {
-            await BookerService.EditBookerById(bookerDTO);
+            await salonService.EditSalonById(salonDTO);
             await OnEdited.InvokeAsync();
 
         }

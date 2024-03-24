@@ -1,0 +1,113 @@
+﻿@page "/reservation"
+@using Request.HTTP.RequestService.IRequestService
+@using Request.HTTP.DTO.MovieTheatreDTO
+@using BookerPortal.Web.Components.EditItems.MovieTheatreEdit.EditReservation
+@rendermode InteractiveServer
+@inject IReservationService reservationService
+@attribute [StreamRendering]
+<PageTitle>Bokningar</PageTitle>
+
+@if (reservations != null)
+{
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Booked seats</th>
+                    <th>Show id</th>
+                    <th>Reservation time</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in reservations)
+                {
+                    if (item != null)
+                    {
+                        <tr>
+                            @if (isEditMode && selectedId == item.Id)
+                            {
+                                <td><input @bind="item.BookerEmail" /></td>
+                                <td><input @bind="item.BookedSeats" /></td>
+                                <td><input @bind="item.ShowId" /></td>
+                                <td><input @bind="item.ReservationTime" /></td>
+                                <EditItemReservation reservationDTO="item" OnEdited=@OnEdited></EditItemReservation>
+                            }
+                            else
+                            {
+                                <td class="smooth-text">@item.BookerEmail</td>
+                                <td class="smooth-text">@item.BookedSeats</td>
+                                <td class="smooth-text">@item.ShowId</td>
+                                <td class="smooth-text">@item.ReservationTime</td>
+                                <td>
+                                    <div style="display:flex">
+                                        <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
+                                            </svg>
+                                        </button>
+                                        <RemoveItemReservation reservationDTO="item" OnRemove=@OnRemove></RemoveItemReservation>
+                                    </div>
+
+                                </td>
+
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<ReservationDTO> reservations;
+    private string errorMessage;
+    private bool isEditMode;
+    private int selectedId = 0;
+
+    private async Task LoadReservation()
+    {
+        try
+        {
+            reservations = await reservationService.GetReservation();
+
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while retrieving data. Please try again later.";
+
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadReservation();
+    }
+
+    protected async Task OnRemove()
+    {
+        await LoadReservation();
+
+    }
+
+    protected async Task OnEdited()
+    {
+        selectedId = 0;
+        isEditMode = false;
+        await LoadReservation();
+
+    }
+
+    protected async Task SetEditMode(ReservationDTO reservationDTO)
+    {
+        selectedId = reservationDTO.Id;
+        isEditMode = true;
+
+    }
+}
+
+

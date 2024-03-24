@@ -1,6 +1,8 @@
 using Booking.Web.Components;
 using Microsoft.EntityFrameworkCore;
 using Request.HTTP.DTO.MovieTheatreDTO;
+using Request.HTTP.RequestService.IRequestService;
+using Request.HTTP.RequestService;
 using Booking.Api.Data;
 
 

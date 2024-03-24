@@ -5,7 +5,7 @@
 @using Booking.Api.Repositories.Interfaces
 @using Microsoft.AspNetCore.Components.Forms
 @using Request.HTTP.DTO.MovieTheatreDTO
-@using Request.HTTP
+@using Request.HTTP.RequestService.IRequestService
 @inject IBookerService BookerService
 @inject ILogger<BookerDTO> Logger
 
@@ -139,7 +139,7 @@
     [SupplyParameterFromForm]
     public BookerDTO booker { get; set; }
     [SupplyParameterFromForm]
-    public ReservationDto reservation { get; set; }
+    public ReservationDTO reservation { get; set; }
 
     private EditContext editContext;
     private string successMessage = "";
@@ -148,7 +148,7 @@
     protected override void OnInitialized()
     {
         booker ??= new BookerDTO();
-        reservation ??= new ReservationDto();
+        reservation ??= new ReservationDTO();
     }
 
     private async Task SubmitForm()

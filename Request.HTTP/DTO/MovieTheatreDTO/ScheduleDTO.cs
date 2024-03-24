@@ -1,10 +1,8 @@
-﻿using Booking.Api.Entities.DTO;
-
-namespace Request.HTTP.DTO.MovieTheatreDTO
+﻿namespace Request.HTTP.DTO.MovieTheatreDTO
 {
-    public class Schedule
+    public class ScheduleDTO
     {
         public DateTime Date { get; set; }
-        public List<ShowDto> Shows { get; set; }
+        public List<ShowDTO> Shows { get; set; }
     }
 }
