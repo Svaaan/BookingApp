@@ -57,7 +57,7 @@ namespace Request.HTTP.RequestService
             try
             {
                 HttpClient httpClient = new HttpClient();
-                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"https://localhost:44367/api/Show/{showDTO.ID}", showDTO);
+                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"https://localhost:44367/api/Show/{showDTO.Id}", showDTO);
 
                 if (response.IsSuccessStatusCode)
                 {

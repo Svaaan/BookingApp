@@ -4,10 +4,10 @@ namespace Request.HTTP.DTO.MovieTheatreDTO
 {
     public class MovieDTO
     {
-        public int ID { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string  Director { get; set; }
+        public int Id { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+        public string? Director { get; set; }
         public int Hours { get; set; }
         public int Minutes { get; set; }
         public int ReleaseYear { get; set; }

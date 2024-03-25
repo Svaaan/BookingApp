@@ -8,10 +8,10 @@ namespace Booking.Api.Entities
         public string? Name { get; set; }
         public int AvailableSeats { get; set; }
         public int MovieTheatreId { get; set; }
+        public MovieTheatre MovieTheatre { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Status Status { get; set; }
-        public MovieTheatre MovieTheatre { get; set; }
     }
 
     public enum Status

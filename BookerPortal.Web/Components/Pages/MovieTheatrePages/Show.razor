@@ -26,20 +26,20 @@
                     if (item != null)
                     {
                         <tr>
-                            @if (isEditMode && selectedId == item.ID)
+                            @if (isEditMode && selectedId == item.Id)
                             {
-                                <td><input @bind="item.movie" /></td>
+                                <td><input @bind="item.MovieTitle" /></td>
                                 <td><input @bind="item.AvailableSeats" /></td>
-                                <td><input @bind="item.Salon" /></td>
+                                <td><input @bind="item.SalonName" /></td>
                                 <td><input @bind="item.StartTime" /></td>
                                 <td><input @bind="item.EndTime" /></td>
                                 <EditItemShow showDTO="item" OnEdited=@OnEdited></EditItemShow>
                             }
                             else
                             {
-                                <td class="smooth-text">@item.movie</td>
+                                <td class="smooth-text">@item.MovieTitle</td>
                                 <td class="smooth-text">@item.AvailableSeats</td>
-                                <td class="smooth-text">@item.Salon</td>
+                                <td class="smooth-text">@item.SalonName</td>
                                 <td class="smooth-text">@item.StartTime</td>
                                 <td class="smooth-text">@item.EndTime</td>
                                 <td>
@@ -107,7 +107,7 @@
 
     protected async Task SetEditMode(ShowDTO showDTO)
     {
-        selectedId = showDTO.ID;
+        selectedId = showDTO.Id;
         isEditMode = true;
 
     }

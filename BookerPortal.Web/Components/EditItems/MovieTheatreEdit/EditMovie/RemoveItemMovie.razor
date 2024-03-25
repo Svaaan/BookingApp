@@ -25,7 +25,7 @@
     {
         try
         {
-            await movieService.RemoveMovieById(movieDTO.ID);
+            await movieService.RemoveMovieById(movieDTO.Id);
             await OnRemove.InvokeAsync();
 
         }
