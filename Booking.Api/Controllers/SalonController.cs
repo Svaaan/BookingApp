@@ -85,12 +85,12 @@ namespace Booking.Api.Controllers
         [HttpPut("{id:int}")]
         [ProducesResponseType(typeof(Salon), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Salon>> UpdateSalon(int id, [FromBody] Salon salon)
+        public async Task<ActionResult<Salon>> UpdateSalon(int id, [FromBody] SalonDTO salonDTO)
         {
             try
             {
-                // Ensure the provided ID matches the ID in the updateSalon
-                if (id != salon.Id)
+                var salon = new Salon { Id = salonDTO.Id, Name = salonDTO.Name, Status = salonDTO.Status, MovieTheatreId = salonDTO.MovieTheatreId, AvailableSeats = salonDTO.AvailableSeats };
+                if (id != salonDTO.Id)
                 {
                     return BadRequest("Mismatched salon ID in the request.");
                 }
@@ -119,7 +119,7 @@ namespace Booking.Api.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Salon>> DeleteSalonById(int Id)
+        public async Task<ActionResult<SalonDTO>> DeleteSalonById(int Id)
         {
             var deleteSalon = await this._salonRepository.DeleteSalonById(Id);
             if (deleteSalon == null)

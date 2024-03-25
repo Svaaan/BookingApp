@@ -1,4 +1,6 @@
-﻿namespace Booking.Api.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace Booking.Api.Entities
 {
     public class MovieTheatre
     {

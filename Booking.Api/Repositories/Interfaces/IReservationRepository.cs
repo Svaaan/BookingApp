@@ -8,7 +8,7 @@ namespace Booking.Api.Repositories.Interfaces
         Task<Reservation> CreateReservation(Reservation reservation);
         Task<List<Reservation>> GetAllReservations();
         Task<Reservation> GetReservationById(int Id);
-        Task<Reservation> UpdateReservation(int Id, ReservationDto reservationDto);
+        Task<Reservation> UpdateReservation(int Id, Reservation reservationDto);
         Task<Reservation> DeleteReservation(int Id);
     }
 }
