@@ -28,7 +28,6 @@
                         <tr>
                             @if (isEditMode && selectedId == item.Id)
                             {
-                                <td><input @bind="item.BookerEmail" /></td>
                                 <td><input @bind="item.BookedSeats" /></td>
                                 <td><input @bind="item.ShowId" /></td>
                                 <td><input @bind="item.ReservationTime" /></td>
@@ -36,7 +35,6 @@
                             }
                             else
                             {
-                                <td class="smooth-text">@item.BookerEmail</td>
                                 <td class="smooth-text">@item.BookedSeats</td>
                                 <td class="smooth-text">@item.ShowId</td>
                                 <td class="smooth-text">@item.ReservationTime</td>

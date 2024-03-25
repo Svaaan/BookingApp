@@ -89,10 +89,10 @@ namespace Booking.Api.Controllers
         {
             try
             {
-                // Ensure the provided ID matches the ID in the updateMovie
+                // Ensure the provided ID matches the ID in the updateSalon
                 if (id != salon.Id)
                 {
-                    return BadRequest("Mismatched movie ID in the request.");
+                    return BadRequest("Mismatched salon ID in the request.");
                 }
 
                 var updatedSalon = await _salonRepository.UpdateSalonById(id, salon);
@@ -119,7 +119,7 @@ namespace Booking.Api.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Salon>> DeleteMovieById(int Id)
+        public async Task<ActionResult<Salon>> DeleteSalonById(int Id)
         {
             var deleteSalon = await this._salonRepository.DeleteSalonById(Id);
             if (deleteSalon == null)
