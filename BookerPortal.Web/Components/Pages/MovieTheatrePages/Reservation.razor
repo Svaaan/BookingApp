@@ -16,6 +16,7 @@
                     <th>Show id</th>
                     <th>Booked seats</th>
                     <th>BookerId</th>
+                    <th>Booker Email</th>
                     <th> </th>
                 </tr>
             </thead>
@@ -38,6 +39,7 @@
                                 <td class="smooth-text">@item.ShowId</td>
                                 <td class="smooth-text">@item.BookedSeats</td>
                                 <td class="smooth-text">@item.BookerId</td>
+                                <td class="smooth-text">@item.Booker.Email</td>
                                 <td>
                                     <div style="display:flex">
                                         <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
@@ -60,7 +62,7 @@
 }
 
 @code {
-    private List<ReservationDTO> reservations;
+    private List<PresentReservationDTO> reservations;
     private string errorMessage;
     private bool isEditMode;
     private int selectedId = 0;
@@ -100,7 +102,7 @@
 
     }
 
-    protected async Task SetEditMode(ReservationDTO reservationDTO)
+    protected async Task SetEditMode(PresentReservationDTO reservationDTO)
     {
         selectedId = reservationDTO.Id;
         isEditMode = true;

@@ -30,11 +30,11 @@ namespace Request.HTTP.RequestService
             }
         }
 
-        public async Task<List<ShowDTO>> GetShow()
+        public async Task<List<ScheduleDTO>> GetShow()
         {
             HttpClient httpClient = new HttpClient();
 
-            var getShow = await httpClient.GetFromJsonAsync<List<ShowDTO>>("https://localhost:44367/api/Show/schedule");
+            var getShow = await httpClient.GetFromJsonAsync<List<ScheduleDTO>>("https://localhost:44367/api/Show/schedule");
 
             return getShow;
         }
@@ -56,8 +56,15 @@ namespace Request.HTTP.RequestService
         {
             try
             {
-                HttpClient httpClient = new HttpClient();
-                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"https://localhost:44367/api/Show/{showDTO.Id}", showDTO);
+                var editShowDTO = new EditShowDTO();
+                editShowDTO.Id = showDTO.Id;
+                editShowDTO.MovieId = showDTO.MovieId;
+                editShowDTO.SalonId = showDTO.SalonId;
+                editShowDTO.StartTime = showDTO.StartTime;
+                editShowDTO.EndTime = showDTO.EndTime;
+
+        HttpClient httpClient = new HttpClient();
+                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"https://localhost:44367/api/Show/{editShowDTO.Id}", editShowDTO);
 
                 if (response.IsSuccessStatusCode)
                 {

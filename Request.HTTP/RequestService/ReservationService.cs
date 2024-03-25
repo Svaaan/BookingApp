@@ -30,11 +30,11 @@ namespace Request.HTTP.RequestService
             }
         }
 
-        public async Task<List<ReservationDTO>> GetReservation()
+        public async Task<List<PresentReservationDTO>> GetReservation()
         {
             HttpClient httpClient = new HttpClient();
 
-            var getReservation = await httpClient.GetFromJsonAsync<List<ReservationDTO>>("https://localhost:44367/api/Reservation");
+            var getReservation = await httpClient.GetFromJsonAsync<List<PresentReservationDTO>>("https://localhost:44367/api/Reservation");
 
             return getReservation;
         }
