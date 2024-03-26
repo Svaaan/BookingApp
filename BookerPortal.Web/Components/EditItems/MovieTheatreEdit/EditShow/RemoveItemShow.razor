@@ -25,7 +25,7 @@
     {
         try
         {
-            await showService.RemoveShowById(showDTO.ID);
+            await showService.RemoveShowById(showDTO.Id);
             await OnRemove.InvokeAsync();
 
         }

@@ -25,7 +25,7 @@
                     if (item != null) 
                     {
                         <tr>
-                            @if (isEditMode && selectedId == item.ID)
+                            @if (isEditMode && selectedId == item.Id)
                             {
                                 <td><input @bind="item.Title" /></td>
                                 <td><input @bind="item.Director" /></td>
@@ -105,7 +105,7 @@
 
     protected async Task SetEditMode(MovieDTO movieDTO)
     {
-        selectedId = movieDTO.ID;
+        selectedId = movieDTO.Id;
         isEditMode = true;
 
     }

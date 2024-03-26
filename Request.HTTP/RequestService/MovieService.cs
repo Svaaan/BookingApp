@@ -61,7 +61,7 @@ namespace Request.HTTP.RequestService
             try
             {
                 HttpClient httpClient = new HttpClient();
-                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"https://localhost:44367/api/Movie/{movie.ID}", movie);
+                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"https://localhost:44367/api/Movie/{movie.Id}", movie);
 
                 if (response.IsSuccessStatusCode)
                 {

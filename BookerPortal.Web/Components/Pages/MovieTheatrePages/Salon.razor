@@ -25,7 +25,7 @@
                     if (item != null)
                     {
                         <tr>
-                            @if (isEditMode && selectedId == item.ID)
+                            @if (isEditMode && selectedId == item.Id)
                             {
                                 <td><input @bind="item.Name" /></td>
                                 <td><input @bind="item.AvailableSeats" /></td>
@@ -103,7 +103,7 @@
 
     protected async Task SetEditMode(SalonDTO salonDTO)
     {
-        selectedId = salonDTO.ID;
+        selectedId = salonDTO.Id;
         isEditMode = true;
 
     }

@@ -25,7 +25,7 @@
     {
         try
         {
-            await salonService.RemoveSalonById(salonDTO.ID);
+            await salonService.RemoveSalonById(salonDTO.Id);
             await OnRemove.InvokeAsync();
 
         }

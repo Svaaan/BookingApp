@@ -78,7 +78,7 @@ namespace Booking.Api.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<User>> DeleteUserById(int id)
+        public async Task<ActionResult<UserDTO>> DeleteUserById(int id)
         {
             var deleteUser = await this._userRepository.DeleteUserByIdAsync(id);
             if (deleteUser == null)
@@ -117,7 +117,7 @@ namespace Booking.Api.Controllers
         [HttpPut("{id:int}")]
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<User>> UpdateUSer(int id, [FromBody] User updateUser)
+        public async Task<ActionResult<User>> UpdateUser(int id, [FromBody] User updateUser)
         {
             try
             {

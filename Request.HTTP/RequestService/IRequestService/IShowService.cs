@@ -5,7 +5,7 @@ namespace Request.HTTP.RequestService.IRequestService
     public interface IShowService
     {
         Task<bool> PostShow(ShowDTO show);
-        Task<List<ShowDTO>> GetShow();
+        Task<List<ScheduleDTO>> GetShow();
         Task<bool> RemoveShowById(int showId);
         Task<ShowDTO> EditShowById(ShowDTO show);
     }
