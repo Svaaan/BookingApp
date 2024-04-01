@@ -89,8 +89,17 @@ namespace Booking.Api.Repositories.Tests
             var mockLogger = new Mock<ILogger<ReservationRepository>>();
             var reservationRepository = new ReservationRepository(mockContext.Object, mockLogger.Object);
 
+            // Convert ReservationDto to Reservation
+            var reservationToUpdate = new Reservation
+            {
+                Id = reservationId,
+                ShowId = updateReservationDto.ShowId,
+                Booker = updateReservationDto.Booker,
+                BookedSeats = updateReservationDto.BookedSeats
+            };
+
             // Act
-            await reservationRepository.UpdateReservation(reservationId, updateReservationDto);
+            await reservationRepository.UpdateReservation(reservationId, reservationToUpdate);
 
             // Assert
             // For UpdateReservation_IncreasesAvailableSeats_WhenBookingSeatsDecrease

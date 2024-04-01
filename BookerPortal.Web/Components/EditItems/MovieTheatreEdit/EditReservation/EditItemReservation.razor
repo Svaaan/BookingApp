@@ -13,7 +13,7 @@
 
 @code {
     [Parameter]
-    public ReservationDTO reservationDTO { get; set; }
+    public PresentReservationDTO reservationDTO { get; set; }
     [Parameter]
     public EventCallback<int> OnEdited { get; set; }
 
@@ -23,7 +23,13 @@
     {
         try
         {
-            await reservationService.EditReservationById(reservationDTO);
+            var editReservation = new ReservationDTO();
+            editReservation.Id = reservationDTO.Id;
+            editReservation.BookerId = reservationDTO.BookerId;
+            editReservation.ShowId = reservationDTO.ShowId;
+            editReservation.BookedSeats = reservationDTO.BookedSeats;
+
+            await reservationService.EditReservationById(editReservation);
             await OnEdited.InvokeAsync();
 
         }

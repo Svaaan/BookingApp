@@ -111,6 +111,7 @@ namespace Booking.Api.Repositories
                 movie.ReleaseYear = updateMovie.ReleaseYear;
                 movie.AgeRestriction = updateMovie.AgeRestriction;
                 movie.MaxShows = updateMovie.MaxShows;
+                movie.Genre = updateMovie.Genre;
 
                 await _context.SaveChangesAsync();
                 return movie;

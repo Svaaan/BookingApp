@@ -75,7 +75,7 @@ namespace Booking.Api.Repositories
             }
         }
 
-        public async Task<Reservation> UpdateReservation(int Id, ReservationDto updateReservation)
+        public async Task<Reservation> UpdateReservation(int Id, Reservation updateReservation)
         {
             var reservation = await _context.reservations.FindAsync(Id);
 
@@ -105,7 +105,6 @@ namespace Booking.Api.Repositories
 
             // Update reservation properties
             reservation.ShowId = updateReservation.ShowId;
-            reservation.Booker.Email = updateReservation.Booker.Email;
             reservation.BookedSeats = updateReservation.BookedSeats;
 
             ReservationValidator.ValidateReservation(reservation);

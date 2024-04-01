@@ -101,7 +101,7 @@ namespace Booking.Api.Controllers
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Reservation>> UpdateReservation(int id, [FromBody] ReservationDto updateReservation)
+        public async Task<ActionResult<Reservation>> UpdateReservation(int id, [FromBody] CreateReservationDTO updateReservation)
         {
             try
             {
@@ -109,7 +109,14 @@ namespace Booking.Api.Controllers
                 {
                     return BadRequest();
                 }
-                var reservation = await this._reservationRepository.UpdateReservation(id, updateReservation);
+                var NewReservation = new Reservation
+                {
+                    ShowId = updateReservation.ShowId,
+                    BookedSeats = updateReservation.BookedSeats,
+                    BookerId = updateReservation.BookerId,
+                    ReservationTime = DateTime.UtcNow
+                };
+                var reservation = await this._reservationRepository.UpdateReservation(id, NewReservation);
                 return Ok(reservation);
             }
             catch (ShowUpsertDtoException ex)
@@ -137,7 +144,7 @@ namespace Booking.Api.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Reservation>> DeleteReservation(int id)
+        public async Task<ActionResult<CreateReservationDTO>> DeleteReservation(int id)
         {
             var deleteReservation = await _reservationRepository.DeleteReservation(id);
             if (deleteReservation == null)

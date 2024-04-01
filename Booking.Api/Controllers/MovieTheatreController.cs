@@ -81,7 +81,7 @@ namespace Booking.Api.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<MovieTheatre>> DeleteMovieTheatreById(int id)
+        public async Task<ActionResult<MovieTheatreDTO>> DeleteMovieTheatreById(int id)
         {
             var deleteMovieTheatre = await this._movieTheatreRepository.DeleteMovieTheatreByIdAsync(id);
             if (deleteMovieTheatre == null)
@@ -120,7 +120,7 @@ namespace Booking.Api.Controllers
         [HttpPut("{id:int}")]
         [ProducesResponseType(typeof(MovieTheatre), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<MovieTheatre>> UpdateMovieTheatre(int id, [FromBody] MovieTheatre updateMovieTheatre)
+        public async Task<ActionResult<MovieTheatre>> UpdateMovieTheatre(int id, [FromBody] MovieTheatreDTO updateMovieTheatre)
         {
             try
             {
@@ -129,8 +129,13 @@ namespace Booking.Api.Controllers
                 {
                     return BadRequest("Mismatched MovieTheatre ID in the request.");
                 }
-
-                var updatedMovieTheatre = await _movieTheatreRepository.UpdateMovieTheatreById(id, updateMovieTheatre);
+                var movieTheatre = new MovieTheatre
+                {
+                    Id = updateMovieTheatre.Id,
+                    CompanyId = updateMovieTheatre.CompanyId,
+                    Name = updateMovieTheatre.Name
+                };
+                var updatedMovieTheatre = await _movieTheatreRepository.UpdateMovieTheatreById(id, movieTheatre);
                 if (updatedMovieTheatre == null)
                 {
                     return NotFound();
