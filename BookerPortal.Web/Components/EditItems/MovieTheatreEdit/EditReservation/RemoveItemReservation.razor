@@ -68,7 +68,13 @@
         <div class="modal-overlay"></div>
         <div class="modal-content">
             <div class="modal-body">
-                Are you sure you want to remove this reservation?
+                <div class="warning-text">
+                    <div>
+                        <span style="color: red; font-size: 1.5em;">Warning</span>
+                    </div>
+
+                    <span style="color: red;">Removing this item will affect the corresponding ID of other related items in the database. Please confirm that you want to proceed.</span>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger" @onclick="RemoveReservation">Confirm Removal</button>
