@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Booking.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class DbPull : Migration
+    public partial class seedData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -94,7 +94,8 @@ namespace Booking.Api.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: false)
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -202,6 +203,11 @@ namespace Booking.Api.Migrations
                 table: "movieTheatres",
                 columns: new[] { "Id", "CompanyId", "Name" },
                 values: new object[] { 1, 1, "TestTheatre" });
+
+            migrationBuilder.InsertData(
+                table: "users",
+                columns: new[] { "Id", "CompanyId", "Email", "LastName", "Name", "Password", "Role" },
+                values: new object[] { 1, 1, "john@example.com", "Doe", "John", "password", "Admin" });
 
             migrationBuilder.InsertData(
                 table: "salons",

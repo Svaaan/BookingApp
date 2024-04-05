@@ -1,4 +1,5 @@
-﻿<div class="nav-item px-3">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+<div class="nav-item px-3">
     <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
         <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Booker Portal
     </NavLink>
@@ -9,31 +10,37 @@
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
 
+        <AuthorizeView Roles="AdminRole">
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="booking">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Bookings
+                    </NavLink>
+                </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="booking">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Bookings
-            </NavLink>
-        </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="movie">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Movies
+                    </NavLink>
+                </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="movie">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Movies
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="reservation">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Reservations
-            </NavLink>
-        </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="reservation">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Reservations
+                    </NavLink>
+                </div>
+
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="salon">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Salons
+                    </NavLink>
+                </div>
+            </Authorized>
+        </AuthorizeView>
+
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="Show">
                 <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Shows
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="salon">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Salons
             </NavLink>
         </div>
     </nav>
