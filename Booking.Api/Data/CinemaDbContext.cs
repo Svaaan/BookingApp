@@ -75,11 +75,24 @@ namespace Booking.Api.Data
                 AgeRestriction = 15,
                 MaxShows = 5,
             });
+            modelBuilder.Entity<Company>().HasData(new Company
+            {
+                Id = 1,
+                CompanyName = "TestCompany",
+                Email = "Test@mail.com"
+            });
+            modelBuilder.Entity<MovieTheatre>().HasData(new MovieTheatre
+            {
+                Id = 1,
+                CompanyId = 1,
+                Name = "TestTheatre"
+            });
             modelBuilder.Entity<Salon>().HasData(new Salon
             {
                 Id = 1,
-                Name = "Salon 1",
                 AvailableSeats = 30,
+                MovieTheatreId = 1,
+                Name = "Salon 1",
                 Status = 0
             });
 
