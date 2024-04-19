@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Booking.Api.Migrations
 {
     [DbContext(typeof(CinemaDbContext))]
-    [Migration("20240324191014_DbPull")]
-    partial class DbPull
+    [Migration("20240405083812_seedData")]
+    partial class seedData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -306,11 +306,27 @@ namespace Booking.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
                     b.ToTable("users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CompanyId = 1,
+                            Email = "john@example.com",
+                            LastName = "Doe",
+                            Name = "John",
+                            Password = "password",
+                            Role = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Booking.Api.Entities.MovieTheatre", b =>
