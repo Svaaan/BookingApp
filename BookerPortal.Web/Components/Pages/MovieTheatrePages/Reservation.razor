@@ -5,7 +5,7 @@
 @rendermode InteractiveServer
 @inject IReservationService reservationService
 @attribute [StreamRendering]
-@attribute [Authorize(Roles = "Admin,User")]
+@attribute [Authorize(Roles = "Admin,Manager")]
 <PageTitle>Bokningar</PageTitle>
 
 @if (reservations != null)
