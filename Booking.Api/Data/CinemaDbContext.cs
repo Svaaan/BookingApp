@@ -105,6 +105,26 @@ namespace Booking.Api.Data
                 Password = "password",
                 Role = UserRole.Admin
             });
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 2,
+                CompanyId = 1,
+                Name = "Tess",
+                LastName = "Doe",
+                Email = "tess@example.com",
+                Password = "password",
+                Role = UserRole.User
+            });
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 3,
+                CompanyId = 1,
+                Name = "Richard",
+                LastName = "Doe",
+                Email = "Richard@example.com",
+                Password = "password",
+                Role = UserRole.Manager
+            });
             modelBuilder.Entity<Salon>().HasData(new Salon
             {
                 Id = 1,
