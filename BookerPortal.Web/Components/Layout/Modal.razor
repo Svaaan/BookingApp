@@ -1,0 +1,33 @@
+﻿<Modal @ref="modal" Title="Modal title">
+    <BodyTemplate>
+        Modal body text goes here.
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Close</Button>
+        <Button Color="ButtonColor.Primary" @onclick="OnSaveChangesClick">Save changes</Button>
+    </FooterTemplate>
+</Modal>
+
+@code {
+    private Modal modal = default!;
+    private int itemId; // Parameter to hold the item Id
+
+    private async Task OnShowModalClick(int id)
+    {
+        itemId = id; // Assign the item Id
+        await modal.ShowAsync();
+    }
+
+    // Add this method to handle the Save button click
+    private async Task OnSaveChangesClick()
+    {
+        // Perform any logic here, possibly using the itemId
+        // For example: await bookerService.UpdateItem(itemId);
+        await modal.HideAsync();
+    }
+
+    private async Task OnHideModalClick()
+    {
+        await modal.HideAsync();
+    }
+}

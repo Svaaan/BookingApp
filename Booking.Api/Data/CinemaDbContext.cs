@@ -72,7 +72,9 @@ namespace Booking.Api.Data
             {
                 Id = 1,
                 CompanyName = "TestCompany",
-                Email = "Test@mail.com"
+                Email = "Test@mail.com",
+                Adress = "Testgatan 123b",
+                Country = "Sverige"
             });
             modelBuilder.Entity<Movie>().HasData(new Movie
             {
@@ -93,7 +95,8 @@ namespace Booking.Api.Data
             {
                 Id = 1,
                 CompanyId = 1,
-                Name = "TestTheatre"
+                Name = "TestTheatre",
+                Adress = "Biogatan 12a"
             });
             modelBuilder.Entity<User>().HasData(new User
             {

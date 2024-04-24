@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Booking.Api.Migrations
 {
     [DbContext(typeof(CinemaDbContext))]
-    [Migration("20240405083812_seedData")]
-    partial class seedData
+    [Migration("20240424171214_addresss")]
+    partial class addresss
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace Booking.Api.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BookingNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -58,7 +61,15 @@ namespace Booking.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Adress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -74,7 +85,9 @@ namespace Booking.Api.Migrations
                         new
                         {
                             Id = 1,
+                            Adress = "Testgatan 123b",
                             CompanyName = "TestCompany",
+                            Country = "Sverige",
                             Email = "Test@mail.com"
                         });
                 });
@@ -153,6 +166,10 @@ namespace Booking.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Adress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
@@ -170,6 +187,7 @@ namespace Booking.Api.Migrations
                         new
                         {
                             Id = 1,
+                            Adress = "Biogatan 12a",
                             CompanyId = 1,
                             Name = "TestTheatre"
                         });
@@ -326,6 +344,26 @@ namespace Booking.Api.Migrations
                             Name = "John",
                             Password = "password",
                             Role = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CompanyId = 1,
+                            Email = "tess@example.com",
+                            LastName = "Doe",
+                            Name = "Tess",
+                            Password = "password",
+                            Role = "User"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CompanyId = 1,
+                            Email = "Richard@example.com",
+                            LastName = "Doe",
+                            Name = "Richard",
+                            Password = "password",
+                            Role = "Manager"
                         });
                 });
 

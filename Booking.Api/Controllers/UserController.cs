@@ -44,7 +44,8 @@ namespace Booking.Api.Controllers
                     return BadRequest($"Property {property.Name} is null.");
                 }
             }
-            var user = new User { Id = userDTO .Id, CompanyId = userDTO .CompanyId, Email = userDTO .Email, Name = userDTO.Name, LastName = userDTO.LastName, Password = userDTO.Password };
+            //hårdkodar en roll sålänge
+            var user = new User { Id = userDTO .Id, CompanyId = userDTO .CompanyId, Email = userDTO .Email, Name = userDTO.Name, LastName = userDTO.LastName, Password = userDTO.Password, Role = UserRole.Admin};
             var createUser = await _userRepository.CreateUserAsync(user);
             return Ok(createUser);
         }
