@@ -5,6 +5,7 @@
 @rendermode InteractiveServer
 @inject IMovieService movieService
 @attribute [StreamRendering]
+@attribute [Authorize(Roles = "Admin,Manager")]
 <PageTitle>Filmer</PageTitle>
 
 @if (movies != null)

@@ -5,6 +5,7 @@
 @rendermode InteractiveServer
 @inject IBookerService bookerService
 @attribute [StreamRendering]
+@attribute [Authorize(Roles = "Admin,User")]
 <PageTitle>Bokningar</PageTitle>
 
 @if (bookers != null)

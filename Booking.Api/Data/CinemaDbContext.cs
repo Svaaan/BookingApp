@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Booking.Api.Entities;
+using System.Data;
 
 namespace Booking.Api.Data
 {
@@ -53,13 +54,26 @@ namespace Booking.Api.Data
             modelBuilder.Entity<Show>()
                 .Property(s => s.PricePerSeat)
                 .HasColumnType("decimal(10, 2)");
+
             modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.Show)
                 .WithMany(s => s.Reservations)
                 .HasForeignKey(r => r.ShowId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<User>()
+                .Property(e => e.Role)
+                .HasConversion(
+                v => v.ToString(),
+                v => (UserRole)Enum.Parse(typeof(UserRole), v));
+
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Company>().HasData(new Company
+            {
+                Id = 1,
+                CompanyName = "TestCompany",
+                Email = "Test@mail.com"
+            });
             modelBuilder.Entity<Movie>().HasData(new Movie
             {
                 Id = 2,
@@ -75,17 +89,54 @@ namespace Booking.Api.Data
                 AgeRestriction = 15,
                 MaxShows = 5,
             });
+            modelBuilder.Entity<MovieTheatre>().HasData(new MovieTheatre
+            {
+                Id = 1,
+                CompanyId = 1,
+                Name = "TestTheatre"
+            });
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 1,
+                CompanyId = 1,
+                Name = "John",
+                LastName = "Doe",
+                Email = "john@example.com",
+                Password = "password",
+                Role = UserRole.Admin
+            });
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 2,
+                CompanyId = 1,
+                Name = "Tess",
+                LastName = "Doe",
+                Email = "tess@example.com",
+                Password = "password",
+                Role = UserRole.User
+            });
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 3,
+                CompanyId = 1,
+                Name = "Richard",
+                LastName = "Doe",
+                Email = "Richard@example.com",
+                Password = "password",
+                Role = UserRole.Manager
+            });
             modelBuilder.Entity<Salon>().HasData(new Salon
             {
                 Id = 1,
-                Name = "Salon 1",
                 AvailableSeats = 30,
+                MovieTheatreId = 1,
+                Name = "Salon 1",
                 Status = 0
             });
 
             modelBuilder.Entity<User>().HasOne(u => u.Company);
 
         }
-         
+
     }
 }

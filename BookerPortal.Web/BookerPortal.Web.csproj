@@ -11,4 +11,9 @@
 		<ProjectReference Include="..\booking.api\booking.api.csproj" />
 		<ProjectReference Include="..\Request.HTTP\Request.HTTP.csproj" />
 	</ItemGroup>
+
+
+	<ItemGroup>
+	  <None Include="wwwroot\access-denied.jpg" />
+	</ItemGroup>
 </Project>

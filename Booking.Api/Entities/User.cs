@@ -1,4 +1,6 @@
-﻿namespace Booking.Api.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace Booking.Api.Entities
 {
     public class User
     {
@@ -9,5 +11,15 @@
         public string Password { get; set; }
         public int CompanyId { get; set; }
         public Company Company { get; set; }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public UserRole Role { get; set; }
+    }
+
+    public enum UserRole
+    {
+        Admin,
+        Manager,
+        User
     }
 }

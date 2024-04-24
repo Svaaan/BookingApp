@@ -5,6 +5,7 @@
 @rendermode InteractiveServer
 @inject ISalonService salonService
 @attribute [StreamRendering]
+@attribute [Authorize(Roles = "Admin,Manager")]
 <PageTitle>Bokningar</PageTitle>
 
 @if (salon != null)

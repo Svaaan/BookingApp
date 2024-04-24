@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Booking.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class NewDataBase : Migration
+    public partial class seedData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -65,21 +65,6 @@ namespace Booking.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "salons",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AvailableSeats = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_salons", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "movieTheatres",
                 columns: table => new
                 {
@@ -109,7 +94,8 @@ namespace Booking.Api.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: false)
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -118,6 +104,28 @@ namespace Booking.Api.Migrations
                         name: "FK_users_company_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "company",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "salons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AvailableSeats = table.Column<int>(type: "int", nullable: false),
+                    MovieTheatreId = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_salons", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_salons_movieTheatres_MovieTheatreId",
+                        column: x => x.MovieTheatreId,
+                        principalTable: "movieTheatres",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -182,14 +190,29 @@ namespace Booking.Api.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "company",
+                columns: new[] { "Id", "CompanyName", "Email" },
+                values: new object[] { 1, "TestCompany", "Test@mail.com" });
+
+            migrationBuilder.InsertData(
                 table: "movies",
                 columns: new[] { "Id", "AgeRestriction", "Description", "Director", "Genre", "Hours", "Language", "MaxShows", "Minutes", "ReleaseYear", "Subtitle", "Title" },
                 values: new object[] { 2, 15, "The aging patriarch of an organized crime dynasty in postwar New York City transfers control of his clandestine empire to his reluctant youngest son", "Francis Ford Coppola", "Crime", 2, "English", 5, 55, 1972, "Swedish", "The Godfather" });
 
             migrationBuilder.InsertData(
+                table: "movieTheatres",
+                columns: new[] { "Id", "CompanyId", "Name" },
+                values: new object[] { 1, 1, "TestTheatre" });
+
+            migrationBuilder.InsertData(
+                table: "users",
+                columns: new[] { "Id", "CompanyId", "Email", "LastName", "Name", "Password", "Role" },
+                values: new object[] { 1, 1, "john@example.com", "Doe", "John", "password", "Admin" });
+
+            migrationBuilder.InsertData(
                 table: "salons",
-                columns: new[] { "Id", "AvailableSeats", "Name", "Status" },
-                values: new object[] { 1, 30, "Salon 1", 0 });
+                columns: new[] { "Id", "AvailableSeats", "MovieTheatreId", "Name", "Status" },
+                values: new object[] { 1, 30, 1, "Salon 1", 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_movieTheatres_CompanyId",
@@ -205,6 +228,11 @@ namespace Booking.Api.Migrations
                 name: "IX_reservations_ShowId",
                 table: "reservations",
                 column: "ShowId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_salons_MovieTheatreId",
+                table: "salons",
+                column: "MovieTheatreId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_shows_MovieId",
@@ -226,9 +254,6 @@ namespace Booking.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "movieTheatres");
-
-            migrationBuilder.DropTable(
                 name: "reservations");
 
             migrationBuilder.DropTable(
@@ -241,13 +266,16 @@ namespace Booking.Api.Migrations
                 name: "shows");
 
             migrationBuilder.DropTable(
-                name: "company");
-
-            migrationBuilder.DropTable(
                 name: "movies");
 
             migrationBuilder.DropTable(
                 name: "salons");
+
+            migrationBuilder.DropTable(
+                name: "movieTheatres");
+
+            migrationBuilder.DropTable(
+                name: "company");
         }
     }
 }

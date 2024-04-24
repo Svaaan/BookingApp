@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Booking.Api.Migrations
 {
     [DbContext(typeof(CinemaDbContext))]
-    [Migration("20240324165113_movietheatre-salon")]
-    partial class movietheatresalon
+    [Migration("20240419081700_seedUserDataUpdate")]
+    partial class seedUserDataUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,6 +69,14 @@ namespace Booking.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("company");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CompanyName = "TestCompany",
+                            Email = "Test@mail.com"
+                        });
                 });
 
             modelBuilder.Entity("Booking.Api.Entities.Movie", b =>
@@ -157,6 +165,14 @@ namespace Booking.Api.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("movieTheatres");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CompanyId = 1,
+                            Name = "TestTheatre"
+                        });
                 });
 
             modelBuilder.Entity("Booking.Api.Entities.Reservation", b =>
@@ -199,6 +215,9 @@ namespace Booking.Api.Migrations
                     b.Property<int>("AvailableSeats")
                         .HasColumnType("int");
 
+                    b.Property<int>("MovieTheatreId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -207,6 +226,8 @@ namespace Booking.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MovieTheatreId");
+
                     b.ToTable("salons");
 
                     b.HasData(
@@ -214,6 +235,7 @@ namespace Booking.Api.Migrations
                         {
                             Id = 1,
                             AvailableSeats = 30,
+                            MovieTheatreId = 1,
                             Name = "Salon 1",
                             Status = 0
                         });
@@ -284,11 +306,47 @@ namespace Booking.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
                     b.ToTable("users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CompanyId = 1,
+                            Email = "john@example.com",
+                            LastName = "Doe",
+                            Name = "John",
+                            Password = "password",
+                            Role = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CompanyId = 1,
+                            Email = "tess@example.com",
+                            LastName = "Doe",
+                            Name = "Tess",
+                            Password = "password",
+                            Role = "User"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CompanyId = 1,
+                            Email = "Richard@example.com",
+                            LastName = "Doe",
+                            Name = "Richard",
+                            Password = "password",
+                            Role = "Manager"
+                        });
                 });
 
             modelBuilder.Entity("Booking.Api.Entities.MovieTheatre", b =>
@@ -319,6 +377,17 @@ namespace Booking.Api.Migrations
                     b.Navigation("Booker");
 
                     b.Navigation("Show");
+                });
+
+            modelBuilder.Entity("Booking.Api.Entities.Salon", b =>
+                {
+                    b.HasOne("Booking.Api.Entities.MovieTheatre", "MovieTheatre")
+                        .WithMany()
+                        .HasForeignKey("MovieTheatreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MovieTheatre");
                 });
 
             modelBuilder.Entity("Booking.Api.Entities.Show", b =>
