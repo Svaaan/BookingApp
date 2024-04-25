@@ -6,6 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="Components\Layout\Modal.razor" />
+  </ItemGroup>
+
 
 	<ItemGroup>
 		<ProjectReference Include="..\booking.api\booking.api.csproj" />
@@ -14,6 +18,17 @@
 
 
 	<ItemGroup>
+	  <None Include="Components\Layout\Modal.razor" />
 	  <None Include="wwwroot\access-denied.jpg" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Components\Layout\Modal.razor" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Components\Layout\Modal.razor" />
 	</ItemGroup>
 </Project>

@@ -4,13 +4,77 @@
 @using Request.HTTP.DTO.MovieTheatreDTO
 @rendermode InteractiveServer
 @inject IBookerService bookerService
+@inject IShowService showService
+@inject IReservationService reservationService
 @attribute [StreamRendering]
 @attribute [Authorize(Roles = "Admin,User")]
 <PageTitle>Bokningar</PageTitle>
 
+<style>
+    /* Modal styles */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    }
+
+    /* Modal content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+    }
+
+    /* Close button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
 @if (bookers != null)
 {
     <div class="table-container">
+        @if (isModalOpen)
+        {
+            <div class="modal" style="display: block;">
+                <div class="modal-content">
+                    <span class="close" @onclick="CloseModal">&times;</span>
+                    <p>Boka</p>
+                    <label for="dropdown">Välj en visning:</label>
+                    <select id="dropdown" @bind="selectedShowId">
+                        @foreach (var s in schedule)
+                        {
+                            <p>@s.Date.ToShortDateString()</p>
+                            @foreach (var show in s.Shows)
+                            {
+                                <option value="@show.Id">@show.MovieTitle - @show.StartTime - Platser kvar: @show.AvailableSeats</option>
+                            }
+                        }
+                    </select>
+
+                      <Button Color="ButtonColor.Primary"  @onclick="MakeReservation">Save changes</Button>
+                </div>
+            </div>
+        }
+
         <table class="table">
             <thead>
                 <tr>
@@ -49,6 +113,9 @@
                                             </svg>
                                         </button>
                                         <RemoveItemBooker bookerDTO="item" OnRemove=@OnRemove></RemoveItemBooker>
+                                        <button @onclick="() => OpenModal(item.Id)" style="margin-right:10px">
+                                           BOKA
+                                        </button>
                                     </div>
       
                                 </td>
@@ -64,9 +131,14 @@
 
 @code {
     private List<BookerDTO> bookers;
+    private List<ScheduleDTO> schedule = new();
     private string errorMessage;
     private bool isEditMode;
     private int selectedId = 0;
+    private bool isModalOpen = false;
+    private int itemIdForModal = 0;
+    private int selectedShowId;
+    private int selectedBookerId;
 
     private async Task LoadBookers()
     {
@@ -83,9 +155,49 @@
         }
     }
 
+
+    private async Task LoadShows()
+    {
+        try
+        {
+            schedule = await showService.GetShow();
+
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while retrieving data. Please try again later.";
+
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task MakeReservation()
+    {
+        try
+        {
+            //hårdkodar antal seats sålänge
+            ReservationDTO reservationDTO = new()
+                {
+                    BookerId = selectedBookerId,
+                    ShowId = selectedShowId,
+                    BookedSeats = 1
+        };
+            await reservationService.PostReservation(reservationDTO);
+
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while retrieving data. Please try again later.";
+
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+
     protected override async Task OnInitializedAsync()
     {
         await LoadBookers();
+        await LoadShows();
     }
 
 
@@ -111,4 +223,21 @@
 
     }
 
+    protected void OpenModal(int id)
+    {
+        itemIdForModal = id;
+        isModalOpen = true;
+        selectedBookerId = id;
+    }
+
+    protected void CloseModal()
+    {
+        isModalOpen = false;
+    }
+
+    protected async Task SaveChanges()
+    {
+        // Implement your logic to save changes using itemIdForModal if needed
+        isModalOpen = false;
+    }
 }

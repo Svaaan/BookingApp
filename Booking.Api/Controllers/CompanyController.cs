@@ -50,7 +50,7 @@ namespace Booking.Api.Controllers
                 }
             }
 
-            var company = new Company { Id = companyDTO.Id, CompanyName = companyDTO.CompanyName, Email = companyDTO.Email };
+            var company = new Company { Id = companyDTO.Id, CompanyName = companyDTO.CompanyName, Email = companyDTO.Email, Adress = companyDTO.Adress, Country = companyDTO.Country };
 
             var createCompany = await _companyRepository.CreateCompanyAsync(company);
             return Ok(createCompany);

@@ -1,5 +1,7 @@
 ﻿@page "/"
+@using BookerPortal.Web.Components.Pages.Account
 @rendermode InteractiveServer
+
 
 <PageTitle>Home</PageTitle>
 
@@ -12,10 +14,11 @@
             <div class="card-body">
                 <AuthorizeView>
                     <NotAuthorized>
+                        
                         <span>You are not logged in. Please <a class="fw-bolder" href="/login">Click here</a> to login.</span>
                     </NotAuthorized>
                     <Authorized>
-                        <span>Logged in as <b>@context.User.Identity.Name</b>. <a class="fw-bolder" href="/logout">Click here</a>to logout.</span>
+                        <span>Logged in as <b>@context.User.Identity.Name</b></span>
                     </Authorized>
                 </AuthorizeView>
             </div>

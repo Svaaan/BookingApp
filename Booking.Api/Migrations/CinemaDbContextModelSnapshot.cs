@@ -30,6 +30,9 @@ namespace Booking.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BookingNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -55,7 +58,15 @@ namespace Booking.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Adress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -71,7 +82,9 @@ namespace Booking.Api.Migrations
                         new
                         {
                             Id = 1,
+                            Adress = "Testgatan 123b",
                             CompanyName = "TestCompany",
+                            Country = "Sverige",
                             Email = "Test@mail.com"
                         });
                 });
@@ -150,6 +163,10 @@ namespace Booking.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Adress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
@@ -167,6 +184,7 @@ namespace Booking.Api.Migrations
                         new
                         {
                             Id = 1,
+                            Adress = "Biogatan 12a",
                             CompanyId = 1,
                             Name = "TestTheatre"
                         });
