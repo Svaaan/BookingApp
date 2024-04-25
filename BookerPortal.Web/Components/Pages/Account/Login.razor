@@ -8,12 +8,59 @@
 @inject CinemaDbContext cinemaDbContext
 @inject NavigationManager navigationManager
 
+<style>
+    .login-frame {
+        border: 2px solid black;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+        .login-frame input[type="text"],
+        .login-frame input[type="password"] {
+            border: 1px solid black;
+            border-radius: 5px;
+            color: black;
+        }
+
+            .login-frame input[type="text"]::placeholder,
+            .login-frame input[type="password"]::placeholder {
+                color: black;
+                opacity: 0.7;
+            }
+
+        .login-frame .btn {
+            background-color: black;
+            color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+            .login-frame .btn:hover {
+                background-color: #333;
+                border-color: #333;
+            }
+
+        .login-frame a {
+            color: black;
+        }
+
+            .login-frame a:hover {
+                color: #333;
+            }
+
+    .form-controll {
+        color: #343a40;
+        font-weight: bold;
+    }
+</style>
+
 <div class="row">
-    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 black-border">
+    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 login-frame">
+        <div class="text-center mb-3">
+            <img src="login.png" style="max-height:10rem;" />
+        </div>
         <EditForm Model="@Model" OnValidSubmit="Authenticate" FormName="LoginForm">
-            <div class="mb-3 text-center flex-column">
-                <img src="login.png" style="max-height:15rem;" />
-            </div>
             <div class="mb-3">
                 <label>Email</label>
                 <InputText @bind-Value="Model.Email" class="form-control" placeholder="Email" />
@@ -28,11 +75,18 @@
                 <span class="text-danger">@errorMessage</span>
             </div>
             <div class="mb-3 d-grid gap-2">
-                <button type="submit" class="btn btn-dark">Login</button>
+                <button type="submit" class="btn">Login</button>
             </div>
         </EditForm>
+        <div class="text-center">
+            <a href="/forgot-password">Forgot Password?</a>
+        </div>
+        <div class="text-center">
+            <p>Don't have an account? <a href="/register">Register</a></p>
+        </div>
     </div>
 </div>
+
 
 @code {
     [CascadingParameter]
