@@ -48,7 +48,7 @@ namespace Booking.Api.Data
                 v => (Subtitles)Enum.Parse(typeof(Subtitles), v));
 
             modelBuilder.Entity<Show>()
-                .Property(e => e.InterestRate)
+                .Property(e => e.VAT)
                 .HasColumnType("decimal(10, 2)");
 
             modelBuilder.Entity<Show>()

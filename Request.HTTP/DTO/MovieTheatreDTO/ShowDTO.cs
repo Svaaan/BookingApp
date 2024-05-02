@@ -10,5 +10,6 @@
         public int AvailableSeats { get; set; }
         public DateTime StartTime { get; set; } = DateTime.UtcNow;
         public DateTime EndTime { get; set; } = DateTime.UtcNow;
+
     }
 }
