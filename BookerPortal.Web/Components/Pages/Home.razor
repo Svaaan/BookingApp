@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using BookerPortal.Web.Components.Pages.Account
+@using System.Security.Claims
 @rendermode InteractiveServer
 
 
@@ -18,7 +19,7 @@
                         <span>You are not logged in. Please <a class="fw-bolder" href="/login">Click here</a> to login.</span>
                     </NotAuthorized>
                     <Authorized>
-                        <span>Logged in as <b>@context.User.Identity.Name</b></span>
+                        <span>Logged in as <b>@context.User.FindFirst(ClaimTypes.Email)?.Value</b></span>
                     </Authorized>
                 </AuthorizeView>
             </div>

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Booking.Api.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookerPortal.Web.ViewModels
 {
@@ -9,5 +10,9 @@ namespace BookerPortal.Web.ViewModels
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide Password")]
         public string? Password { get; set; }
+        [Required(AllowEmptyStrings = true)]
+        public string? Name { get; set; }
+        [Required(AllowEmptyStrings = true)]
+        public string? SurName { get; set; }
     }
 }
