@@ -105,10 +105,15 @@
             return;
         }
 
+        Model.Name = userAccount.Name;
+        Model.SurName = userAccount.LastName;
+
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, Model.Email),
-            new Claim(ClaimTypes.Role, userAccount.Role.ToString())
+            new Claim(ClaimTypes.Email, Model.Email),
+            new Claim(ClaimTypes.Role, userAccount.Role.ToString()),
+            new Claim(ClaimTypes.Name, Model.Name),
+            new Claim(ClaimTypes.Surname, Model.SurName),
         };
 
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

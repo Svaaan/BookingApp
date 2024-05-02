@@ -4,9 +4,11 @@
 @using Booking.Api.Data
 @using Booking.Api.Entities
 @using Microsoft.EntityFrameworkCore
+
+
 <h1>Welcome</h1>
 <div class="card">
-    <div class="card-body">
+    <div class="card-body d-flex flex-column align-items-center">
         <div class="text-center justify-content-center">
             <div class="d-flex flex-column align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="146" height="156" fill="#ADD8E6" class="bi bi-person-badge" viewBox="0 0 16 16">
@@ -14,16 +16,17 @@
                     <path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492z" />
                 </svg>
             </div>
-            @if (user != null)
-            {
-                <p>Email: @user.Email</p>
-                <p>Name: @user.Name</p>
-                <p>Role: @user.Role</p>
-            }
-            else
-            {
-                <p>No user found.</p>
-            }
+            <AuthorizeView>
+                <Authorized>
+                    <ul style="list-style-type: none; padding: 0;">
+                        <li>Name: <b>@context.User.FindFirst(ClaimTypes.Name)?.Value</b></li>
+                        <li>Surname: <b>@context.User.FindFirst(ClaimTypes.Surname)?.Value</b></li>
+                        <li>Email: <b>@context.User.FindFirst(ClaimTypes.Email)?.Value</b></li>
+                        <li>Role: <b>@context.User.FindFirst(ClaimTypes.Role)?.Value</b></li>
+                        <li>Authentication: <b>@context.User.Identity.AuthenticationType</b></li>
+                    </ul>
+                </Authorized>
+            </AuthorizeView>
         </div>
     </div>
 </div>
@@ -36,7 +39,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var userEmail = "john@example.com";
-        user = await cinemaDbContext.users.FirstOrDefaultAsync(u => u.Email == userEmail);
+        user = await cinemaDbContext.users.FirstOrDefaultAsync();
     }
 }
