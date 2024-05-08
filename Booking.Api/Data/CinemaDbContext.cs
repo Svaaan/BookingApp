@@ -98,6 +98,7 @@ namespace Booking.Api.Data
                 Name = "TestTheatre",
                 Adress = "Biogatan 12a"
             });
+            var (hashedPassword, salt) = PasswordHashing.HashPassword("password");
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = 1,
@@ -106,6 +107,8 @@ namespace Booking.Api.Data
                 LastName = "Doe",
                 Email = "john@example.com",
                 Password = "password",
+                HashedPassword = hashedPassword,
+                Salt = salt,
                 Role = UserRole.Admin
             });
             modelBuilder.Entity<User>().HasData(new User
@@ -116,6 +119,8 @@ namespace Booking.Api.Data
                 LastName = "Doe",
                 Email = "tess@example.com",
                 Password = "password",
+                HashedPassword = hashedPassword,
+                Salt = salt,
                 Role = UserRole.User
             });
             modelBuilder.Entity<User>().HasData(new User
@@ -126,6 +131,8 @@ namespace Booking.Api.Data
                 LastName = "Doe",
                 Email = "Richard@example.com",
                 Password = "password",
+                HashedPassword = hashedPassword,
+                Salt = salt,
                 Role = UserRole.Manager
             });
             modelBuilder.Entity<Salon>().HasData(new Salon
