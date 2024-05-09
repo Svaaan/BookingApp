@@ -5,23 +5,17 @@
 
 <PageTitle>Home</PageTitle>
 
-<div class="row">
-    <div class="col-12">
-        <h2 class="fw-bolder"> Welcome to <span class="text-decoration-underline">Booking app!</span></h2>
-    </div>
     <div class="col-12">
         <div class="card">
             <div class="card-body">
                 <AuthorizeView>
                     <NotAuthorized>
-                        
-                        <span>You are not logged in. Please <a class="fw-bolder" href="/login">Click here</a> to login.</span>
+                        <OfflineHome></OfflineHome>
                     </NotAuthorized>
                     <Authorized>
-                        <span>Logged in as <b>@context.User.Identity.Name</b></span>
+                        <OnlineHome></OnlineHome>
                     </Authorized>
                 </AuthorizeView>
             </div>
         </div>
     </div>
-</div>
