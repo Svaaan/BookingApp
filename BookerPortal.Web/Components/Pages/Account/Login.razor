@@ -99,16 +99,21 @@
     private async Task Authenticate()
     {
         var userAccount = cinemaDbContext.users.Where(x => x.Email == Model.Email).FirstOrDefault();
-        if (userAccount is null || userAccount.Password != Model.Password)
+        if (userAccount == null || !PasswordHashing.VerifyPassword(Model.Password, userAccount.HashedPassword, userAccount.Salt))
         {
             errorMessage = "Invalid Email or Password";
             return;
         }
 
+        Model.Name = userAccount.Name;
+        Model.SurName = userAccount.LastName;
+
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, Model.Email),
-            new Claim(ClaimTypes.Role, userAccount.Role.ToString())
+            new Claim(ClaimTypes.Email, Model.Email),
+            new Claim(ClaimTypes.Role, userAccount.Role.ToString()),
+            new Claim(ClaimTypes.Name, Model.Name),
+            new Claim(ClaimTypes.Surname, Model.SurName),
         };
 
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

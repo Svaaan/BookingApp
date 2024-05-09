@@ -4,6 +4,7 @@ using Booking.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Booking.Api.Migrations
 {
     [DbContext(typeof(CinemaDbContext))]
-    partial class CinemaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240502065842_laptopDb")]
+    partial class laptopDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -309,10 +312,6 @@ namespace Booking.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HashedPassword")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -329,10 +328,6 @@ namespace Booking.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Salt")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
@@ -345,36 +340,30 @@ namespace Booking.Api.Migrations
                             Id = 1,
                             CompanyId = 1,
                             Email = "john@example.com",
-                            HashedPassword = "Oe6MRAWwHOmE4vBD0tsPVmTwX3QpuaAmDZd2TWs4xaQ=",
                             LastName = "Doe",
                             Name = "John",
                             Password = "password",
-                            Role = "Admin",
-                            Salt = new byte[] { 90, 122, 125, 74, 238, 48, 201, 231, 53, 171, 34, 123, 92, 224, 200, 87, 63, 168, 106, 104, 159, 195, 99, 34, 242, 220, 169, 196, 148, 2, 82, 245 }
+                            Role = "Admin"
                         },
                         new
                         {
                             Id = 2,
                             CompanyId = 1,
                             Email = "tess@example.com",
-                            HashedPassword = "Oe6MRAWwHOmE4vBD0tsPVmTwX3QpuaAmDZd2TWs4xaQ=",
                             LastName = "Doe",
                             Name = "Tess",
                             Password = "password",
-                            Role = "User",
-                            Salt = new byte[] { 90, 122, 125, 74, 238, 48, 201, 231, 53, 171, 34, 123, 92, 224, 200, 87, 63, 168, 106, 104, 159, 195, 99, 34, 242, 220, 169, 196, 148, 2, 82, 245 }
+                            Role = "User"
                         },
                         new
                         {
                             Id = 3,
                             CompanyId = 1,
                             Email = "Richard@example.com",
-                            HashedPassword = "Oe6MRAWwHOmE4vBD0tsPVmTwX3QpuaAmDZd2TWs4xaQ=",
                             LastName = "Doe",
                             Name = "Richard",
                             Password = "password",
-                            Role = "Manager",
-                            Salt = new byte[] { 90, 122, 125, 74, 238, 48, 201, 231, 53, 171, 34, 123, 92, 224, 200, 87, 63, 168, 106, 104, 159, 195, 99, 34, 242, 220, 169, 196, 148, 2, 82, 245 }
+                            Role = "Manager"
                         });
                 });
 

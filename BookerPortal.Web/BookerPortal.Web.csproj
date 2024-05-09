@@ -31,4 +31,9 @@
 	<ItemGroup>
 	  <_ContentIncludedByDefault Remove="Components\Layout\Modal.razor" />
 	</ItemGroup>
+
+
+	<ItemGroup>
+	  <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+	</ItemGroup>
 </Project>

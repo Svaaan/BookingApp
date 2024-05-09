@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using BookerPortal.Web.Components.Pages.Account
+@using System.Security.Claims
 @rendermode InteractiveServer
 
 
@@ -13,7 +14,7 @@
                         <OfflineHome></OfflineHome>
                     </NotAuthorized>
                     <Authorized>
-                        <OnlineHome></OnlineHome>
+                        <span>Logged in as <b>@context.User.FindFirst(ClaimTypes.Email)?.Value</b></span>
                     </Authorized>
                 </AuthorizeView>
             </div>
