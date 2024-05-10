@@ -1,1 +1,82 @@
-﻿Home page for not logged in
+﻿<style>
+    body {
+        margin: 0; 
+        padding: 0; 
+    }
+
+    .welcome-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-items: flex-start;
+        height: 75vh;
+        border: none; 
+
+    .welcome-content {
+        text-align: center;
+        margin-top: 75px;
+    }
+
+    .welcome-heading {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .welcome-description {
+        font-size: 1.25rem;
+        color: #6c757d;
+        margin-bottom: 1.5rem;
+    }
+
+    .welcome-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .welcome-buttons {
+        margin-top: 65px;
+        display: flex;
+        justify-content: center;
+    }
+
+        .welcome-buttons a {
+            text-decoration: none;
+        }
+
+        .welcome-buttons button {
+            border: 2px solid black;
+            color: black;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            height: 60px;
+            border-radius: 10px; /* Add rounded corners */
+        }
+
+            .welcome-buttons button:hover {
+                background-color: #f0f0f0;
+            }
+</style>
+
+<div class="welcome-container">
+    <div class="welcome-content">
+        <h1 class="welcome-heading">Welcome to booking portal</h1>
+        <p class="welcome-description">The ultimate solution for businesses</p>
+        <p class="welcome-text">
+            The ultimate solution for businesses looking to streamline their booking processes and enhance customer engagement. Our Booking App offers a comprehensive suite of modals specially designed for booking forms, along with a user-friendly dashboard that empowers customers to seamlessly edit, view, and analyze data.
+        </p>
+        <div class="welcome-buttons">
+            <a href="/register" class="welcome-button">
+                <button>Get Started</button>
+            </a>
+            <a href="/login" class="welcome-button">
+                <button>Login</button>
+            </a>
+        </div>
+    </div>
+</div>

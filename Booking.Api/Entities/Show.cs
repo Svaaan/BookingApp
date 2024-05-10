@@ -11,7 +11,7 @@
         public DateTime StartTime { get; set; } = DateTime.UtcNow;
         public DateTime EndTime { get; set; } = DateTime.UtcNow;
         public decimal PricePerSeat { get; set; }
-        public decimal InterestRate { get; set; } = 25;
+        public decimal VAT { get; set; } = 25;
 
         public ICollection<Reservation> Reservations { get; set; }
 
@@ -19,9 +19,9 @@
         {
             decimal totalCost = bookedSeats * PricePerSeat;
 
-            if (InterestRate > 0)
+            if (VAT > 0)
             {
-                decimal interestAmount = totalCost * InterestRate;
+                decimal interestAmount = totalCost * VAT;
                 totalCost += interestAmount;
             }
 

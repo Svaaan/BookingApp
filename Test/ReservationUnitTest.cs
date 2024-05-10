@@ -121,7 +121,7 @@ namespace Booking.Api.Repositories.Tests
             var show = new Show
             {
                 PricePerSeat = 10,
-                InterestRate = 0.25m
+                VAT = 0.25m
             };
 
             var reservation = new Reservation
@@ -135,7 +135,7 @@ namespace Booking.Api.Repositories.Tests
             // Act
             var totalCost = show.CalculateTotalCost(reservation.BookedSeats);
 
-            var expectedTotalCost = reservation.BookedSeats * show.PricePerSeat * (1 + show.InterestRate);
+            var expectedTotalCost = reservation.BookedSeats * show.PricePerSeat * (1 + show.VAT);
 
             // Assert
             Assert.Equal(expectedTotalCost, totalCost);

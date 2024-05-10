@@ -11,29 +11,27 @@
 <PageTitle>Bokningar</PageTitle>
 
 <style>
-    /* Modal styles */
+
     .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
+        display: none; 
+        position: fixed; 
+        z-index: 1; 
         left: 0;
         top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        width: 100%; 
+        height: 100%; 
+        overflow: auto; 
+        background-color: rgba(0, 0, 0, 0.4); 
     }
 
-    /* Modal content */
     .modal-content {
         background-color: #fefefe;
-        margin: 15% auto; /* 15% from the top and centered */
+        margin: 15% auto; 
         padding: 20px;
         border: 1px solid #888;
-        width: 80%; /* Could be more or less, depending on screen size */
+        width: 80%; /
     }
 
-    /* Close button */
     .close {
         color: #aaa;
         float: right;
@@ -69,8 +67,9 @@
                             }
                         }
                     </select>
-
-                      <Button Color="ButtonColor.Primary"  @onclick="MakeReservation">Save changes</Button>
+                    <label for="seatCount">Antal platser:</label>
+                    <input type="number" id="seatCount" @bind="selectedSeatCount" min="1" max="10"> <!-- Adjust min and max values as needed -->
+                    <Button Color="ButtonColor.Primary"  @onclick="MakeReservation">Boka</Button>
                 </div>
             </div>
         }
@@ -82,7 +81,6 @@
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Phone Number</th>
-                    <th> </th>
                 </tr>
             </thead>
             <tbody>
@@ -105,22 +103,26 @@
                                 <td class="smooth-text">@item.LastName</td>
                                 <td class="smooth-text">@item.Email</td>
                                 <td class="smooth-text">@item.PhoneNumber</td>
-                                <td>
-                                    <div style="display:flex">
+                            }
+                            <td>
+                                <div style="display:flex; justify-content: flex-end;">
+                                    @if (!isEditMode || selectedId != item.Id)
+                                    {
                                         <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                                                 <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
                                             </svg>
                                         </button>
                                         <RemoveItemBooker bookerDTO="item" OnRemove=@OnRemove></RemoveItemBooker>
-                                        <button @onclick="() => OpenModal(item.Id)" style="margin-right:10px">
-                                           BOKA
-                                        </button>
-                                    </div>
-      
-                                </td>
-
-                            }
+                                    }
+                                    <button class="btn btn-success" @onclick="() => OpenModal(item.Id)" style="margin-right:10px">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                                            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     }
                 }
@@ -128,6 +130,7 @@
         </table>
     </div>
 }
+
 
 @code {
     private List<BookerDTO> bookers;
@@ -139,6 +142,7 @@
     private int itemIdForModal = 0;
     private int selectedShowId;
     private int selectedBookerId;
+    private int selectedSeatCount;
 
     private async Task LoadBookers()
     {
@@ -175,20 +179,17 @@
     {
         try
         {
-            //hårdkodar antal seats sålänge
             ReservationDTO reservationDTO = new()
                 {
                     BookerId = selectedBookerId,
                     ShowId = selectedShowId,
-                    BookedSeats = 1
-        };
+                    BookedSeats = selectedSeatCount // Use the selected number of seats
+                };
             await reservationService.PostReservation(reservationDTO);
-
         }
         catch (Exception ex)
         {
             errorMessage = "An error occurred while retrieving data. Please try again later.";
-
             Console.WriteLine($"Error: {ex.Message}");
         }
     }
@@ -237,7 +238,6 @@
 
     protected async Task SaveChanges()
     {
-        // Implement your logic to save changes using itemIdForModal if needed
         isModalOpen = false;
     }
 }
