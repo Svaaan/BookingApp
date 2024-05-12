@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Booking.Api.Migrations
 {
     [DbContext(typeof(CinemaDbContext))]
-    [Migration("20240508101229_AddPasswordHashAndSalt")]
-    partial class AddPasswordHashAndSalt
+    [Migration("20240512093708_hashUpdate")]
+    partial class hashUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -273,9 +273,6 @@ namespace Booking.Api.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("InterestRate")
-                        .HasColumnType("decimal(10, 2)");
-
                     b.Property<int>("MovieId")
                         .HasColumnType("int");
 
@@ -287,6 +284,9 @@ namespace Booking.Api.Migrations
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("VAT")
+                        .HasColumnType("decimal(10, 2)");
 
                     b.HasKey("Id");
 
@@ -309,10 +309,6 @@ namespace Booking.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HashedPassword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -348,36 +344,33 @@ namespace Booking.Api.Migrations
                             Id = 1,
                             CompanyId = 1,
                             Email = "john@example.com",
-                            HashedPassword = "Oe6MRAWwHOmE4vBD0tsPVmTwX3QpuaAmDZd2TWs4xaQ=",
                             LastName = "Doe",
                             Name = "John",
-                            Password = "password",
+                            Password = "F6gz1VzSO0OhkE1CsmiSDflgEU+82504dYwRrdAaS+8=",
                             Role = "Admin",
-                            Salt = new byte[] { 90, 122, 125, 74, 238, 48, 201, 231, 53, 171, 34, 123, 92, 224, 200, 87, 63, 168, 106, 104, 159, 195, 99, 34, 242, 220, 169, 196, 148, 2, 82, 245 }
+                            Salt = new byte[] { 51, 132, 51, 23, 131, 253, 58, 134, 172, 192, 32, 186, 40, 171, 219, 83, 193, 244, 74, 67, 122, 225, 165, 154, 32, 90, 127, 229, 83, 37, 193, 116 }
                         },
                         new
                         {
                             Id = 2,
                             CompanyId = 1,
                             Email = "tess@example.com",
-                            HashedPassword = "Oe6MRAWwHOmE4vBD0tsPVmTwX3QpuaAmDZd2TWs4xaQ=",
                             LastName = "Doe",
                             Name = "Tess",
-                            Password = "password",
+                            Password = "F6gz1VzSO0OhkE1CsmiSDflgEU+82504dYwRrdAaS+8=",
                             Role = "User",
-                            Salt = new byte[] { 90, 122, 125, 74, 238, 48, 201, 231, 53, 171, 34, 123, 92, 224, 200, 87, 63, 168, 106, 104, 159, 195, 99, 34, 242, 220, 169, 196, 148, 2, 82, 245 }
+                            Salt = new byte[] { 51, 132, 51, 23, 131, 253, 58, 134, 172, 192, 32, 186, 40, 171, 219, 83, 193, 244, 74, 67, 122, 225, 165, 154, 32, 90, 127, 229, 83, 37, 193, 116 }
                         },
                         new
                         {
                             Id = 3,
                             CompanyId = 1,
                             Email = "Richard@example.com",
-                            HashedPassword = "Oe6MRAWwHOmE4vBD0tsPVmTwX3QpuaAmDZd2TWs4xaQ=",
                             LastName = "Doe",
                             Name = "Richard",
-                            Password = "password",
+                            Password = "F6gz1VzSO0OhkE1CsmiSDflgEU+82504dYwRrdAaS+8=",
                             Role = "Manager",
-                            Salt = new byte[] { 90, 122, 125, 74, 238, 48, 201, 231, 53, 171, 34, 123, 92, 224, 200, 87, 63, 168, 106, 104, 159, 195, 99, 34, 242, 220, 169, 196, 148, 2, 82, 245 }
+                            Salt = new byte[] { 51, 132, 51, 23, 131, 253, 58, 134, 172, 192, 32, 186, 40, 171, 219, 83, 193, 244, 74, 67, 122, 225, 165, 154, 32, 90, 127, 229, 83, 37, 193, 116 }
                         });
                 });
 

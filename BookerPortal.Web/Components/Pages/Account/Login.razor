@@ -99,7 +99,7 @@
     private async Task Authenticate()
     {
         var userAccount = cinemaDbContext.users.Where(x => x.Email == Model.Email).FirstOrDefault();
-        if (userAccount == null || !PasswordHashing.VerifyPassword(Model.Password, userAccount.HashedPassword, userAccount.Salt))
+        if (userAccount == null || !PasswordHashing.VerifyPassword(Model.Password, userAccount.Password, userAccount.Salt))
         {
             errorMessage = "Invalid Email or Password";
             return;

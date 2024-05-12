@@ -106,8 +106,7 @@ namespace Booking.Api.Data
                 Name = "John",
                 LastName = "Doe",
                 Email = "john@example.com",
-                Password = "password",
-                HashedPassword = hashedPassword,
+                Password = hashedPassword,
                 Salt = salt,
                 Role = UserRole.Admin
             });
@@ -118,8 +117,7 @@ namespace Booking.Api.Data
                 Name = "Tess",
                 LastName = "Doe",
                 Email = "tess@example.com",
-                Password = "password",
-                HashedPassword = hashedPassword,
+                Password = hashedPassword,
                 Salt = salt,
                 Role = UserRole.User
             });
@@ -130,8 +128,7 @@ namespace Booking.Api.Data
                 Name = "Richard",
                 LastName = "Doe",
                 Email = "Richard@example.com",
-                Password = "password",
-                HashedPassword = hashedPassword,
+                Password = hashedPassword,
                 Salt = salt,
                 Role = UserRole.Manager
             });
