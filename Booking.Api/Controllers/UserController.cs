@@ -45,7 +45,16 @@ namespace Booking.Api.Controllers
                 }
             }
             //hårdkodar en roll sålänge
-            var user = new User { Id = userDTO .Id, CompanyId = userDTO .CompanyId, Email = userDTO .Email, Name = userDTO.Name, LastName = userDTO.LastName, Password = userDTO.Password, Role = UserRole.Admin};
+            var user = new User
+            {
+                Id = userDTO.Id,
+                CompanyId = userDTO.CompanyId,
+                Email = userDTO.Email,
+                Name = userDTO.Name,
+                LastName = userDTO.LastName,
+                Password = userDTO.Password,
+                Role = Enum.TryParse<UserRole>(userDTO.Role, out var role) ? role : UserRole.User
+            };
             var createUser = await _userRepository.CreateUserAsync(user);
             return Ok(createUser);
         }
@@ -128,7 +137,7 @@ namespace Booking.Api.Controllers
                     return BadRequest("Mismatched user ID in the request.");
                 }
 
-                var updatedUser= await _userRepository.UpdateUserById(id, updateUser);
+                var updatedUser = await _userRepository.UpdateUserById(id, updateUser);
                 if (updatedUser == null)
                 {
                     return NotFound();

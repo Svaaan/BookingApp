@@ -21,6 +21,9 @@ namespace Booking.Api.Repositories
         {
             try
             {
+                (string hashedPassword, byte[] salt) = PasswordHashing.HashPassword(user.Password);
+                user.Password = hashedPassword;
+                user.Salt = salt;
 
                 await _context.users.AddAsync(user);
                 await _context.SaveChangesAsync();
@@ -101,12 +104,10 @@ namespace Booking.Api.Repositories
                 }
 
                 user.Name = updateUser.Name;
-                user.LastName = updateUser.LastName;    
+                user.LastName = updateUser.LastName;
                 user.Email = updateUser.Email;
                 user.Password = updateUser.Password;
                 user.CompanyId = updateUser.CompanyId;
-              
-
 
                 await _context.SaveChangesAsync();
                 return user;

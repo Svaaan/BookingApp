@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Booking.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class laptopDb : Migration
+    public partial class hashUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -100,6 +100,7 @@ namespace Booking.Api.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -148,7 +149,7 @@ namespace Booking.Api.Migrations
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PricePerSeat = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    InterestRate = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
+                    VAT = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -212,12 +213,12 @@ namespace Booking.Api.Migrations
 
             migrationBuilder.InsertData(
                 table: "users",
-                columns: new[] { "Id", "CompanyId", "Email", "LastName", "Name", "Password", "Role" },
+                columns: new[] { "Id", "CompanyId", "Email", "LastName", "Name", "Password", "Role", "Salt" },
                 values: new object[,]
                 {
-                    { 1, 1, "john@example.com", "Doe", "John", "password", "Admin" },
-                    { 2, 1, "tess@example.com", "Doe", "Tess", "password", "User" },
-                    { 3, 1, "Richard@example.com", "Doe", "Richard", "password", "Manager" }
+                    { 1, 1, "john@example.com", "Doe", "John", "F6gz1VzSO0OhkE1CsmiSDflgEU+82504dYwRrdAaS+8=", "Admin", new byte[] { 51, 132, 51, 23, 131, 253, 58, 134, 172, 192, 32, 186, 40, 171, 219, 83, 193, 244, 74, 67, 122, 225, 165, 154, 32, 90, 127, 229, 83, 37, 193, 116 } },
+                    { 2, 1, "tess@example.com", "Doe", "Tess", "F6gz1VzSO0OhkE1CsmiSDflgEU+82504dYwRrdAaS+8=", "User", new byte[] { 51, 132, 51, 23, 131, 253, 58, 134, 172, 192, 32, 186, 40, 171, 219, 83, 193, 244, 74, 67, 122, 225, 165, 154, 32, 90, 127, 229, 83, 37, 193, 116 } },
+                    { 3, 1, "Richard@example.com", "Doe", "Richard", "F6gz1VzSO0OhkE1CsmiSDflgEU+82504dYwRrdAaS+8=", "Manager", new byte[] { 51, 132, 51, 23, 131, 253, 58, 134, 172, 192, 32, 186, 40, 171, 219, 83, 193, 244, 74, 67, 122, 225, 165, 154, 32, 90, 127, 229, 83, 37, 193, 116 } }
                 });
 
             migrationBuilder.InsertData(
