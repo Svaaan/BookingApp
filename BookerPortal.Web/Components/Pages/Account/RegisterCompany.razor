@@ -3,6 +3,7 @@
 @using Request.HTTP.DTO.MovieTheatreDTO
 @using Request.HTTP.RequestService.IRequestService
 @inject ICompanyService companyService
+@inject NavigationManager navigationManager
 
 <style>
     .register-frame {
@@ -81,7 +82,7 @@
                 <span class="text-danger">@errorMessage</span>
             </div>
             <div class="mb-3 d-grid gap-2">
-                <button type="submit" class="btn"> <a href="/">Register</a></button>
+                <button type="submit" class="btn btn-primary">Register</button>
             </div>
         </EditForm>
     </div>
@@ -91,41 +92,28 @@
     [SupplyParameterFromForm]
     public CompanyViewModel Model { get; set; } = new();
 
-    [Inject]
-    private NavigationManager navigationManager { get; set; }
-    private void NavigateToHomePage()
-    {
-      navigationManager.NavigateTo("/");
-    }
-
     private string? errorMessage;
 
     private async Task SubmitForm()
     {
-        try
-        {
-            CompanyDTO companyDTO = new CompanyDTO
-                {
-                    CompanyName = Model.CompanyName,
-                    Email = Model.Email,
-                    Adress = Model.Adress,
-                    Country = Model.Country
-                };
-
-            var success = await companyService.PostCompany(companyDTO);
-
-            if (success)
+        CompanyDTO companyDTO = new CompanyDTO
             {
-                navigationManager.NavigateTo("/");
-            }
-            else
-            {
-                errorMessage = "Failed to register company.";
-            }
-        }
-        catch (Exception ex)
+                CompanyName = Model.CompanyName,
+                Email = Model.Email,
+                Adress = Model.Adress,
+                Country = Model.Country
+            };
+
+        var respone = await companyService.PostCompany(companyDTO);
+
+        if (respone.IsSuccessStatusCode)
         {
-            errorMessage = $"An error occurred: {ex.Message}";
+            navigationManager.NavigateTo("/");
         }
+        else
+        {
+            errorMessage = "Failed to register company.";
+        }
+
     }
 }

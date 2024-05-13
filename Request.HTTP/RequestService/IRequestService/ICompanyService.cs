@@ -4,6 +4,6 @@ namespace Request.HTTP.RequestService.IRequestService
 {
     public interface ICompanyService
     {
-        Task<bool> PostCompany(CompanyDTO company);
+        Task<HttpResponseMessage> PostCompany(CompanyDTO company);
     }
 }
