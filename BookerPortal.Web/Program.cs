@@ -34,6 +34,7 @@ builder.Services.AddScoped<ISalonService, SalonService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IShowService, ShowService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
