@@ -1,0 +1,57 @@
+﻿@page "/register"
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .welcome-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-items: flex-start;
+        height: 75vh;
+        border: none;
+    }
+
+    .welcome-buttons {
+        margin-top: 65px;
+        display: flex;
+        justify-content: center;
+    }
+
+        .welcome-buttons a {
+            text-decoration: none;
+        }
+
+        .welcome-buttons button {
+            border: 2px solid black;
+            color: black;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            height: 60px;
+            border-radius: 10px;
+        }
+
+            .welcome-buttons button:hover {
+                background-color: #f0f0f0;
+            }
+</style>
+
+<div class="welcome-container">
+    <div class="welcome-content">
+        <div class="welcome-buttons">
+            <button class="welcome-button"><a href="/registeruser">Register User</a></button>
+            <button class="welcome-button"><a href="/registercompany">Register Company</a></button>
+        </div>
+    </div>
+</div>
+@code {
+
+}

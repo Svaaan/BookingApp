@@ -10,8 +10,10 @@ namespace BookerPortal.Web.ViewModels
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide Password")]
         public string? Password { get; set; }
+
         [Required(AllowEmptyStrings = true)]
         public string? Name { get; set; }
+
         [Required(AllowEmptyStrings = true)]
         public string? SurName { get; set; }
     }

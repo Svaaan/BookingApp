@@ -1,0 +1,119 @@
+﻿@page "/registercompany"
+@using BookerPortal.Web.ViewModels
+@using Request.HTTP.DTO.MovieTheatreDTO
+@using Request.HTTP.RequestService.IRequestService
+@inject ICompanyService companyService
+@inject NavigationManager navigationManager
+
+<style>
+    .register-frame {
+        border: 2px solid black;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+        .register-frame input[type="text"],
+        .register-frame input[type="text"] {
+            border: 1px solid black;
+            border-radius: 5px;
+            color: black;
+        }
+
+            .register-frame input[type="text"]::placeholder,
+            .register-frame input[type="text"]::placeholder {
+                color: black;
+                opacity: 0.7;
+            }
+
+        .register-frame .btn {
+            background-color: black;
+            color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+            .register-frame .btn:hover {
+                background-color: #333;
+                border-color: #333;
+            }
+
+        .register-frame a {
+            color: black;
+        }
+
+            .register-frame a:hover {
+                color: #333;
+            }
+
+    .form-controll {
+        color: #343a40;
+        font-weight: bold;
+    }
+</style>
+
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 register-frame">
+        <div class="text-center mb-3">
+            <img src="login.png" style="max-height:10rem;" />
+        </div>
+        <EditForm Model="@Model" FormName="RegisterForm" OnSubmit="SubmitForm">
+            <div class="mb-3">
+                <label>CompanyName</label>
+                <InputText @bind-Value="Model.CompanyName" placeholder="Company Name" class="form-control" />
+                <ValidationMessage For="() => Model.CompanyName" />
+            </div>
+            <div class="mb-3">
+                <label>Email</label>
+                <InputText @bind-Value="Model.Email" class="form-control" placeholder="Email" />
+                <ValidationMessage For="() => Model.Email" />
+            </div>
+            <div class="mb-3">
+                <label>Adress</label>
+                <InputText @bind-Value="Model.Adress" class="form-control" placeholder="Adress" />
+                <ValidationMessage For="() => Model.Adress" />
+            </div>
+            <div class="mb-3">
+                <label>Country</label>
+                <InputText @bind-Value="Model.Country" class="form-control" placeholder="Country" />
+                <ValidationMessage For="() => Model.Country" />
+            </div>
+            <div class="mb-3 text-center">
+                <span class="text-danger">@errorMessage</span>
+            </div>
+            <div class="mb-3 d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    public CompanyViewModel Model { get; set; } = new();
+
+    private string? errorMessage;
+
+    private async Task SubmitForm()
+    {
+        CompanyDTO companyDTO = new CompanyDTO
+            {
+                CompanyName = Model.CompanyName,
+                Email = Model.Email,
+                Adress = Model.Adress,
+                Country = Model.Country
+            };
+
+        var respone = await companyService.PostCompany(companyDTO);
+
+        if (respone.IsSuccessStatusCode)
+        {
+            navigationManager.NavigateTo("/");
+        }
+        else
+        {
+            errorMessage = "Failed to register company.";
+        }
+
+    }
+}
