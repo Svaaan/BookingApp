@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Booking.Api/Migrations/20240324161724_NewDataBase.cs
+/BookerPortal.Web/Components/Pages/MovieTheatrePages/GridColumn.razor

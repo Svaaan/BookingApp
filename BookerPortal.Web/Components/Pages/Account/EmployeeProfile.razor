@@ -32,13 +32,13 @@
 </div>
 
 @code {
-    private User user;
+    private Employee employee;
 
     [Inject]
     private CinemaDbContext cinemaDbContext { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        user = await cinemaDbContext.users.FirstOrDefaultAsync();
+        employee = await cinemaDbContext.employees.FirstOrDefaultAsync();
     }
 }

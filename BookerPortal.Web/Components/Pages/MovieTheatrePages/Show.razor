@@ -5,7 +5,7 @@
 @rendermode InteractiveServer
 @inject IShowService showService
 @attribute [StreamRendering]
-@attribute [Authorize(Roles = "Admin,User")]
+@attribute [Authorize(Roles = "Admin,Employee")]
 <PageTitle>Bokningar</PageTitle>
 
 @if (scheduleDTO != null)

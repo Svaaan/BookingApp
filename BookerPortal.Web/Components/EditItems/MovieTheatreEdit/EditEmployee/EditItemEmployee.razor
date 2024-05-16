@@ -1,0 +1,36 @@
+﻿@using Request.HTTP.RequestService.IRequestService
+@using Request.HTTP.DTO.MovieTheatreDTO
+@using System.Net.Http
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode InteractiveServer
+@inject IEmployeeService employeeService
+
+<td>
+    <button class="btn btn-success" @onclick="() => EditEmployee()">
+        Save
+    </button>
+</td>
+
+@code {
+    [Parameter]
+    public EmployeeDTO employeeDTO { get; set; }
+    [Parameter]
+    public EventCallback<int> OnEdited { get; set; }
+
+
+
+    private async Task EditEmployee()
+    {
+        try
+        {
+            await employeeService.EditEmployeeById(employeeDTO);
+            await OnEdited.InvokeAsync();
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+
+        }
+    }
+}
