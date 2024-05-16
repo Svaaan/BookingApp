@@ -22,9 +22,8 @@ namespace Request.HTTP.RequestService
         }
         public async Task<List<EmployeeDTO>> GetEmployee()
         {
-            HttpClient httpClient = new HttpClient();
 
-            var getEmployee = await httpClient.GetFromJsonAsync<List<EmployeeDTO>>("https://localhost:44367/api/Employee");
+            var getEmployee = await _HttpClient.GetFromJsonAsync<List<EmployeeDTO>>("api/Employee");
 
             return getEmployee;
         }
@@ -32,8 +31,7 @@ namespace Request.HTTP.RequestService
         {
             try
             {
-                HttpClient httpClient = new HttpClient();
-                HttpResponseMessage response = await httpClient.DeleteAsync($"https://localhost:44367/api/Booker/{employeeId}");
+                HttpResponseMessage response = await _HttpClient.DeleteAsync($"api/Employee/{employeeId}");
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -46,8 +44,7 @@ namespace Request.HTTP.RequestService
         {
             try
             {
-                HttpClient httpClient = new HttpClient();
-                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"https://localhost:44367/api/Booker/{employeeDTO.Id}", employeeDTO);
+                HttpResponseMessage response = await _HttpClient.PutAsJsonAsync($"api/Employee/{employeeDTO.Id}", employeeDTO);
 
                 if (response.IsSuccessStatusCode)
                 {

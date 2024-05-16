@@ -51,7 +51,6 @@
                                     </div>
 
                                 </td>
-
                             }
                         </tr>
                     }
@@ -72,8 +71,6 @@
         try
         {
             employee = await employeeService.GetEmployee();
-
-
         }
         catch (Exception ex)
         {
@@ -92,7 +89,6 @@
     protected async Task OnRemove()
     {
         await LoadEmployees();
-
     }
 
 
@@ -101,14 +97,12 @@
         selectedId = 0;
         isEditMode = false;
         await LoadEmployees();
-
     }
 
     protected async Task SetEditMode(EmployeeDTO employeeDTO)
     {
         selectedId = employeeDTO.Id;
         isEditMode = true;
-
     }
 
 }
