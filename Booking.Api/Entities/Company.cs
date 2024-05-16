@@ -8,6 +8,6 @@
         public string Adress { get; set; }
         public string Country { get; set; }
         public List<MovieTheatre> MovieTheatres = new();
-        public List<User> Users = new();
+        public List<Employee> Employees = new();
     }
 }

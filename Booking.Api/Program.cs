@@ -36,7 +36,7 @@ builder.Services.AddScoped<IBookerRepository, BookerRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddHostedService<ShowCleanUpService>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IMovieTheatreRepository, MovieTheatreRepository>();
 
 

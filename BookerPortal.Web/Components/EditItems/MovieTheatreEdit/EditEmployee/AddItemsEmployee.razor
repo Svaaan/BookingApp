@@ -1,9 +1,9 @@
-﻿@page "/registeruser"
-@using Booking.Api.Entities.DTO
+﻿@page "/addemployee"
+@using Request.HTTP.DTO.MovieTheatreDTO
 @using Request.HTTP.RequestService.IRequestService
 @using BookerPortal.Web.ViewModels
 @using System.Text.RegularExpressions
-@inject IUserService userService
+@inject IEmployeeService employeeService
 @inject NavigationManager navigationManager
 
 <style>
@@ -86,7 +86,7 @@
             </div>
             <div class="mb-3">
                 <label>Role</label>
-                <InputText @bind-Value="Model.Role" class="form-control" placeholder="Role: Admin, Manager, User" />
+                <InputText @bind-Value="Model.Role" class="form-control" placeholder="Role: Admin, Manager, Employee" />
                 <ValidationMessage For="() => Model.Role" />
             </div>
             <div class="mb-3 text-center">
@@ -101,38 +101,38 @@
 
 @code {
     [SupplyParameterFromForm]
-    public UserViewModel Model { get; set; } = new();
+    public EmployeeViewModel Model { get; set; } = new();
 
     private string? errorMessage;
 
     private async Task SubmitForm()
     {
-        UserDTO userDTO = new UserDTO
-        {
+        EmployeeDTO employeeDTO = new EmployeeDTO
+            {
                 Name = Model.Name,
                 LastName = Model.LastName,
                 Email = Model.Email,
                 Password = Model.Password,
                 CompanyId = Model.CompanyId,
-                Role = Model.Role
-        };
+//                Role = Model.Role
+            };
 
-        string rolePattern = "^(admin|manager|user)$";
+        string rolePattern = "^(admin|manager|employee)$";
         if (!Regex.IsMatch(Model.Role, rolePattern, RegexOptions.IgnoreCase))
         {
-            errorMessage = "Invalid role. Please enter Admin, Manager, or User.";
+            errorMessage = "Invalid role. Please enter Admin, Manager, or Employee.";
             return;
         }
 
-        var respone = await userService.PostUser(userDTO);
+        var response = await employeeService.PostEmployee(employeeDTO);
 
-        if (respone.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode)
         {
             navigationManager.NavigateTo("/");
         }
         else
         {
-            errorMessage = "Failed to register the user.";
+            errorMessage = "Failed to register the employee.";
         }
     }
 }

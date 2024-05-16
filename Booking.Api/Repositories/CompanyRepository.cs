@@ -102,7 +102,7 @@ namespace Booking.Api.Repositories
 
                 company.CompanyName = updateCompany.CompanyName;
                 company.Email = updateCompany.Email;
-                company.Users = updateCompany.Users;
+                company.Employees = updateCompany.Employees;
                 company.MovieTheatres = updateCompany.MovieTheatres;
 
 

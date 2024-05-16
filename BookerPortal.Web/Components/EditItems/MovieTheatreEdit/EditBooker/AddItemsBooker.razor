@@ -1,6 +1,152 @@
-﻿namespace BookerPortal.Web.Components.EditItems.EditBooker
-{
-    public class AddItems
+﻿@page "/edit-movie-theatre"
+@using BookerPortal.Web.Components.EditItems.MovieTheatreEdit.EditBooker
+@using Request.HTTP.RequestService.IRequestService
+@using Request.HTTP.DTO.MovieTheatreDTO
+@rendermode InteractiveServer
+@inject IBookerService bookerService
+@inject IShowService showService
+@inject IReservationService reservationService
+@attribute [StreamRendering]
+
+<style>
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        /
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<div class="table-container">
+    @if (isModalOpen)
     {
+        <div class="modal" style="display: block;">
+            <div class="modal-content">
+                <span class="close" @onclick="CloseModal">&times;</span>
+                <p>Boka</p>
+                <label for="dropdown">Välj en visning:</label>
+                <select id="dropdown" @bind="selectedShowId">
+                    @foreach (var s in schedule)
+                    {
+                        @foreach (var show in s.Shows)
+                        {
+                            <option value="@show.Id">@s.Date.ToShortDateString() - @show.MovieTitle - @show.StartTime - Platser kvar: @show.AvailableSeats</option>
+                        }
+                    }
+                </select>
+                <label for="seatCount">Antal platser:</label>
+                <input type="number" id="seatCount" @bind="selectedSeatCount" min="1" max="10" />
+                <button class="btn btn-primary" @onclick="MakeReservation">Boka</button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<BookerDTO> bookers;
+    private List<ScheduleDTO> schedule = new();
+    private string errorMessage;
+    private bool isEditMode;
+    private int selectedId = 0;
+    private bool isModalOpen = false;
+    private int itemIdForModal = 0;
+    private int selectedShowId;
+    private int selectedBookerId;
+    private int selectedSeatCount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBookers();
+        await LoadShows();
+    }
+
+    private async Task LoadBookers()
+    {
+        try
+        {
+            bookers = await bookerService.GetBooker();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while retrieving data. Please try again later.";
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task LoadShows()
+    {
+        try
+        {
+            schedule = await showService.GetShow();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while retrieving data. Please try again later.";
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task MakeReservation()
+    {
+        try
+        {
+            ReservationDTO reservationDTO = new()
+                {
+                    BookerId = selectedBookerId,
+                    ShowId = selectedShowId,
+                    BookedSeats = selectedSeatCount
+                };
+            await reservationService.PostReservation(reservationDTO);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while making a reservation. Please try again later.";
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        finally
+        {
+            CloseModal();
+        }
+    }
+
+    protected void OpenModal(int id)
+    {
+        itemIdForModal = id;
+        isModalOpen = true;
+        selectedBookerId = id;
+    }
+
+    protected void CloseModal()
+    {
+        isModalOpen = false;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Booking.Api.Entities
 {
-    public class User
+    public class Employee
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -14,13 +14,13 @@ namespace Booking.Api.Entities
         public Company Company { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public UserRole Role { get; set; }
+        public EmployeeRole Role { get; set; }
     }
 
-    public enum UserRole
+    public enum EmployeeRole
     {
         Admin,
         Manager,
-        User
+        Employee
     }
 }

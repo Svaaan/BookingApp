@@ -10,7 +10,7 @@ namespace Booking.Api.Data
 
         public DbSet<Company> company { get; set; }
         public DbSet<MovieTheatre> movieTheatres { get; set; }
-        public DbSet<User> users { get; set; }
+        public DbSet<Employee> employees { get; set; }
         public DbSet<Booker> bookers { get; set; }
         public DbSet<Movie> movies { get; set; }
         public DbSet<Salon> salons { get; set; }
@@ -61,11 +61,11 @@ namespace Booking.Api.Data
                 .HasForeignKey(r => r.ShowId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<Employee>()
                 .Property(e => e.Role)
                 .HasConversion(
                 v => v.ToString(),
-                v => (UserRole)Enum.Parse(typeof(UserRole), v));
+                v => (EmployeeRole)Enum.Parse(typeof(EmployeeRole), v));
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Company>().HasData(new Company
@@ -99,7 +99,7 @@ namespace Booking.Api.Data
                 Adress = "Biogatan 12a"
             });
             var (hashedPassword, salt) = PasswordHashing.HashPassword("password");
-            modelBuilder.Entity<User>().HasData(new User
+            modelBuilder.Entity<Employee>().HasData(new Employee
             {
                 Id = 1,
                 CompanyId = 1,
@@ -108,9 +108,9 @@ namespace Booking.Api.Data
                 Email = "john@example.com",
                 Password = hashedPassword,
                 Salt = salt,
-                Role = UserRole.Admin
+                Role = EmployeeRole.Admin
             });
-            modelBuilder.Entity<User>().HasData(new User
+            modelBuilder.Entity<Employee>().HasData(new Employee
             {
                 Id = 2,
                 CompanyId = 1,
@@ -119,9 +119,9 @@ namespace Booking.Api.Data
                 Email = "tess@example.com",
                 Password = hashedPassword,
                 Salt = salt,
-                Role = UserRole.User
+                Role = EmployeeRole.Employee
             });
-            modelBuilder.Entity<User>().HasData(new User
+            modelBuilder.Entity<Employee>().HasData(new Employee
             {
                 Id = 3,
                 CompanyId = 1,
@@ -130,7 +130,7 @@ namespace Booking.Api.Data
                 Email = "Richard@example.com",
                 Password = hashedPassword,
                 Salt = salt,
-                Role = UserRole.Manager
+                Role = EmployeeRole.Manager
             });
             modelBuilder.Entity<Salon>().HasData(new Salon
             {
@@ -141,7 +141,7 @@ namespace Booking.Api.Data
                 Status = 0
             });
 
-            modelBuilder.Entity<User>().HasOne(u => u.Company);
+            modelBuilder.Entity<Employee>().HasOne(u => u.Company);
 
         }
 

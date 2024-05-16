@@ -2,7 +2,7 @@
 
 namespace BookerPortal.Web.ViewModels
 {
-    public class UserViewModel
+    public class EmployeeViewModel
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide Name")]
         public string Name { get; set; }
