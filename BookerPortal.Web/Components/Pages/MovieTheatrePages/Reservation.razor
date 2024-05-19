@@ -14,7 +14,9 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>Reservation ID</th>
                     <th>Show id</th>
+                    <th>BookerId</th>
                     <th>Booked seats</th>
                     <th>BookerId</th>
                     <th>Booker Email</th>
@@ -31,12 +33,13 @@
                             {
                                 
                                 <td><input @bind="item.ShowId" /></td>
-                                <td><input @bind="item.BookedSeats" /></td>
                                 <td><input @bind="item.BookerId" /></td>
+                                <td><input @bind="item.BookedSeats" /></td>          
                                 <EditItemReservation reservationDTO="item" OnEdited=@OnEdited></EditItemReservation>
                             }
                             else
                             {
+                                <td class="smooth-text">@item.Id</td>
                                 <td class="smooth-text">@item.ShowId</td>
                                 <td class="smooth-text">@item.BookedSeats</td>
                                 <td class="smooth-text">@item.BookerId</td>

@@ -4,146 +4,135 @@
 @using Request.HTTP.DTO.MovieTheatreDTO
 @rendermode InteractiveServer
 @inject IBookerService bookerService
-@inject IShowService showService
-@inject IReservationService reservationService
 @attribute [StreamRendering]
 @attribute [Authorize(Roles = "Admin,Employee")]
 <PageTitle>Bokningar</PageTitle>
 
-
 @if (bookers != null)
 {
-    <AddItemsBooker></AddItemsBooker>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in bookers)
-                {
-                    if (item != null) 
-                    {
-                        <tr>
-                            @if (isEditMode && selectedId == item.Id)
-                            {
-                                <td><input @bind="item.Name" /></td>
-                                <td><input @bind="item.LastName" /></td>
-                                <td><input @bind="item.Email" /></td>
-                                <td><input @bind="item.PhoneNumber" /></td>
-                                <EditItemBooker bookerDTO="item" OnEdited=@OnEdited></EditItemBooker>
-                            }
-                            else
-                            {
-                                <td class="smooth-text">@item.Name</td>
-                                <td class="smooth-text">@item.LastName</td>
-                                <td class="smooth-text">@item.Email</td>
-                                <td class="smooth-text">@item.PhoneNumber</td>
-                            }
-                            <td>
-                                <div style="display:flex; justify-content: flex-end;">
-                                    @if (!isEditMode || selectedId != item.Id)
-                                    {
-                                        <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
-                                            </svg>
-                                        </button>
-                                        <RemoveItemBooker bookerDTO="item" OnRemove=@OnRemove></RemoveItemBooker>
-                                    }
-                                    <button class="btn btn-success" @onclick="() => OpenModal(item.Id)" style="margin-right:10px">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
-                                            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-                                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-}
+    <AddItemsBooker BookerId="@selectedBookerId" IsOpen="@isModalOpen" OnClose="@CloseModal"></AddItemsBooker>
 
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in bookers)
+            {
+                <tr>
+                    @if (isEditMode && selectedId == item.Id)
+                    {
+                        <td>@item.Id</td>
+                        <td><input class="form-control" @bind="item.Name" /></td>
+                        <td><input class="form-control" @bind="item.LastName" /></td>
+                        <td><input class="form-control" @bind="item.Email" /></td>
+                        <td><input class="form-control" @bind="item.PhoneNumber" /></td>
+                        <td>
+                            <button class="btn btn-success btn-sm" @onclick="() => SaveChanges(item)">Spara</button>
+                            <button class="btn btn-danger btn-sm" @onclick="CancelEdit">Avbryt</button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>@item.LastName</td>
+                        <td>@item.Email</td>
+                        <td>@item.PhoneNumber</td>
+                        <td>
+                            <button class="btn btn-success btn-sm" @onclick="OpenAddModal">Boka</button>
+                            <button class="btn btn-warning btn-sm" @onclick="() => SetEditMode(item)">Redigera</button>
+                            <button class="btn btn-danger btn-sm" @onclick="() => RemoveBooker(item)">Radera</button>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
     private List<BookerDTO> bookers;
-    private List<ScheduleDTO> schedule = new();
     private string errorMessage;
     private bool isEditMode;
     private int selectedId = 0;
-    private int selectedShowId;
     private int selectedBookerId;
-    private int selectedSeatCount;
+    private bool isModalOpen = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBookers();
+    }
 
     private async Task LoadBookers()
     {
         try
         {
             bookers = await bookerService.GetBooker();
-
         }
         catch (Exception ex)
         {
             errorMessage = "An error occurred while retrieving data. Please try again later.";
-
             Console.WriteLine($"Error: {ex.Message}");
         }
     }
-
-
-    private async Task LoadShows()
-    {
-        try
-        {
-            schedule = await showService.GetShow();
-
-        }
-        catch (Exception ex)
-        {
-            errorMessage = "An error occurred while retrieving data. Please try again later.";
-
-            Console.WriteLine($"Error: {ex.Message}");
-        }
-    }
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadBookers();
-        await LoadShows();
-    }
-
 
     protected async Task OnRemove()
     {
         await LoadBookers();
-
     }
-
 
     protected async Task OnEdited()
     {
         selectedId = 0;
         isEditMode = false;
         await LoadBookers();
-
     }
 
-    protected async Task SetEditMode(BookerDTO bookerDTO)
+    protected void SetEditMode(BookerDTO bookerDTO)
     {
         selectedId = bookerDTO.Id;
         isEditMode = true;
-
     }
 
-    protected void OpenModal(int id)
+    protected void OpenAddModal()
     {
-        selectedBookerId = id;
+        selectedBookerId = 0; 
+        isModalOpen = true;
+    }
+
+    protected async Task CloseModal(bool isOpen)
+    {
+        isModalOpen = isOpen;
+        if (!isOpen)
+        {
+            await LoadBookers();
+        }
+    }
+
+    protected async Task SaveChanges(BookerDTO booker)
+    {
+        selectedId = 0;
+        isEditMode = false;
+        await LoadBookers();
+    }
+
+    protected void CancelEdit()
+    {
+        selectedId = 0;
+        isEditMode = false;
+    }
+
+    protected async Task RemoveBooker(BookerDTO booker)
+    {
+
+        await LoadBookers();
     }
 }
