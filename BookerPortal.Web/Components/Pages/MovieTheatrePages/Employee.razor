@@ -11,54 +11,58 @@
 
 @if (employee != null)
 {
-                <tr>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Last Name</th>
+                <th>Namn</th>
+                <th>Efternamn</th>
                 <th>Email</th>
-                <th>Role</th>
+                <th>Företag</th>
+                <th>Roll</th>
                 <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in employee)
-                {
-                        <tr>
-                            @if (isEditMode && selectedId == item.Id)
-                            {
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in employee)
+            {
+                <tr>
+                    @if (isEditMode && selectedId == item.Id)
+                    {
                         <td>@item.Id</td>               
                         <td><input class="form-control" @bind="item.Name" /></td>
                         <td><input class="form-control" @bind="item.LastName" /></td>
                         <td><input class="form-control" @bind="item.Email" /></td>
+                        <td>@item.Company.CompanyName</td>
                         <td><input class="form-control" @bind="item.Role" /></td>
+                        
                         <td>
-                                <EditItemEmployee employeeDTO="item" OnEdited=@OnEdited></EditItemEmployee>
+                            <EditItemEmployee employeeDTO="item" OnEdited=@OnEdited></EditItemEmployee>
                         </td>
                         
-                            }
-                            else
-                            {
+                    }
+                    else
+                    {
                         <td>@item.Id</td>
                         <td>@item.Name</td>
                         <td>@item.LastName</td>
                         <td>@item.Email</td>
+                        <td>@item.Company.CompanyName</td>
                         <td>@item.Role</td>
-                                <td>
+                        <td>
                             <button class="btn btn-success btn-sm" @onclick="NavigateToAddPage">Lägg till</button>
                             <button class="btn btn-warning btn-sm" @onclick="() => SetEditMode(item)">Redigera</button>
                             @if (!isEditMode || selectedId != item.Id)
                             {
-                                        <RemoveItemEmployee employeeDTO="item" OnRemove=@OnRemove></RemoveItemEmployee>
+                                <RemoveItemEmployee employeeDTO="item" OnRemove=@OnRemove></RemoveItemEmployee>
                             }
-
-                                </td>
-                            }
-                        </tr>
+                            
+                        </td>
                     }
-                }
-            </tbody>
-        </table>
-    </div>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
