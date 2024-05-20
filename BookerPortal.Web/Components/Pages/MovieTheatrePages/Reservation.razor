@@ -6,60 +6,58 @@
 @inject IReservationService reservationService
 @attribute [StreamRendering]
 @attribute [Authorize(Roles = "Admin,Manager")]
-<PageTitle>Bokningar</PageTitle>
+<PageTitle>Reservationer</PageTitle>
 
 @if (reservations != null)
 {
-    <div class="table-container">
-        <table class="table">
-            <thead>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Booker ID</th>
+                <th>Show ID</th>
+                <th>Platser</th>
+                <th>Tid</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in reservations)
+            {
                 <tr>
-                    <th>Show id</th>
-                    <th>Booked seats</th>
-                    <th>BookerId</th>
-                    <th>Booker Email</th>
-                    <th> </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in reservations)
-                {
-                    if (item != null)
+                    @if (isEditMode && selectedId == item.Id)
                     {
-                        <tr>
-                            @if (isEditMode && selectedId == item.Id)
-                            {
-                                
-                                <td><input @bind="item.ShowId" /></td>
-                                <td><input @bind="item.BookedSeats" /></td>
-                                <td><input @bind="item.BookerId" /></td>
-                                <EditItemReservation reservationDTO="item" OnEdited=@OnEdited></EditItemReservation>
-                            }
-                            else
-                            {
-                                <td class="smooth-text">@item.ShowId</td>
-                                <td class="smooth-text">@item.BookedSeats</td>
-                                <td class="smooth-text">@item.BookerId</td>
-                                <td class="smooth-text">@item.Booker.Email</td>
-                                <td>
-                                    <div style="display:flex">
-                                        <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
-                                            </svg>
-                                        </button>
-                                        <RemoveItemReservation reservationDTO="item" OnRemove=@OnRemove></RemoveItemReservation>
-                                    </div>
-
-                                </td>
-
-                            }
-                        </tr>
+                        <td>@item.Id</td>
+                        <td>@item.BookerId</td>
+                        <td><input class="form-control" @bind="item.ShowId" /></td>
+                        <td><input class="form-control" @bind="item.BookedSeats"/></td>
+                        <td><input class="form-control" @bind="item.ReservationTime" /></td>
+                        <td>
+                            <EditItemReservation reservationDTO="item" OnEdited=@OnEdited></EditItemReservation>
+                        </td>
+                        
                     }
-                }
-            </tbody>
-        </table>
-    </div>
+                    else
+                    {
+                        <td>@item.Id</td>
+                        <td>@item.BookerId</td>
+                        <td>@item.ShowId</td>
+                        <td>@item.BookedSeats</td>
+                        <td>@item.ReservationTime</td>
+
+                        <td>
+                            <button class="btn btn-warning btn-sm" @onclick="() => SetEditMode(item)">Redigera</button>
+                            @if (!isEditMode || selectedId != item.Id)
+                            {
+                                <RemoveItemReservation reservationDTO="item" OnRemove=@OnRemove></RemoveItemReservation>
+                            }
+                            
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {

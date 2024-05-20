@@ -124,17 +124,25 @@ namespace Booking.Api.Repositories
 
                 if (deleteReservation != null)
                 {
+                 
+                    var show = await _context.shows.FindAsync(deleteReservation.ShowId);
+                    if (show != null)
+                    {
+                        show.AvailableSeats += deleteReservation.BookedSeats;
+                        _context.shows.Update(show);
+                    }
+
                     _context.reservations.Remove(deleteReservation);
                     await _context.SaveChangesAsync();
                 }
+
                 return deleteReservation;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting movie. MovieId: {MovieId}", Id);
+                _logger.LogError(ex, "Error deleting reservation. ReservationId: {ReservationId}", Id);
                 throw;
             }
-
         }
     }
 }

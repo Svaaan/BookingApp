@@ -4,61 +4,64 @@
 @using BookerPortal.Web.Components.EditItems.MovieTheatreEdit.EditMovie
 @rendermode InteractiveServer
 @inject IMovieService movieService
+@inject NavigationManager Navigation
 @attribute [StreamRendering]
 @attribute [Authorize(Roles = "Admin,Manager")]
 <PageTitle>Filmer</PageTitle>
 
 @if (movies != null)
 {
-<div class="table-container">
-        <table class="table">
-            <thead>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Genre</th>
+                <th>Age</th>
+                <th>Length</th>
+                <th>Language</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in movies)
+            {
                 <tr>
-                    <th>Title</th>
-                    <th>Director</th>
-                    <th>Description</th>
-                    <th>Genre</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in movies)
-                {
-                    if (item != null) 
+                    @if (isEditMode && selectedId == item.Id)
                     {
-                        <tr>
-                            @if (isEditMode && selectedId == item.Id)
-                            {
-                                <td><input @bind="item.Title" /></td>
-                                <td><input @bind="item.Director" /></td>
-                                <td><input @bind="item.Description" /></td>
-                                <td><input @bind="item.Genre" /></td>
-                                <EditItemMovie movieDTO="item" OnEdited=@OnEdited></EditItemMovie>
-                            }
-                            else
-                            {
-                                <td class="smooth-text">@item.Title</td>
-                                <td class="smooth-text">@item.Director</td>
-                                <td class="smooth-text">@item.Description</td>
-                                <td class="smooth-text">@item.Genre</td>
-                                <td>
-                                    <div style="display:flex">
-                                        <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
-                                            </svg>
-                                        </button>
-                                        <RemoveItemMovie movieDTO="item" OnRemove=@OnRemove></RemoveItemMovie>
-                                    </div>
-      
-                                </td>
-
-                            }
-                        </tr>
+                        <td>@item.Id</td>               
+                        <td><input class="form-control" @bind="item.Title" /></td>
+                        <td><input class="form-control" @bind="item.Genre" /></td>
+                        <td><input class="form-control" @bind="item.AgeRestriction" /></td>
+                        <td><input class="form-control" @bind="item.Hours" /></td>
+                        <td><input class="form-control" @bind="item.Language" /></td>
+                        <td>
+                            <EditItemMovie movieDTO="item" OnEdited=@OnEdited></EditItemMovie>
+                        </td>
+                        
                     }
-                }
-            </tbody>
-        </table>
-    </div>
+                    else
+                    {
+                        <td>@item.Id</td>
+                        <td>@item.Title</td>
+                        <td>@item.Genre</td>
+                        <td>@item.AgeRestriction</td>
+                        <td>@item.Hours</td>
+                        <td>@item.Language</td>
+                        <td>
+                            <button class="btn btn-success btn-sm" @onclick="NavigateToAddPage">Lägg till</button>
+                            <button class="btn btn-warning btn-sm" @onclick="() => SetEditMode(item)">Redigera</button>
+                            @if (!isEditMode || selectedId != item.Id)
+                            {
+                                <RemoveItemMovie movieDTO="item" OnRemove=@OnRemove></RemoveItemMovie>
+                            }
+                            
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
@@ -109,6 +112,10 @@
         selectedId = movieDTO.Id;
         isEditMode = true;
 
+    }
+    protected void NavigateToAddPage()
+    {
+        Navigation.NavigateTo("/add-item-movie");
     }
 
 }

@@ -6,65 +6,70 @@
 @inject IShowService showService
 @attribute [StreamRendering]
 @attribute [Authorize(Roles = "Admin,Employee")]
-<PageTitle>Bokningar</PageTitle>
+<PageTitle>Visningar</PageTitle>
 
 @if (scheduleDTO != null)
 {
     @foreach (var schedule in scheduleDTO)
     {
-        <h2>@schedule.Date.ToShortDateString()</h2> <!-- Displaying the date as the title -->
-
-        <div class="table-container">
-            <table class="table">
-                <thead>
-                    <tr>
-
-                        <th>Movie</th>
-                        <th>AvailableSeats</th>
-                        <th>Salon</th>
-                        <th>StartTime</th>
-                        <th>EndTime</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Salong</th>
+                    <th>Film</th>
+                    <th>Start</th>
+                    <th>Slut</th>
+                    <th>Platser kvar</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
                     @foreach (var item in schedule.Shows)
                     {
                         if (item != null)
                         {
-                            <tr>
-                                @if (isEditMode && selectedId == item.Id)
-                                {
-                                    <td class="smooth-text">@item.MovieTitle</td>
-                                    <td class="smooth-text">@item.AvailableSeats</td>
-                                    <td class="smooth-text">@item.SalonName</td>
-                                    <td><input @bind="item.StartTime" /></td>
-                                    <td><input @bind="item.EndTime" /></td>
-                                    <EditItemShow showDTO="item" OnEdited=@OnEdited></EditItemShow>
-                                }
-                                else
-                                {
-                                    <td class="smooth-text">@item.MovieTitle</td>
-                                    <td class="smooth-text">@item.AvailableSeats</td>
-                                    <td class="smooth-text">@item.SalonName</td>
-                                    <td class="smooth-text">@item.StartTime.ToShortTimeString()</td>
-                                    <td class="smooth-text">@item.EndTime.ToShortTimeString()</td>
-                                    <td>
-                                        <div style="display:flex">
-                                            <button class="btn btn-warning" @onclick="() => SetEditMode(item)" style="margin-right:10px">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                    <path d="M12.354 1.646a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.708-.708l9-9a.5.5 0 0 1 .708 0zm-1.708.708L3 11.5v1.5a.5.5 0 0 0 .5.5H5l9.146-9.146-1.5-1.5z" />
-                                                </svg>
-                                            </button>
-                                            <RemoveItemShow showDTO="item" OnRemove=@OnRemove></RemoveItemShow>
-                                        </div>
-                                    </td>
-                                }
-                            </tr>
-                        }
+                              @if (isEditMode && selectedId == item.Id)
+                    {
+                        <td>@item.Id</td>
+                        <td><input class="form-control" @bind="item.SalonName" /></td>
+                        <td><input class="form-control" @bind="item.MovieTitle"/></td>
+                        <td><input class="form-control" @bind="item.StartTime" /></td>
+                                <td><input class="form-control" @bind="item.EndTime" /></td>
+                                <td><input class="form-control" @bind="item.AvailableSeats" /></td>
+                        <td>
+                            <EditItemShow showDTO="item" OnEdited=@OnEdited></EditItemShow>
+                        </td>
+                        
                     }
-                </tbody>
-            </table>
-        </div>
+                    else
+                    {
+                        <td>@item.Id</td>
+                        <td>@item.SalonName</td>
+                        <td>@item.MovieTitle</td>
+                        <td>@item.StartTime</td>
+                                <td>@item.EndTime</td>
+                                <td>@item.AvailableSeats</td>
+
+                        <td>
+                            <button class="btn btn-warning btn-sm" @onclick="() => SetEditMode(item)">Redigera</button>
+                            @if (!isEditMode || selectedId != item.Id)
+                            {
+                                <RemoveItemShow showDTO="item" OnRemove=@OnRemove></RemoveItemShow>
+                            }
+                            
+                        </td>
+                    }
+                            
+                        }
+
+                    }
+                  
+                </tr>
+            
+        </tbody>
+    </table>
     }
 }
 
