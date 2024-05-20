@@ -14,20 +14,21 @@ namespace Request.HTTP.RequestService
         /// </summary>
         /// <param name="booker"></param>
         /// <returns></returns>
-        public async Task <bool> PostBooking(BookerDTO booker)
+        public async Task<bool> PostBooking(BookerDTO booker)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    
+                    booker.BookingNumber = GenerateBookingNumber();
+
                     var endpoint = new Uri("https://localhost:44367/api/Booker");
                     var jsonContent = JsonConvert.SerializeObject(booker);
                     var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
                     var response = await client.PostAsync(endpoint, httpContent);
                     var result = await response.Content.ReadAsStringAsync();
 
-                    return true;
+                    return response.IsSuccessStatusCode;
                 }
             }
             catch (HttpRequestException ex)
@@ -81,6 +82,15 @@ namespace Request.HTTP.RequestService
                 Console.WriteLine($"Error updating booker: {ex.Message}");
                 return null;
             }
+        }
+        private string GenerateBookingNumber()
+        {
+            Random random = new Random();
+            string letters = new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 2)
+                                          .Select(s => s[random.Next(s.Length)]).ToArray());
+            string numbers = random.Next(10000, 99999).ToString();
+
+            return letters + numbers;
         }
 
 

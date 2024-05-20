@@ -17,28 +17,10 @@
     <div class="mb-1">
         <label class="form-label">Telefonnummer:</label>
         <span>@booker.PhoneNumber</span>
-    </div
-    <div class="mb-1">
-        <label class="form-label">Film:</label>
-        <span>@bookingConfirmationDTO.MovieTitle</span>
     </div>
-        <div class="mb-1">
-        <label class="form-label">Film Start:</label>
-        <span>@bookingConfirmationDTO.ShowStart</span>
-    </div>
-       </div>
-        <div class="mb-1">
-        <label class="form-label">Film Start:</label>
-        <span>@bookingConfirmationDTO.ShowEnd</span>
-    </div>
-    <div>
-        <div class="mb-1">
-        <label class="form-label">Film Start:</label>
-        <span>@bookingConfirmationDTO.ShowEnd</span>
-    </div>
+
     <div class="mb-1">
         <label class="form-label">Boknings nummer:</label>
-        <span>@(GenerateBookingNumber())</span>
     </div>
 </div>
 
@@ -51,11 +33,4 @@
 
     [Parameter]
     public BookingConfirmationDTO bookingConfirmationDTO { get; set; }
-
-    // Method to generate a random 5-digit booking number
-    private string GenerateBookingNumber()
-    {
-        Random random = new Random();
-        return random.Next(10000, 99999).ToString();
-    }
 }
