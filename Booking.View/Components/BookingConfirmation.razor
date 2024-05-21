@@ -1,5 +1,8 @@
-﻿@using Request.HTTP.DTO.MovieTheatreDTO
+﻿@page "/BookingConfirmation"
 
+@using Request.HTTP.DTO.MovieTheatreDTO
+
+<h3>BOKNINGS BEKRÄFTELSE</h3>
 <div class="receipt-container" style="width: 100%; border: 2px solid #000000; border-radius: 8px; padding: 5px;">
     <h3>Booking Receipt</h3>
     <div class="mb-1">
@@ -18,9 +21,9 @@
         <label class="form-label">Telefonnummer:</label>
         <span>@booker.PhoneNumber</span>
     </div>
-
     <div class="mb-1">
         <label class="form-label">Boknings nummer:</label>
+        <span>@booker.BookingNumber</span>
     </div>
 </div>
 
