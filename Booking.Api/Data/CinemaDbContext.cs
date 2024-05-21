@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Booking.Api.Entities;
-using System.Data;
 
 namespace Booking.Api.Data
 {
@@ -25,7 +24,6 @@ namespace Booking.Api.Data
         {
             return base.SaveChangesAsync(cancellationToken);
         }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -66,6 +64,8 @@ namespace Booking.Api.Data
                 .HasConversion(
                 v => v.ToString(),
                 v => (EmployeeRole)Enum.Parse(typeof(EmployeeRole), v));
+
+            modelBuilder.Entity<Employee>().HasOne(u => u.Company);
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Company>().HasData(new Company
@@ -140,10 +140,34 @@ namespace Booking.Api.Data
                 Name = "Salon 1",
                 Status = 0
             });
-
-            modelBuilder.Entity<Employee>().HasOne(u => u.Company);
-
+            modelBuilder.Entity<Booker>().HasData(new Booker
+            {
+                Id=1,
+                Name = "John",
+                LastName = "Doe",
+                Email = "Does@mail.com",
+                PhoneNumber = "1234567890",
+                BookingNumber = "7890"
+            });
+            modelBuilder.Entity<Show>().HasData(new Show
+            {
+                Id = 1,
+                MovieId = 2,
+                SalonId = 1,
+                AvailableSeats = 15,
+                PricePerSeat = 120,
+                VAT = 25,
+                StartTime = DateTime.UtcNow,
+                EndTime = DateTime.UtcNow.AddDays(15)
+            });
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id = 1,
+                ShowId = 1,
+                BookedSeats = 2,
+                ReservationTime = DateTime.UtcNow.AddHours(5),
+                BookerId = 1,
+            });
         }
-
     }
 }
