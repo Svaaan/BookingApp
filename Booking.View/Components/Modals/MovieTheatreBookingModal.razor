@@ -6,6 +6,7 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using Request.HTTP.DTO.MovieTheatreDTO
 @using Request.HTTP.RequestService.IRequestService
+@inject NavigationManager NavigationManager
 @inject IBookerService BookerService
 @inject ILogger<BookerDTO> Logger
 
@@ -74,8 +75,7 @@
     }
 </style>
 
-
-<div class="container">
+<div class="container" style="display: @(successMessage != "" ? "none" : "block");">
     <div class="card mx-auto mt-5" style="max-width: 500px;">
         <div class="card-body">
             <EditForm Model="@bookerDTO" OnValidSubmit="@SubmitForm" FormName="BookerDTO">
@@ -114,7 +114,8 @@
             <div style="text-align: center; display: flex; align-items: center; flex-direction: column;">
                 @if (!string.IsNullOrWhiteSpace(successMessage))
                 {
-                    <BookingConfirmation Booker="@bookerDTO" Reservation="@reservation" />
+                    <BookingConfirmation booker="bookerDTO"/>
+
                     <div class="success-message">
                         <span style="display: flex; align-items: center;">
                             @successMessage
@@ -123,6 +124,7 @@
                             </svg>
                         </span>
                     </div>
+                    
                 }
                 @if (!string.IsNullOrWhiteSpace(errorMessage))
                 {
@@ -156,14 +158,13 @@
     {
         try
         {
-            var postForm = await BookerService.PostBooking(bookerDTO);
-            if (postForm)
+            bookerDTO = await BookerService.PostBooking(bookerDTO);
+            if (bookerDTO != null)
             {
              
                 successMessage = "Bokning slutförd";
                 errorMessage = ""; 
 
-                bookerDTO = new BookerDTO();
             }
             else
             {
@@ -178,4 +179,5 @@
             errorMessage = "An unexpected error occurred. Please try again later.";
         }
     }
+
 }
