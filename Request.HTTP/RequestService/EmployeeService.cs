@@ -1,4 +1,5 @@
 ﻿using Booking.Api.Data;
+using Booking.Api.Entities;
 using Request.HTTP.DTO.MovieTheatreDTO;
 using Request.HTTP.RequestService.IRequestService;
 
@@ -51,6 +52,10 @@ namespace Request.HTTP.RequestService
 
                 if (response.IsSuccessStatusCode)
                 {
+                    (string hashedPassword, byte[] salt) = PasswordHashing.HashPassword(employeeDTO.Password);
+                    employeeDTO.Password = hashedPassword;
+                    employeeDTO.Salt = salt;
+
                     return await response.Content.ReadFromJsonAsync<EmployeeDTO>();
                 }
                 else
