@@ -1,0 +1,185 @@
+﻿@page "/Add-Booker"
+@using Booking.Api.Data
+@using Booking.Api.Entities
+@using Booking.Api.Repositories
+@using Booking.Api.Repositories.Interfaces
+@using Microsoft.AspNetCore.Components.Forms
+@using Request.HTTP.DTO.MovieTheatreDTO
+@using Request.HTTP.RequestService.IRequestService
+@using Microsoft.AspNetCore.Antiforgery;
+@attribute [RequireAntiforgeryToken(required: false)]
+@inject NavigationManager NavigationManager
+@inject IBookerService BookerService
+@inject ILogger<BookerDTO> Logger
+
+@inject CinemaDbContext dbContext
+
+<style>
+    body {
+        margin-top: 10px;
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        margin-top: 25px;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border: 2px solid #000000;
+        border-radius: 8px;
+        margin: 100px;
+    }
+
+    .card-title {
+        color: black;
+    }
+
+    .form-label {
+        color: #343a40;
+        font-weight: bold;
+    }
+
+    .form-control {
+        background-color: #f1f3f5;
+    }
+
+    .custom-button {
+        background-color: white;
+        color: black;
+        border: 2px solid black;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        margin-top: 30px;
+    }
+
+        .custom-button:hover {
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+
+        .custom-button:active {
+            transform: translateY(2px);
+        }
+
+    .success-message {
+        color: green;
+        font-size: 20px;
+        margin-top: 10px;
+    }
+    .error-message{
+        color: red;
+        font-size: 20px;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container" style="display: @(successMessage != "" ? "none" : "block");">
+    <div class="card mx-auto mt-5" style="max-width: 500px;">
+        <div class="card-body">
+            <EditForm Model="@bookerDTO" OnValidSubmit="@SubmitForm" FormName="BookerDTO">
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Namn:</label>
+                    <InputText type="text" id="Name" class="form-control" @bind-Value="bookerDTO.Name" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="LastName" class="form-label">Efternamn:</label>
+                    <InputText type="text" id="LastName" class="form-control" @bind-Value="bookerDTO.LastName" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Email:</label>
+                    <InputText type="email" id="Email" class="form-control" @bind-Value="bookerDTO.Email" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="PhoneNumber" class="form-label">Telefon nummer:</label>
+                    <InputText type="tel" id="PhoneNumber" class="form-control" @bind-Value="bookerDTO.PhoneNumber" required />
+                </div>
+                 <div class="mb-3">
+                    <label for="BookedSeats" class="form-label">Antal platser:</label>
+                    <InputNumber type="seats" id="BookedSeats" class="form-control" @bind-Value="reservation.BookedSeats" required />
+                </div
+
+                <div class="mb-3 text-center">
+                    <button type="submit" class="custom-button">Lägg till</button>
+                </div>
+            </EditForm>
+            </div>
+        </div>
+</div>
+
+            <div style="text-align: center; display: flex; align-items: center; flex-direction: column;">
+                @if (!string.IsNullOrWhiteSpace(successMessage))
+                {
+                    <BookingConfirmation booker="bookerDTO"/>
+
+                    <div class="success-message">
+                        <span style="display: flex; align-items: center;">
+                            @successMessage
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
+                            </svg>
+                        </span>
+                    </div>
+                    
+                }
+                @if (!string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    
+                    <div class="error-message">
+                        @errorMessage
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                        </svg>
+                    </div>
+                }
+            </div>
+
+@code {
+    [SupplyParameterFromForm]
+    public BookerDTO bookerDTO { get; set; }
+    [SupplyParameterFromForm]
+    public ReservationDTO reservation { get; set; }
+
+    private EditContext editContext;
+    private string successMessage = "";
+    private string errorMessage = "";
+
+    protected override void OnInitialized()
+    {
+        bookerDTO ??= new BookerDTO();
+        reservation ??= new ReservationDTO();
+    }
+
+    private async Task SubmitForm()
+    {
+        try
+        {
+            bookerDTO = await BookerService.PostBooking(bookerDTO);
+            if (bookerDTO != null)
+            {
+             
+                successMessage = "Bokning tillagd";
+                errorMessage = ""; 
+
+            }
+            else
+            {
+                successMessage = "";
+                errorMessage = "Något gick fel. Försök igen.";
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "An error occurred while submitting the booking form.");
+            successMessage = ""; 
+            errorMessage = "An unexpected error occurred. Please try again later.";
+        }
+    }
+
+}

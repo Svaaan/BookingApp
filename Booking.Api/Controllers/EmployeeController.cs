@@ -30,7 +30,7 @@ namespace Booking.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Employee>> PostEmployee([FromBody] EmployeeDTO employeeDTO)
+        public async Task<ActionResult<Employee>> PostEmployee([FromBody] IncomingEmployeeDTO employeeDTO)
         {
             if (employeeDTO == null)
             {
@@ -54,7 +54,8 @@ namespace Booking.Api.Controllers
                 Name = employeeDTO.Name,
                 LastName = employeeDTO.LastName,
                 Password = employeeDTO.Password,
-                Role = Enum.TryParse<EmployeeRole>(employeeDTO.Role, out var role) ? role : EmployeeRole.Employee
+                Role = Enum.TryParse<EmployeeRole>(employeeDTO.Role, out var role) ? role : EmployeeRole.Employee,
+                Salt = employeeDTO.Salt
             };
             var createEmployee = await _employeeRepository.CreateEmployeeAsync(employee);
             return Ok(createEmployee);

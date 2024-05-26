@@ -1,6 +1,152 @@
-﻿namespace BookerPortal.Web.Components.EditItems.EditBooker
-{
-    public class AddItems
+﻿@page "/Add-Salon"
+@using Booking.Api.Data
+@using Booking.Api.Entities
+@using Booking.Api.Repositories
+@using Booking.Api.Repositories.Interfaces
+@using Microsoft.AspNetCore.Components.Forms
+@using Request.HTTP.DTO.MovieTheatreDTO
+@using Request.HTTP.RequestService.IRequestService
+@using Microsoft.AspNetCore.Antiforgery;
+@attribute [RequireAntiforgeryToken(required: false)]
+@inject NavigationManager NavigationManager
+@inject ISalonService SalonService
+@inject ILogger<SalonDTO> Logger
+
+@inject CinemaDbContext dbContext
+
+<style>
+    body {
+        margin-top: 10px;
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        margin-top: 25px;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border: 2px solid #000000;
+        border-radius: 8px;
+        margin: 100px;
+    }
+
+    .card-title {
+        color: black;
+    }
+
+    .form-label {
+        color: #343a40;
+        font-weight: bold;
+    }
+
+    .form-control {
+        background-color: #f1f3f5;
+    }
+
+    .custom-button {
+        background-color: white;
+        color: black;
+        border: 2px solid black;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        margin-top: 30px;
+    }
+
+        .custom-button:hover {
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+
+        .custom-button:active {
+            transform: translateY(2px);
+        }
+
+    .success-message {
+        color: green;
+        font-size: 20px;
+        margin-top: 10px;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 20px;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container">
+    <div class="card mx-auto mt-5" style="max-width: 500px;">
+        <div class="card-body">
+            <EditForm Model="@salonDTO" OnValidSubmit="@SubmitSalonForm" FormName="SalonDTO">
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Salon Name:</label>
+                    <InputText id="Name" class="form-control" @bind-Value="salonDTO.Name" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="AvailableSeats" class="form-label">Available Seats:</label>
+                    <InputNumber id="AvailableSeats" class="form-control" @bind-Value="salonDTO.AvailableSeats" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="MovieTheatreId" class="form-label">Movie Theatre Id:</label>
+                    <InputNumber id="MovieTheatreId" class="form-control" @bind-Value="salonDTO.MovieTheatreId" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="Status" class="form-label">Status:</label>
+                    <InputSelect id="Status" class="form-control" @bind-Value="salonDTO.Status" required>
+                        @foreach (var status in Enum.GetValues(typeof(Status)))
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3 text-center">
+                    <button type="submit" class="custom-button">Lägg till</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    public SalonDTO salonDTO { get; set; } = new SalonDTO();
+    public string successMessage { get; set; }
+    public string errorMessage { get; set; }
+
+
+    protected override void OnInitialized()
     {
+        salonDTO ??= new SalonDTO();
+    }
+
+    private async Task SubmitSalonForm()
+    {
+        try
+        {
+            var result = await SalonService.PostSalon(salonDTO);
+            if (result != null)
+            {
+                successMessage = "Salon added successfully";
+                errorMessage = "";
+            }
+            else
+            {
+                errorMessage = "Something went wrong. Please try again.";
+                successMessage = "";
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "An error occurred while submitting the salon form.");
+            errorMessage = "An unexpected error occurred. Please try again later.";
+            successMessage = "";
+        }
     }
 }

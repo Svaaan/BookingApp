@@ -4,6 +4,7 @@
 @using BookerPortal.Web.Components.EditItems.MovieTheatreEdit.EditShow
 @rendermode InteractiveServer
 @inject IShowService showService
+@inject NavigationManager Navigation
 @attribute [StreamRendering]
 @attribute [Authorize(Roles = "Admin,Employee")]
 <PageTitle>Visningar</PageTitle>
@@ -53,6 +54,7 @@
                                 <td>@item.AvailableSeats</td>
 
                         <td>
+                                    <button class="btn btn-success btn-sm" @onclick="NavigateToAddPage">Lägg till</button>
                             <button class="btn btn-warning btn-sm" @onclick="() => SetEditMode(item)">Redigera</button>
                             @if (!isEditMode || selectedId != item.Id)
                             {
@@ -121,6 +123,11 @@
         selectedId = showDTO.Id;
         isEditMode = true;
 
+    }
+
+    protected void NavigateToAddPage()
+    {
+        Navigation.NavigateTo("/Add-Show");
     }
 
 }

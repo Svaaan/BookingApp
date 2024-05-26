@@ -1,8 +1,7 @@
-﻿//using Booking.Api.Entities.DTO;
+﻿using Booking.Api.Data;
 using Request.HTTP.DTO.MovieTheatreDTO;
 using Request.HTTP.RequestService.IRequestService;
-using System.Net.Http;
-using System.Net.Http.Json;
+
 
 namespace Request.HTTP.RequestService
 {
@@ -18,6 +17,10 @@ namespace Request.HTTP.RequestService
 
         public async Task<HttpResponseMessage> PostEmployee(EmployeeDTO employee)
         {
+            (string hashedPassword, byte[] salt) = PasswordHashing.HashPassword(employee.Password);
+            employee.Password = hashedPassword;
+            employee.Salt = salt;
+
             return await _HttpClient.PostAsJsonAsync("api/employee", employee);
         }
         public async Task<List<EmployeeDTO>> GetEmployee()

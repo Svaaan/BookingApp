@@ -21,10 +21,6 @@ namespace Booking.Api.Repositories
         {
             try
             {
-                (string hashedPassword, byte[] salt) = PasswordHashing.HashPassword(employee.Password);
-                employee.Password = hashedPassword;
-                employee.Salt = salt;
-
                 await _context.employees.AddAsync(employee);
                 await _context.SaveChangesAsync();
                 return employee;
@@ -57,6 +53,7 @@ namespace Booking.Api.Repositories
         {
             try
             {
+
                 var employeeList = await _context.employees.Include(u => u.Company).ToListAsync();
                 if (employeeList.Count == 0)
                 {
