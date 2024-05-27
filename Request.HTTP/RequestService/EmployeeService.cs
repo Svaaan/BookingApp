@@ -27,9 +27,28 @@ namespace Request.HTTP.RequestService
         public async Task<List<EmployeeDTO>> GetEmployee()
         {
 
-            var getEmployee = await _HttpClient.GetFromJsonAsync<List<EmployeeDTO>>("api/Employee");
-
-            return getEmployee;
+            var getEmployee = await _HttpClient.GetFromJsonAsync<List<NoSaltEmployeeDTO>>("api/Employee");
+            if(getEmployee == null)
+            {
+                return new List<EmployeeDTO>();
+            }
+            //FÖR VARJE EMPLOYEE HÄMTA DENS COMPANY VIA API/COMPANY/EMPLOYEE.COMPANYID
+            List<EmployeeDTO> employees = getEmployee.Select(e => new EmployeeDTO()
+            {
+                Id = e.Id,
+                CompanyId = e.CompanyId,
+                Email = e.Email,
+                LastName = e.LastName,
+                Name = e.Name,
+                Password = e.Password,
+                Role = e.Role
+            }).ToList();
+            foreach(var employee in employees)
+            {
+                
+                employee.Company = await _HttpClient.GetFromJsonAsync<CompanyDTO>($"api/Company/{employee.CompanyId}");
+            }
+            return employees;
         }
         public async Task<bool> RemoveEmployeeById(int employeeId)
         {

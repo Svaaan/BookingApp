@@ -115,6 +115,14 @@
 
     private string? errorMessage;
 
+
+    public enum EmployeeRole
+    {
+        Admin,
+        Manager,
+        Employee
+    }
+
     private async Task SubmitForm()
     {
         try
@@ -139,7 +147,7 @@
                     Email = Model.Email,
                     Password = Model.Password,
                     CompanyId = 1,
-                    Role = parsedRole,
+                    Role = Model.Role,
                 };
 
             var response = await employeeService.PostEmployee(employeeDTO);

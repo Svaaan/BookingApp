@@ -10,16 +10,12 @@ namespace Request.HTTP.DTO.MovieTheatreDTO
         public string Password { get; set; }
         public byte[] Salt { get; set; }
         public int CompanyId { get; set; }
-        public CompanyDTO Company { get; set; }
+        public CompanyDTO Company = new();
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public EmployeeRole Role { get; set; }
+        public string Role { get; set; }
     }
 
-    public enum EmployeeRole
-    {
-        Admin,
-        Manager,
-        Employee
-    }
+   
+
 }

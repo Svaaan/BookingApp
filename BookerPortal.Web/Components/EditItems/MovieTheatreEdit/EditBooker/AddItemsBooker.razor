@@ -54,7 +54,7 @@
         }
 </style>
 
-@if (isModalOpen)
+@if (IsOpen)
 {
     <div class="confirmation-modal">
         <div class="modal-overlay" @onclick="CloseModal"></div>
@@ -63,6 +63,7 @@
                 <p>Boka</p>
                 <label for="dropdown">Välj en visning:</label>
                 <select id="dropdown" @bind="selectedShowId">
+                    <option value="0">Välj en visning</option>
                     @foreach (var s in schedule)
                     {
                         @foreach (var show in s.Shows)
@@ -90,14 +91,12 @@
 
     private List<ScheduleDTO> schedule = new();
     private string errorMessage;
-    private bool isModalOpen = false;
     private int selectedShowId;
     private int selectedSeatCount;
 
     protected override async Task OnParametersSetAsync()
     {
-        isModalOpen = IsOpen;
-        if (isModalOpen)
+        if (IsOpen)
         {
             await LoadShows();
         }
@@ -120,12 +119,19 @@
     {
         try
         {
+            if (selectedShowId == 0)
+            {
+                errorMessage = "Please select a show.";
+                return;
+            }
+
             var reservationDTO = new ReservationDTO
                 {
                     BookerId = BookerId,
                     ShowId = selectedShowId,
                     BookedSeats = selectedSeatCount
                 };
+
             await reservationService.PostReservation(reservationDTO);
         }
         catch (Exception ex)
@@ -139,14 +145,14 @@
         }
     }
 
+
     private void NavigateToAddBooker()
     {
         Navigation.NavigateTo("/add-booker");
     }
 
-    protected async Task CloseModal()
+    private async Task CloseModal()
     {
-        isModalOpen = false;
         await OnClose.InvokeAsync(false);
     }
 }

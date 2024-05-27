@@ -83,17 +83,17 @@
         <div class="card-body">
             <EditForm Model="@salonDTO" OnValidSubmit="@SubmitSalonForm" FormName="SalonDTO">
                 <div class="mb-3">
-                    <label for="Name" class="form-label">Salon Name:</label>
+                    <label for="Name" class="form-label">Salong Namn:</label>
                     <InputText id="Name" class="form-control" @bind-Value="salonDTO.Name" required />
                 </div>
 
                 <div class="mb-3">
-                    <label for="AvailableSeats" class="form-label">Available Seats:</label>
+                    <label for="AvailableSeats" class="form-label">Antal platser:</label>
                     <InputNumber id="AvailableSeats" class="form-control" @bind-Value="salonDTO.AvailableSeats" required />
                 </div>
 
                 <div class="mb-3">
-                    <label for="MovieTheatreId" class="form-label">Movie Theatre Id:</label>
+                    <label for="MovieTheatreId" class="form-label">Bio Id:</label>
                     <InputNumber id="MovieTheatreId" class="form-control" @bind-Value="salonDTO.MovieTheatreId" required />
                 </div>
 

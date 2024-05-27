@@ -25,9 +25,14 @@ namespace Booking.Api.Repositories
             {
                 var show = await _context.shows.FirstOrDefaultAsync(s => s.Id == reservation.ShowId);
 
+                if (show == null)
+                {
+                    throw new Exception($"Show with ID {reservation.ShowId} not found.");
+                }
+
                 if (show.AvailableSeats < reservation.BookedSeats)
                 {
-                    throw new Exception("Not enough seats are available for booking");
+                    throw new Exception("Not enough seats are available for booking.");
                 }
 
                 ReservationValidator.ValidateReservation(reservation);
@@ -38,16 +43,28 @@ namespace Booking.Api.Repositories
                 show.AvailableSeats -= reservation.BookedSeats;
                 await _context.SaveChangesAsync();
 
-                var createdReservation = await _context.reservations.Include(r => r.Booker).Where(r => r.Id == reservation.Id).FirstAsync();
+                var createdReservation = await _context.reservations
+                                                        .Include(r => r.Booker)
+                                                        .FirstOrDefaultAsync(r => r.Id == reservation.Id);
+
+                if (createdReservation == null)
+                {
+                    throw new Exception($"Failed to retrieve the created reservation with ID {reservation.Id}.");
+                }
+
                 var receipt = new Receipt(createdReservation, show);
 
-                return reservation;
+                return createdReservation;
             }
             catch (ReservationValidationException ex)
             {
-                // Handle validation exception
                 _logger.LogError(ex, "Validation error while creating a reservation.");
                 throw new Exception($"Validation failed: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while creating a reservation.");
+                throw;
             }
         }
 
@@ -87,7 +104,6 @@ namespace Booking.Api.Repositories
 
             var showId = reservation.ShowId;
 
-            // Load the show from the database
             var show = await _context.shows.FindAsync(showId);
 
             if (show == null)
@@ -103,13 +119,11 @@ namespace Booking.Api.Repositories
                 throw new Exception("Not enough seats are available for the requested update");
             }
 
-            // Update reservation properties
             reservation.ShowId = updateReservation.ShowId;
             reservation.BookedSeats = updateReservation.BookedSeats;
 
             ReservationValidator.ValidateReservation(reservation);
 
-            // Adjust available seats based on seat difference
             show.AvailableSeats -= seatDifference;
 
             await _context.SaveChangesAsync();
@@ -124,7 +138,6 @@ namespace Booking.Api.Repositories
 
                 if (deleteReservation != null)
                 {
-                 
                     var show = await _context.shows.FindAsync(deleteReservation.ShowId);
                     if (show != null)
                     {

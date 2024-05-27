@@ -10,8 +10,8 @@ namespace Booking.Api.Entities
         public string Email { get; set; }
         public string Password { get; set; }
         public byte[] Salt { get; set; }
-        public int CompanyId { get; set; }
         public Company Company { get; set; }
+        public int CompanyId { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public EmployeeRole Role { get; set; }

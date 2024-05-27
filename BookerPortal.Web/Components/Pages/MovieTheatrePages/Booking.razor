@@ -39,7 +39,6 @@
                         <td>
                             <EditItemBooker bookerDTO="item" OnEdited=@OnEdited></EditItemBooker>
                         </td>
-                        
                     }
                     else
                     {
@@ -50,13 +49,12 @@
                         <td>@item.PhoneNumber</td>
                         <td>@item.BookingNumber</td>
                         <td>
-                            <button class="btn btn-success btn-sm" @onclick="OpenAddModal">Boka</button>
+                            <button class="btn btn-success btn-sm" @onclick="() => OpenAddModal(item.Id)">Boka</button>
                             <button class="btn btn-warning btn-sm" @onclick="() => SetEditMode(item)">Redigera</button>
                             @if (!isEditMode || selectedId != item.Id)
                             {
                                 <RemoveItemBooker bookerDTO="item" OnRemove=@OnRemove></RemoveItemBooker>
                             }
-                            
                         </td>
                     }
                 </tr>
@@ -109,37 +107,15 @@
         isEditMode = true;
     }
 
-    protected void OpenAddModal()
+    protected void OpenAddModal(int bookerId)
     {
-        selectedBookerId = 0; 
+        selectedBookerId = bookerId;
         isModalOpen = true;
     }
 
-    protected async Task CloseModal(bool isOpen)
+    protected async Task CloseModal()
     {
-        isModalOpen = isOpen;
-        if (!isOpen)
-        {
-            await LoadBookers();
-        }
-    }
-
-    protected async Task SaveChanges(BookerDTO booker)
-    {
-        selectedId = 0;
-        isEditMode = false;
-        await LoadBookers();
-    }
-
-    protected void CancelEdit()
-    {
-        selectedId = 0;
-        isEditMode = false;
-    }
-
-    protected async Task RemoveBooker(BookerDTO booker)
-    {
-
+        isModalOpen = false;
         await LoadBookers();
     }
 }

@@ -7,5 +7,6 @@
         public string Email { get; set; }
         public string Adress { get; set; }
         public string Country { get; set; }
+
     }
 }
