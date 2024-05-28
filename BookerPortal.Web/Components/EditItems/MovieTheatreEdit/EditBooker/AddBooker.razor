@@ -100,10 +100,6 @@
                     <label for="PhoneNumber" class="form-label">Telefon nummer:</label>
                     <InputText type="tel" id="PhoneNumber" class="form-control" @bind-Value="bookerDTO.PhoneNumber" required />
                 </div>
-                 <div class="mb-3">
-                    <label for="BookedSeats" class="form-label">Antal platser:</label>
-                    <InputNumber type="seats" id="BookedSeats" class="form-control" @bind-Value="reservation.BookedSeats" required />
-                </div
 
                 <div class="mb-3 text-center">
                     <button type="submit" class="custom-button">Lägg till</button>
@@ -164,7 +160,7 @@
             if (bookerDTO != null)
             {
              
-                successMessage = "Bokning tillagd";
+                successMessage = "Anställd tillagd";
                 errorMessage = ""; 
 
             }

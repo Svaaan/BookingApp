@@ -11,8 +11,6 @@ namespace Request.HTTP.DTO.MovieTheatreDTO
         public byte[] Salt { get; set; }
         public int CompanyId { get; set; }
         public CompanyDTO Company = new();
-
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         public string Role { get; set; }
     }
 
