@@ -1,7 +1,6 @@
-﻿using System.Text.Json.Serialization;
-namespace Request.HTTP.DTO.MovieTheatreDTO
+﻿namespace Booking.Api.Entities.DTO
 {
-    public class EmployeeDTO
+    public class IncomingEmployeeDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -10,10 +9,6 @@ namespace Request.HTTP.DTO.MovieTheatreDTO
         public string Password { get; set; }
         public byte[] Salt { get; set; }
         public int CompanyId { get; set; }
-        public CompanyDTO Company = new();
         public string Role { get; set; }
     }
-
-   
-
 }

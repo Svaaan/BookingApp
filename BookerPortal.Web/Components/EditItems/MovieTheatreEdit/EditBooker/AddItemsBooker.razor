@@ -4,6 +4,7 @@
 @rendermode InteractiveServer
 @inject IShowService showService
 @inject IReservationService reservationService
+@inject NavigationManager Navigation
 
 <style>
     .confirmation-modal {
@@ -53,7 +54,7 @@
         }
 </style>
 
-@if (isModalOpen)
+@if (IsOpen)
 {
     <div class="confirmation-modal">
         <div class="modal-overlay" @onclick="CloseModal"></div>
@@ -62,6 +63,7 @@
                 <p>Boka</p>
                 <label for="dropdown">Välj en visning:</label>
                 <select id="dropdown" @bind="selectedShowId">
+                    <option value="0">Välj en visning</option>
                     @foreach (var s in schedule)
                     {
                         @foreach (var show in s.Shows)
@@ -74,6 +76,7 @@
                 <input type="number" id="seatCount" @bind="selectedSeatCount" min="1" max="10" />
             </div>
             <div class="modal-footer">
+                <button class="btn btn-primary" @onclick="NavigateToAddBooker">Lägg till</button>
                 <button class="btn btn-primary" @onclick="MakeReservation">Boka</button>
                 <button class="btn btn-secondary" @onclick="CloseModal">Cancel</button>
             </div>
@@ -88,14 +91,12 @@
 
     private List<ScheduleDTO> schedule = new();
     private string errorMessage;
-    private bool isModalOpen = false;
     private int selectedShowId;
     private int selectedSeatCount;
 
     protected override async Task OnParametersSetAsync()
     {
-        isModalOpen = IsOpen;
-        if (isModalOpen)
+        if (IsOpen)
         {
             await LoadShows();
         }
@@ -118,12 +119,19 @@
     {
         try
         {
+            if (selectedShowId == 0)
+            {
+                errorMessage = "Please select a show.";
+                return;
+            }
+
             var reservationDTO = new ReservationDTO
                 {
                     BookerId = BookerId,
                     ShowId = selectedShowId,
                     BookedSeats = selectedSeatCount
                 };
+
             await reservationService.PostReservation(reservationDTO);
         }
         catch (Exception ex)
@@ -137,10 +145,14 @@
         }
     }
 
-    protected async Task CloseModal()
+
+    private void NavigateToAddBooker()
     {
-        isModalOpen = false;
+        Navigation.NavigateTo("/add-booker");
+    }
+
+    private async Task CloseModal()
+    {
         await OnClose.InvokeAsync(false);
     }
 }
-

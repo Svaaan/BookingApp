@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/Add-Booker"
 @using Booking.Api.Data
 @using Booking.Api.Entities
 @using Booking.Api.Repositories
@@ -6,6 +6,8 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using Request.HTTP.DTO.MovieTheatreDTO
 @using Request.HTTP.RequestService.IRequestService
+@using Microsoft.AspNetCore.Antiforgery;
+@attribute [RequireAntiforgeryToken(required: false)]
 @inject NavigationManager NavigationManager
 @inject IBookerService BookerService
 @inject ILogger<BookerDTO> Logger
@@ -100,7 +102,7 @@
                 </div>
 
                 <div class="mb-3 text-center">
-                    <button type="submit" class="custom-button">Submit Booking</button>
+                    <button type="submit" class="custom-button">Lägg till</button>
                 </div>
             </EditForm>
             </div>
@@ -158,7 +160,7 @@
             if (bookerDTO != null)
             {
              
-                successMessage = "Bokning slutförd";
+                successMessage = "Anställd tillagd";
                 errorMessage = ""; 
 
             }

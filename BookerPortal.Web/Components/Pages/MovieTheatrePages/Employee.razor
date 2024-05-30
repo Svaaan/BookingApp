@@ -18,7 +18,7 @@
                 <th>Namn</th>
                 <th>Efternamn</th>
                 <th>Email</th>
-                <th>Företag</th>
+   @*              <th>Företag</th> *@
                 <th>Roll</th>
                 <th>Actions</th>
             </tr>
@@ -33,7 +33,7 @@
                         <td><input class="form-control" @bind="item.Name" /></td>
                         <td><input class="form-control" @bind="item.LastName" /></td>
                         <td><input class="form-control" @bind="item.Email" /></td>
-                        <td>@item.Company.CompanyName</td>
+              @*           <td>@item.Company.CompanyName</td> *@
                         <td><input class="form-control" @bind="item.Role" /></td>
                         
                         <td>
@@ -47,7 +47,7 @@
                         <td>@item.Name</td>
                         <td>@item.LastName</td>
                         <td>@item.Email</td>
-                        <td>@item.Company.CompanyName</td>
+                   @*      <td>@item.Company.CompanyName</td> *@
                         <td>@item.Role</td>
                         <td>
                             <button class="btn btn-success btn-sm" @onclick="NavigateToAddPage">Lägg till</button>

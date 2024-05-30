@@ -1,47 +1,67 @@
-﻿@using Request.HTTP.DTO.MovieTheatreDTO
+﻿@page "/BookingConfirmation"
 
-<div class="receipt-container" style="width: 100%; border: 2px solid #000000; border-radius: 8px; padding: 5px;">
-    <h3>Booking Receipt</h3>
-    <div class="mb-1">
-        <label class="form-label">Namn:</label>
-        <span>@booker.Name</span>
-    </div>
-    <div class="mb-1">
-        <label class="form-label">Efternamn:</label>
-        <span>@booker.LastName</span>
-    </div>
-    <div class="mb-1">
-        <label class="form-label">Email:</label>
-        <span>@booker.Email</span>
-    </div>
-    <div class="mb-1">
-        <label class="form-label">Telefonnummer:</label>
-        <span>@booker.PhoneNumber</span>
-    </div
-    <div class="mb-1">
-        <label class="form-label">Film:</label>
-        <span>@bookingConfirmationDTO.MovieTitle</span>
-    </div>
-        <div class="mb-1">
-        <label class="form-label">Film Start:</label>
-        <span>@bookingConfirmationDTO.ShowStart</span>
-    </div>
-       </div>
-        <div class="mb-1">
-        <label class="form-label">Film Start:</label>
-        <span>@bookingConfirmationDTO.ShowEnd</span>
-    </div>
-    <div>
-        <div class="mb-1">
-        <label class="form-label">Film Start:</label>
-        <span>@bookingConfirmationDTO.ShowEnd</span>
-    </div>
-    <div class="mb-1">
-        <label class="form-label">Boknings nummer:</label>
-        <span>@(GenerateBookingNumber())</span>
-    </div>
+@using Request.HTTP.DTO.MovieTheatreDTO
+
+<style>
+    body {
+        margin-top: 10px;
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        margin-top: 25px;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border: 2px solid #000000;
+        border-radius: 8px;
+        margin: 100px;
+    }
+
+    .card-title {
+        color: black;
+    }
+
+    .form-label {
+        color: #343a40;
+        font-weight: bold;
+    }
+
+    .form-control {
+        background-color: #f1f3f5;
+    }
+
+</style>
+
+<div class="container">
+    <div class="card mx-auto mt-5" style="max-width: 500px;">
+
+            <div class="receipt-container" style="width: 100%; border: 2px solid #000000; border-radius: 8px; padding: 5px;">
+                <h3 class="text-center">Bokningsbefräftelse</h3>
+                <div class="mb-1">
+                    <label class="form-label">Namn:</label>
+                    <span>@booker.Name</span>
+                </div>
+                <div class="mb-1">
+                    <label class="form-label">Efternamn:</label>
+                    <span>@booker.LastName</span>
+                </div>
+                <div class="mb-1">
+                    <label class="form-label">Email:</label>
+                    <span>@booker.Email</span>
+                </div>
+                <div class="mb-1">
+                    <label class="form-label">Telefonnummer:</label>
+                    <span>@booker.PhoneNumber</span>
+                </div>
+                <div class="mb-1">
+                    <label class="form-label">Boknings nummer:</label>
+                    <span>@booker.BookingNumber</span>
+                </div>
+            </div>
+        </div>
 </div>
-
 @code {
     [Parameter]
     public BookerDTO booker { get; set; }
@@ -51,11 +71,4 @@
 
     [Parameter]
     public BookingConfirmationDTO bookingConfirmationDTO { get; set; }
-
-    // Method to generate a random 5-digit booking number
-    private string GenerateBookingNumber()
-    {
-        Random random = new Random();
-        return random.Next(10000, 99999).ToString();
-    }
 }

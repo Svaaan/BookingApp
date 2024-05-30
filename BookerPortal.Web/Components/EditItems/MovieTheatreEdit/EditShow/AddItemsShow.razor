@@ -1,6 +1,168 @@
-﻿namespace BookerPortal.Web.Components.EditItems.EditBooker
-{
-    public class AddItems
+﻿@page "/Add-Show"
+@using Booking.Api.Data
+@using Booking.Api.Entities
+@using Booking.Api.Repositories
+@using Booking.Api.Repositories.Interfaces
+@using Microsoft.AspNetCore.Components.Forms
+@using Request.HTTP.DTO.MovieTheatreDTO
+@using Request.HTTP.RequestService.IRequestService
+@using Microsoft.AspNetCore.Antiforgery
+@attribute [RequireAntiforgeryToken(required: false)]
+@inject NavigationManager NavigationManager
+@inject IShowService ShowService
+@inject ILogger<ShowDTO> Logger
+
+<style>
+    body {
+        margin-top: 10px;
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        margin-top: 25px;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border: 2px solid #000000;
+        border-radius: 8px;
+        margin: 100px;
+    }
+
+    .card-title {
+        color: black;
+    }
+
+    .form-label {
+        color: #343a40;
+        font-weight: bold;
+    }
+
+    .form-control {
+        background-color: #f1f3f5;
+    }
+
+    .custom-button {
+        background-color: white;
+        color: black;
+        border: 2px solid black;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        margin-top: 30px;
+    }
+
+    .custom-button:hover {
+        background-color: black;
+        color: white;
+        border-color: white;
+    }
+
+    .custom-button:active {
+        transform: translateY(2px);
+    }
+
+    .success-message {
+        color: green;
+        font-size: 20px;
+        margin-top: 10px;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 20px;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container" style="display: @(successMessage != "" ? "none" : "block");">
+    <div class="card mx-auto mt-5" style="max-width: 500px;">
+        <div class="card-body">
+            <EditForm Model="@showDTO" OnValidSubmit="@SubmitForm" FormName="ShowDTO">
+                <div class="mb-3">
+                    <label for="MovieId" class="form-label">Film ID:</label>
+                    <InputNumber id="MovieId" class="form-control" @bind-Value="showDTO.MovieId" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="SalonId" class="form-label">Salong ID:</label>
+                    <InputNumber id="SalonId" class="form-control" @bind-Value="showDTO.SalonId" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="StartTime" class="form-label">Starttid:</label>
+                    <InputDate id="StartTime" class="form-control" @bind-Value="showDTO.StartTime" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="EndTime" class="form-label">Sluttid:</label>
+                    <InputDate id="EndTime" class="form-control" @bind-Value="showDTO.EndTime" required />
+                </div>
+
+                <div class="mb-3 text-center">
+                    <button type="submit" class="custom-button">Lägg till</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center; display: flex; align-items: center; flex-direction: column;">
+    @if (!string.IsNullOrWhiteSpace(successMessage))
     {
+        <div class="success-message">
+            <span style="display: flex; align-items: center;">
+                @successMessage
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
+                </svg>
+            </span>
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    {
+        <div class="error-message">
+            @errorMessage
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+            </svg>
+        </div>
+    }
+</div>
+
+@code {
+    public ShowDTO showDTO { get; set; } = new ShowDTO();
+
+    private string successMessage = "";
+    private string errorMessage = "";
+
+    protected override void OnInitialized()
+    {
+        showDTO = new ShowDTO();
+    }
+
+    private async Task SubmitForm()
+    {
+        try
+        {
+            var result = await ShowService.PostShow(showDTO);
+            if (result != null)
+            {
+                successMessage = "Show tillagd";
+                errorMessage = "";
+            }
+            else
+            {
+                successMessage = "";
+                errorMessage = "Något gick fel. Försök igen.";
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "An error occurred while submitting the show form.");
+            successMessage = "";
+            errorMessage = "An unexpected error occurred. Please try again later.";
+        }
     }
 }

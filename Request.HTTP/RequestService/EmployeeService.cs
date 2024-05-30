@@ -1,8 +1,8 @@
-﻿//using Booking.Api.Entities.DTO;
+﻿using Booking.Api.Data;
+using Booking.Api.Entities;
 using Request.HTTP.DTO.MovieTheatreDTO;
 using Request.HTTP.RequestService.IRequestService;
-using System.Net.Http;
-using System.Net.Http.Json;
+
 
 namespace Request.HTTP.RequestService
 {
@@ -18,14 +18,37 @@ namespace Request.HTTP.RequestService
 
         public async Task<HttpResponseMessage> PostEmployee(EmployeeDTO employee)
         {
+            (string hashedPassword, byte[] salt) = PasswordHashing.HashPassword(employee.Password);
+            employee.Password = hashedPassword;
+            employee.Salt = salt;
+
             return await _HttpClient.PostAsJsonAsync("api/employee", employee);
         }
         public async Task<List<EmployeeDTO>> GetEmployee()
         {
 
-            var getEmployee = await _HttpClient.GetFromJsonAsync<List<EmployeeDTO>>("api/Employee");
-
-            return getEmployee;
+            var getEmployee = await _HttpClient.GetFromJsonAsync<List<NoSaltEmployeeDTO>>("api/Employee");
+            if(getEmployee == null)
+            {
+                return new List<EmployeeDTO>();
+            }
+            //FÖR VARJE EMPLOYEE HÄMTA DENS COMPANY VIA API/COMPANY/EMPLOYEE.COMPANYID
+            List<EmployeeDTO> employees = getEmployee.Select(e => new EmployeeDTO()
+            {
+                Id = e.Id,
+                CompanyId = e.CompanyId,
+                Email = e.Email,
+                LastName = e.LastName,
+                Name = e.Name,
+                Password = e.Password,
+                Role = e.Role
+            }).ToList();
+            foreach(var employee in employees)
+            {
+                
+                employee.Company = await _HttpClient.GetFromJsonAsync<CompanyDTO>($"api/Company/{employee.CompanyId}");
+            }
+            return employees;
         }
         public async Task<bool> RemoveEmployeeById(int employeeId)
         {
@@ -48,6 +71,10 @@ namespace Request.HTTP.RequestService
 
                 if (response.IsSuccessStatusCode)
                 {
+                    (string hashedPassword, byte[] salt) = PasswordHashing.HashPassword(employeeDTO.Password);
+                    employeeDTO.Password = hashedPassword;
+                    employeeDTO.Salt = salt;
+
                     return await response.Content.ReadFromJsonAsync<EmployeeDTO>();
                 }
                 else

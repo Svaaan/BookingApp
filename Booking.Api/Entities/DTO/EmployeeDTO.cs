@@ -1,4 +1,6 @@
-﻿namespace Booking.Api.Entities.DTO
+﻿using System.Text.Json.Serialization;
+
+namespace Booking.Api.Entities.DTO
 {
     public class EmployeeDTO
     {

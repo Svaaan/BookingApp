@@ -30,21 +30,13 @@ namespace Booking.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Employee>> PostEmployee([FromBody] EmployeeDTO employeeDTO)
+        public async Task<ActionResult<Employee>> PostEmployee([FromBody] IncomingEmployeeDTO employeeDTO)
         {
             if (employeeDTO == null)
             {
                 return BadRequest("Employee object is null.");
             }
 
-            PropertyInfo[] properties = typeof(EmployeeDTO).GetProperties();
-            foreach (var property in properties)
-            {
-                if (property.GetValue(employeeDTO) == null)
-                {
-                    return BadRequest($"Property {property.Name} is null.");
-                }
-            }
             //hårdkodar en roll sålänge
             var employee = new Employee
             {
@@ -54,7 +46,8 @@ namespace Booking.Api.Controllers
                 Name = employeeDTO.Name,
                 LastName = employeeDTO.LastName,
                 Password = employeeDTO.Password,
-                Role = Enum.TryParse<EmployeeRole>(employeeDTO.Role, out var role) ? role : EmployeeRole.Employee
+                Role = Enum.TryParse<EmployeeRole>(employeeDTO.Role, out var role) ? role : EmployeeRole.Employee,
+                Salt = employeeDTO.Salt
             };
             var createEmployee = await _employeeRepository.CreateEmployeeAsync(employee);
             return Ok(createEmployee);
@@ -69,16 +62,26 @@ namespace Booking.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<Employee>>> ListAllEmployee()
+        public async Task<ActionResult<List<EmployeeDTO>>> ListAllEmployee()
         {
             var employeeList = await _employeeRepository.GetAllEmployeesAsync();
             if (employeeList == null)
             {
                 return NotFound();
             }
-            return Ok(employeeList);
+            var employeeDtos = employeeList.Select(e => new EmployeeDTO
+            {
+                Id = e.Id,
+                CompanyId = e.CompanyId,
+                Email = e.Email,
+                LastName = e.LastName,
+                Name = e.Name,
+                Password = e.Password,
+                Role = e.Role.ToString()
+            }).ToList();
+            return Ok(employeeDtos);
         }
-
+ 
         /// <summary>
         /// Delete a employee ID
         /// </summary>
