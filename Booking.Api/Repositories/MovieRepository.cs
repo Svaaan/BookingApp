@@ -3,7 +3,6 @@ using Booking.Api.Entities;
 using Booking.Api.Repositories.Interfaces;
 using Booking.Api.Validation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Booking.Api.Repositories
 {
@@ -91,6 +90,7 @@ namespace Booking.Api.Repositories
                 throw;
             }
         }
+
         public async Task<Movie> UpdateMovieById(int movieId, Movie updateMovie)
         {
             try

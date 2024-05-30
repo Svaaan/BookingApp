@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using System.Text;
+﻿using System.Text;
 using Newtonsoft.Json;
 using Request.HTTP.DTO.MovieTheatreDTO;
 using Request.HTTP.RequestService.IRequestService;
@@ -50,6 +49,7 @@ namespace Request.HTTP.RequestService
 
             return getBooker;
         }
+
         public async Task<bool> RemoveBookerById(int bookerId)
         {
             try
@@ -64,6 +64,7 @@ namespace Request.HTTP.RequestService
                 return false;
             }
         }
+
         public async Task<BookerDTO> EditBookerById(BookerDTO bookerDTO)
         {
             try
@@ -87,6 +88,7 @@ namespace Request.HTTP.RequestService
                 return null;
             }
         }
+
         private string GenerateBookingNumber()
         {
             Random random = new Random();
@@ -96,9 +98,6 @@ namespace Request.HTTP.RequestService
 
             return letters + numbers;
         }
-
-
     }
-
 }
 
