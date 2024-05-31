@@ -7,10 +7,8 @@ namespace Request.HTTP.RequestService
 {
     public class SalonService : ISalonService
     {
-
         public async Task<bool> PostSalon(SalonDTO salon)
         {
-
             try
             {
                 using (HttpClient client = new HttpClient())
@@ -40,6 +38,7 @@ namespace Request.HTTP.RequestService
 
             return getSalon;
         }
+
         public async Task<bool> RemoveSalonById(int salonId)
         {
             try
@@ -54,6 +53,7 @@ namespace Request.HTTP.RequestService
                 return false;
             }
         }
+
         public async Task<SalonDTO> EditSalonById(SalonDTO salon)
         {
             try

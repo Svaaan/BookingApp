@@ -1,8 +1,6 @@
 ﻿using Booking.Api.Data;
-using Booking.Api.Entities;
 using Request.HTTP.DTO.MovieTheatreDTO;
 using Request.HTTP.RequestService.IRequestService;
-
 
 namespace Request.HTTP.RequestService
 {
@@ -24,6 +22,7 @@ namespace Request.HTTP.RequestService
 
             return await _HttpClient.PostAsJsonAsync("api/employee", employee);
         }
+
         public async Task<List<EmployeeDTO>> GetEmployee()
         {
 
@@ -50,6 +49,7 @@ namespace Request.HTTP.RequestService
             }
             return employees;
         }
+
         public async Task<bool> RemoveEmployeeById(int employeeId)
         {
             try
@@ -63,6 +63,7 @@ namespace Request.HTTP.RequestService
                 return false;
             }
         }
+
         public async Task<EmployeeDTO> EditEmployeeById(EmployeeDTO employeeDTO)
         {
             try

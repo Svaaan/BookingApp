@@ -38,6 +38,7 @@ namespace Request.HTTP.RequestService
 
             return getReservation;
         }
+
         public async Task<bool> RemoveReservationById(int reservationId)
         {
             try
@@ -52,6 +53,7 @@ namespace Request.HTTP.RequestService
                 return false;
             }
         }
+
         public async Task<ReservationDTO> EditReservationById(ReservationDTO reservationDTO)
         {
             try

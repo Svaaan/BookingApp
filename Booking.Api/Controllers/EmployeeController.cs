@@ -23,7 +23,7 @@ namespace Booking.Api.Controllers
         /// <summary>
         /// Create a new employee.
         /// </summary>
-        /// <param name="employee">The employee to create.</param>
+        /// <param name="employeeDTO">The employee to create.</param>
         /// <returns>The employee employee.</returns>
         /// <response code="200">Returns the newly created employee.</response>
         /// <response code="400">If the employee is not valid or an error occurs.</response>

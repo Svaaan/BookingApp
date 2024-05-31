@@ -21,7 +21,6 @@ namespace Booking.Api.Repositories
         {
             try
             {
-
                 var createBooker = await _context.bookers.AddAsync(booker);
                 await _context.SaveChangesAsync();
                 return createBooker.Entity;
@@ -32,6 +31,7 @@ namespace Booking.Api.Repositories
                 throw;
             }
         }
+
         public async Task<Booker> GetBookerById(int Id)
         {
             try

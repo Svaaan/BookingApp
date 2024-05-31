@@ -32,6 +32,7 @@ namespace Booking.Api.Repositories
                 throw;
             }
         }
+
         public async Task<Company> GetCompanyById(int Id)
         {
             try

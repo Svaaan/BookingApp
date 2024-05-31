@@ -22,7 +22,7 @@ namespace Booking.Api.Controllers
         /// <summary>
         /// Create a Salon for the Theatre
         /// </summary>
-        /// <param name="salon"></param>
+        /// <param name="salonDTO"></param>
         /// <returns>Returns the created object with their values</returns>
         /// <response code="201">Returns the newly created Salon.</response>
         /// <response code="400">If the Salon values are not valid.</response>
@@ -78,7 +78,7 @@ namespace Booking.Api.Controllers
         /// Update a salon by entering it's ID
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="salon"></param>
+        /// <param name="salonDTO"></param>
         /// <returns>Returns the updated Salon.</returns>
         [HttpPut("{id:int}")]
         [ProducesResponseType(typeof(Salon), StatusCodes.Status200OK)]
@@ -117,7 +117,7 @@ namespace Booking.Api.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Salon>> DeleteMovieById(int Id)
+        public async Task<ActionResult<Salon>> DeleteSalonById(int Id)
         {
             var deleteSalon = await this._salonRepository.DeleteSalonById(Id);
             if (deleteSalon == null)

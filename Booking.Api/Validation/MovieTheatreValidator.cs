@@ -1,6 +1,5 @@
 ﻿using Booking.Api.Entities;
 using Ardalis.GuardClauses;
-using Booking.Api.ExceptionHandler;
 
 namespace Booking.Api.Validation
 {

@@ -3,16 +3,12 @@ using Newtonsoft.Json;
 using Request.HTTP.DTO.MovieTheatreDTO;
 using Request.HTTP.RequestService.IRequestService;
 
-
 namespace Request.HTTP.RequestService
 {
-   
     public class MovieService : IMovieService
     {
-     
         public async Task<bool> PostMovie(MovieDTO movie)
         {
-            
             try
             {
                 using (HttpClient client = new HttpClient())
@@ -42,6 +38,7 @@ namespace Request.HTTP.RequestService
 
             return getMovie;
         }
+
         public async Task<bool> RemoveMovieById(int movieId)
         {
             try
@@ -56,6 +53,7 @@ namespace Request.HTTP.RequestService
                 return false;
             }
         }
+
         public async Task<MovieDTO> EditMovieById(MovieDTO movie)
         {
             try

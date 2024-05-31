@@ -32,6 +32,7 @@ namespace Booking.Api.Repositories
                 throw;
             }
         }
+
         public async Task<MovieTheatre> GetMovieTheatreById(int Id)
         {
             try

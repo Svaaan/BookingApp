@@ -31,6 +31,7 @@ namespace Booking.Api.Repositories
                 throw;
             }
         }
+
         public async Task<Employee> GetEmployeeById(int Id)
         {
             try

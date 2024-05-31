@@ -40,6 +40,7 @@ namespace Booking.Api.Controllers
         /// </summary>
         /// <returns>A list of movies.</returns>
         /// <response code="200">Returns the list of movies.</response>
+        /// <response code="404">Not found in database.</response>
         /// <response code="500">If an error occurs while retrieving the movies.</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]

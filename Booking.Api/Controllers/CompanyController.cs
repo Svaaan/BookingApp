@@ -27,7 +27,7 @@ namespace Booking.Api.Controllers
         /// <summary>
         /// Create a new Company.
         /// </summary>
-        /// <param name="company">The company to create.</param>
+        /// <param name="companyDTO">The company to create.</param>
         /// <returns>The Company company.</returns>
         /// <response code="200">Returns the newly created company.</response>
         /// <response code="400">If the company is not valid or an error occurs.</response>

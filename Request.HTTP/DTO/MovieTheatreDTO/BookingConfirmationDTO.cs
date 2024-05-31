@@ -13,7 +13,6 @@
         public DateTime ShowStart { get; set; } 
         public DateTime ShowEnd { get; set; }
 
-
         public BookingConfirmationDTO(ReservationDTO reservation, ShowDTO show)
         {
             ReservationId = reservation.Id;

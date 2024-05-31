@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-namespace Request.HTTP.DTO.MovieTheatreDTO
+﻿namespace Request.HTTP.DTO.MovieTheatreDTO
 {
     public class EmployeeDTO
     {
@@ -13,7 +12,4 @@ namespace Request.HTTP.DTO.MovieTheatreDTO
         public CompanyDTO Company = new();
         public string Role { get; set; }
     }
-
-   
-
 }

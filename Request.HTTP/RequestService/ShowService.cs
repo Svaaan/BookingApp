@@ -38,6 +38,7 @@ namespace Request.HTTP.RequestService
 
             return getShow;
         }
+
         public async Task<bool> RemoveShowById(int showId)
         {
             try
@@ -52,6 +53,7 @@ namespace Request.HTTP.RequestService
                 return false;
             }
         }
+
         public async Task<ShowDTO> EditShowById(ShowDTO showDTO)
         {
             try
